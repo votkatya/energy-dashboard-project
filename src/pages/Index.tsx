@@ -166,20 +166,15 @@ const Index = () => {
                         return (
                           <div 
                             key={idx}
-                            className={`flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all`}
+                            className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all`}
                           >
-                            <div className="flex items-center gap-4">
-                              <div className={`w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
-                                {entry.score}
-                              </div>
-                              <div>
-                                <p className="font-medium text-foreground">{entry.date}</p>
-                                <p className="text-sm text-muted-foreground line-clamp-1">{entry.thoughts}</p>
-                              </div>
+                            <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
+                              {entry.score}
                             </div>
-                            <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${colorClass}/20 text-${colorClass}`}>
-                              {entry.category}
-                            </span>
+                            <div className="flex-1">
+                              <p className="font-medium text-foreground">{entry.date}</p>
+                              <p className="text-sm text-muted-foreground line-clamp-1">{entry.thoughts}</p>
+                            </div>
                           </div>
                         );
                       })}
