@@ -221,43 +221,106 @@ const Index = () => {
                     Этот год
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <span className="text-2xl">😊</span>
-                        Хорошие дни
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
-                    </CardContent>
-                  </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  <div className="space-y-4">
+                    <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <span className="text-2xl">😊</span>
+                          Хорошие дни
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
+                        <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                      </CardContent>
+                    </Card>
 
-                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <span className="text-2xl">😐</span>
-                        Нейтральные
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
-                    </CardContent>
-                  </Card>
+                    <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <span className="text-2xl">😐</span>
+                          Нейтральные
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
+                        <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                      </CardContent>
+                    </Card>
 
-                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <span className="text-2xl">😔</span>
-                        Плохие дни
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                    <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <span className="text-2xl">😔</span>
+                          Плохие дни
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
+                        <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <Card className="shadow-lg relative overflow-hidden">
+                    <CardContent className="p-8 h-full flex items-center justify-center">
+                      <div className="relative w-48 h-80">
+                        <svg viewBox="0 0 100 160" className="w-full h-full">
+                          <defs>
+                            <clipPath id="wine-glass">
+                              <path d="M 30 10 Q 20 10 20 20 L 30 80 Q 35 100 50 100 Q 65 100 70 80 L 80 20 Q 80 10 70 10 Z M 45 100 L 45 140 L 35 140 L 35 145 L 65 145 L 65 140 L 55 140 L 55 100" />
+                            </clipPath>
+                          </defs>
+                          
+                          <path 
+                            d="M 30 10 Q 20 10 20 20 L 30 80 Q 35 100 50 100 Q 65 100 70 80 L 80 20 Q 80 10 70 10 Z M 45 100 L 45 140 L 35 140 L 35 145 L 65 145 L 65 140 L 55 140 L 55 100"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="text-foreground/20"
+                          />
+                          
+                          <g clipPath="url(#wine-glass)">
+                            <rect
+                              x="20"
+                              y={160 - (stats.total > 0 ? (stats.good / stats.total) * 90 : 0)}
+                              width="60"
+                              height={(stats.total > 0 ? (stats.good / stats.total) * 90 : 0)}
+                              className="fill-red-600 transition-all duration-1000 ease-out"
+                            />
+                            
+                            <ellipse
+                              cx="50"
+                              cy={160 - (stats.total > 0 ? (stats.good / stats.total) * 90 : 0)}
+                              rx="28"
+                              ry="4"
+                              className="fill-red-700/60 animate-pulse"
+                              style={{
+                                animation: 'pulse 3s ease-in-out infinite'
+                              }}
+                            />
+                            
+                            <ellipse
+                              cx="50"
+                              cy={160 - (stats.total > 0 ? (stats.good / stats.total) * 90 : 0) + 2}
+                              rx="26"
+                              ry="3"
+                              className="fill-red-500/40"
+                              style={{
+                                animation: 'pulse 2.5s ease-in-out infinite reverse'
+                              }}
+                            />
+                          </g>
+                        </svg>
+                        
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center w-full">
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {stats.total > 0 ? Math.round((stats.good / stats.total) * 100) : 0}%
+                          </p>
+                          <p className="text-xs text-muted-foreground">хороших дней</p>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
