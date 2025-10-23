@@ -8,10 +8,23 @@ import EnergyStats from '@/components/EnergyStats';
 import EnergyCharts from '@/components/EnergyCharts';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
+import { useEnergyData } from '@/hooks/useEnergyData';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+  const { data, isLoading, error } = useEnergyData();
+
+  const getColorClass = (score: number) => {
+    if (score >= 5) return 'energy-excellent';
+    if (score >= 4) return 'energy-good';
+    if (score >= 3) return 'energy-neutral';
+    if (score >= 2) return 'energy-medium-low';
+    return 'energy-low';
+  };
+
+  const stats = data?.stats || { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
+  const recentEntries = data?.entries?.slice(-3).reverse() || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
@@ -78,98 +91,127 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="home" className="animate-fade-in">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Icon name="TrendingUp" size={20} className="text-energy-excellent" />
-                    Хорошие дни
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-heading font-bold text-energy-excellent">12</div>
-                  <p className="text-sm text-muted-foreground mt-1">В этом месяце</p>
-                </CardContent>
-              </Card>
+            {isLoading && (
+              <div className="flex items-center justify-center py-12">
+                <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+              </div>
+            )}
 
-              <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Icon name="Minus" size={20} className="text-energy-neutral" />
-                    Нейтральные
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-heading font-bold text-energy-neutral">4</div>
-                  <p className="text-sm text-muted-foreground mt-1">В этом месяце</p>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Icon name="TrendingDown" size={20} className="text-energy-low" />
-                    Плохие дни
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-heading font-bold text-energy-low">1</div>
-                  <p className="text-sm text-muted-foreground mt-1">В этом месяце</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="shadow-lg mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Icon name="Calendar" size={20} />
-                  Последние записи
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { date: '22.10.2025', score: 5, category: 'Хороший', mood: 'день был классный', color: 'energy-excellent' },
-                    { date: '21.10.2025', score: 4, category: 'Хороший', mood: 'утром гулять не ходила', color: 'energy-good' },
-                    { date: '20.10.2025', score: 2, category: 'Плохой', mood: 'сложный был понедельник', color: 'energy-low' }
-                  ].map((entry, idx) => (
-                    <div 
-                      key={idx}
-                      className={`flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-${entry.color}/10 to-transparent border-l-4 border-l-${entry.color} hover:shadow-md transition-all`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl bg-${entry.color} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
-                          {entry.score}
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">{entry.date}</p>
-                          <p className="text-sm text-muted-foreground">{entry.mood}</p>
-                        </div>
-                      </div>
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${entry.color}/20 text-${entry.color}`}>
-                        {entry.category}
-                      </span>
+            {error && (
+              <Card className="shadow-lg border-l-4 border-l-destructive">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-3">
+                    <Icon name="AlertCircle" size={24} className="text-destructive" />
+                    <div>
+                      <p className="font-medium">Не удалось загрузить данные</p>
+                      <p className="text-sm text-muted-foreground mt-1">Проверь, что Google таблица доступна по ссылке</p>
                     </div>
-                  ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {!isLoading && !error && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Icon name="TrendingUp" size={20} className="text-energy-excellent" />
+                        Хорошие дни
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
+                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Icon name="Minus" size={20} className="text-energy-neutral" />
+                        Нейтральные
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
+                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Icon name="TrendingDown" size={20} className="text-energy-low" />
+                        Плохие дни
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
+                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
+              </>
+            )}
+
+            {!isLoading && !error && (
+              <Card className="shadow-lg mb-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Calendar" size={20} />
+                    Последние записи
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {recentEntries.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">Пока нет записей</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {recentEntries.map((entry, idx) => {
+                        const colorClass = getColorClass(entry.score);
+                        return (
+                          <div 
+                            key={idx}
+                            className={`flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all`}
+                          >
+                            <div className="flex items-center gap-4">
+                              <div className={`w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
+                                {entry.score}
+                              </div>
+                              <div>
+                                <p className="font-medium text-foreground">{entry.date}</p>
+                                <p className="text-sm text-muted-foreground line-clamp-1">{entry.thoughts}</p>
+                              </div>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${colorClass}/20 text-${colorClass}`}>
+                              {entry.category}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="calendar" className="animate-fade-in">
-            <EnergyCalendar />
+            <EnergyCalendar data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in">
-            <EnergyStats />
+            <EnergyStats data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="charts" className="animate-fade-in">
-            <EnergyCharts />
+            <EnergyCharts data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in">
-            <EnergyTrends />
+            <EnergyTrends data={data} isLoading={isLoading} />
           </TabsContent>
         </Tabs>
       </div>
