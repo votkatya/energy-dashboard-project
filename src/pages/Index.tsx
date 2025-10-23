@@ -250,7 +250,7 @@ const Index = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Icon name="Target" size={20} className="text-primary" />
-                            <span className="font-medium">Месячная цель</span>
+                            <span className="font-medium">Давай проведем месяц круто!</span>
                           </div>
                           <div className="text-right">
                             <div className="text-2xl font-heading font-bold text-primary">
