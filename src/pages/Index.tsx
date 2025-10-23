@@ -36,7 +36,7 @@ const Index = () => {
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
-                <p className="text-sm text-muted-foreground">Отслеживай свою энергию каждый день</p>
+                <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
               </div>
             </div>
             <Button 
