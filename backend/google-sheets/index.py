@@ -118,47 +118,44 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     current_value += char
             values.append(current_value.strip())
             
-            if len(values) >= 4:
-                try:
-                    date_str = values[0].strip() if len(values) > 0 else ''
-                    score_str = values[1].strip() if len(values) > 1 else ''
-                    
-                    if not date_str:
-                        skipped.append(f'Line {idx}: empty date')
-                        continue
-                    
-                    if not score_str:
-                        skipped.append(f'Line {idx}: empty score for date {date_str}')
-                        continue
-                    
-                    if not score_str.replace('.', '').replace(',', '').isdigit():
-                        skipped.append(f'Line {idx}: invalid score "{score_str}" for date {date_str}')
-                        continue
-                    
-                    score = int(score_str)
-                    if score < 1 or score > 5:
-                        skipped.append(f'Line {idx}: score {score} out of range for date {date_str}')
-                        continue
-                    
-                    thoughts = values[2].strip() if len(values) > 2 else ''
-                    category = values[4].strip() if len(values) > 4 else ''
-                    week = values[5].strip() if len(values) > 5 else ''
-                    month = values[6].strip() if len(values) > 6 else ''
-                    
-                    entry = {
-                        'date': date_str,
-                        'score': score,
-                        'thoughts': thoughts,
-                        'category': category,
-                        'week': week,
-                        'month': month
-                    }
-                    entries.append(entry)
-                except (ValueError, IndexError) as e:
-                    skipped.append(f'Line {idx}: exception {e}')
+            try:
+                date_str = values[0].strip() if len(values) > 0 else ''
+                score_str = values[1].strip() if len(values) > 1 else ''
+                
+                if not date_str:
+                    skipped.append(f'Line {idx}: empty date')
                     continue
-            else:
-                skipped.append(f'Line {idx}: only {len(values)} columns, need at least 4')
+                
+                if not score_str:
+                    skipped.append(f'Line {idx}: empty score for date {date_str}')
+                    continue
+                
+                if not score_str.replace('.', '').replace(',', '').isdigit():
+                    skipped.append(f'Line {idx}: invalid score "{score_str}" for date {date_str}')
+                    continue
+                
+                score = int(score_str)
+                if score < 1 or score > 5:
+                    skipped.append(f'Line {idx}: score {score} out of range for date {date_str}')
+                    continue
+                
+                thoughts = values[2].strip() if len(values) > 2 else ''
+                category = values[4].strip() if len(values) > 4 else ''
+                week = values[5].strip() if len(values) > 5 else ''
+                month = values[6].strip() if len(values) > 6 else ''
+                
+                entry = {
+                    'date': date_str,
+                    'score': score,
+                    'thoughts': thoughts,
+                    'category': category,
+                    'week': week,
+                    'month': month
+                }
+                entries.append(entry)
+            except (ValueError, IndexError) as e:
+                skipped.append(f'Line {idx}: exception {e}')
+                continue
         
         print(f'Parsed {len(entries)} entries from {len(lines)-1} lines')
         if skipped:
