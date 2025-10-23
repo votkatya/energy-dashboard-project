@@ -202,10 +202,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
 
       <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Icon name="Activity" size={24} />
-            Паттерны и наблюдения
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2">Наблюдения</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
