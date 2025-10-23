@@ -108,35 +108,52 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <header className="mb-8 animate-fade-in">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-                <Icon name="Zap" size={24} className="text-white" />
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
+                  <Icon name="Zap" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
+                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
-                <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => refetch()}
+                  size="icon"
+                  variant="outline"
+                  className="sm:hidden"
+                >
+                  <Icon name="RefreshCw" size={20} />
+                </Button>
+                <Button 
+                  onClick={() => refetch()}
+                  size="lg"
+                  variant="outline"
+                  className="hidden sm:flex"
+                >
+                  <Icon name="RefreshCw" size={20} className="mr-2" />
+                  Обновить
+                </Button>
+                <Button 
+                  onClick={() => setShowAddDialog(true)}
+                  size="lg"
+                  className="hidden sm:flex bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
+                >
+                  <Icon name="Plus" size={20} className="mr-2" />
+                  Добавить запись
+                </Button>
               </div>
             </div>
-            <div className="flex gap-2 w-full sm:w-auto">
-              <Button 
-                onClick={() => refetch()}
-                size="lg"
-                variant="outline"
-                className="flex-1 sm:flex-initial"
-              >
-                <Icon name="RefreshCw" size={20} className="mr-2" />
-                Обновить
-              </Button>
-              <Button 
-                onClick={() => setShowAddDialog(true)}
-                size="lg"
-                className="flex-1 sm:flex-initial bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
-              >
-                <Icon name="Plus" size={20} className="mr-2" />
-                Добавить запись
-              </Button>
-            </div>
+            <Button 
+              onClick={() => setShowAddDialog(true)}
+              size="lg"
+              className="sm:hidden w-full bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
+            >
+              Как ты сегодня?
+            </Button>
           </div>
         </header>
 
