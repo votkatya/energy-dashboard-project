@@ -98,7 +98,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         headers = [h.strip() for h in lines[0].split(',')]
         entries = []
         
-        for line in lines[1:]:
+        for idx, line in enumerate(lines[1:], start=2):
             if not line.strip():
                 continue
             
@@ -121,14 +121,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     date_str = values[0].strip() if len(values) > 0 else ''
                     score_str = values[1].strip() if len(values) > 1 else ''
                     
-                    if not date_str or not score_str:
+                    if not date_str:
+                        print(f'Line {idx}: empty date')
+                        continue
+                    
+                    if not score_str:
+                        print(f'Line {idx}: empty score for date {date_str}')
                         continue
                     
                     if not score_str.replace('.', '').replace(',', '').isdigit():
+                        print(f'Line {idx}: invalid score "{score_str}" for date {date_str}')
                         continue
                     
                     score = int(score_str)
                     if score < 1 or score > 5:
+                        print(f'Line {idx}: score {score} out of range for date {date_str}')
                         continue
                     
                     thoughts = values[2].strip() if len(values) > 2 else ''
@@ -146,8 +153,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     }
                     entries.append(entry)
                 except (ValueError, IndexError) as e:
-                    print(f'Error parsing line: {e}')
+                    print(f'Line {idx}: exception {e}')
                     continue
+            else:
+                print(f'Line {idx}: only {len(values)} columns, need at least 4')
         
         print(f'Parsed {len(entries)} entries from {len(lines)-1} lines')
         
