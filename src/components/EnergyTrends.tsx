@@ -16,7 +16,7 @@ const EnergyTrends = () => {
             <div className="p-6 rounded-xl bg-gradient-to-r from-energy-excellent/20 to-transparent">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Средний балл за месяц</span>
-                <Icon name="ArrowUp" size={20} className="text-energy-excellent" />
+                <span className="text-2xl">📈</span>
               </div>
               <div className="text-4xl font-heading font-bold text-energy-excellent">4.2</div>
               <p className="text-sm text-muted-foreground mt-2">
@@ -26,11 +26,17 @@ const EnergyTrends = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-xl bg-gradient-to-br from-energy-excellent/10 to-transparent border border-energy-excellent/30">
-                <div className="text-2xl font-heading font-bold text-energy-excellent">71%</div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xl">😊</span>
+                  <div className="text-2xl font-heading font-bold text-energy-excellent">71%</div>
+                </div>
                 <p className="text-sm text-muted-foreground">Хорошие дни</p>
               </div>
               <div className="p-4 rounded-xl bg-gradient-to-br from-energy-neutral/10 to-transparent border border-energy-neutral/30">
-                <div className="text-2xl font-heading font-bold text-energy-neutral">24%</div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xl">😐</span>
+                  <div className="text-2xl font-heading font-bold text-energy-neutral">24%</div>
+                </div>
                 <p className="text-sm text-muted-foreground">Нейтральные дни</p>
               </div>
             </div>
@@ -49,7 +55,7 @@ const EnergyTrends = () => {
           <div className="space-y-3">
             <div className="p-4 rounded-xl bg-gradient-to-r from-primary/10 to-transparent border-l-4 border-l-primary">
               <div className="flex items-start gap-3">
-                <Icon name="Sparkles" size={20} className="text-primary mt-1" />
+                <span className="text-2xl">✨</span>
                 <div>
                   <p className="font-medium mb-1">Лучшие дни недели</p>
                   <p className="text-sm text-muted-foreground">
@@ -61,7 +67,7 @@ const EnergyTrends = () => {
 
             <div className="p-4 rounded-xl bg-gradient-to-r from-accent/10 to-transparent border-l-4 border-l-accent">
               <div className="flex items-start gap-3">
-                <Icon name="Target" size={20} className="text-accent mt-1" />
+                <span className="text-2xl">🎯</span>
                 <div>
                   <p className="font-medium mb-1">Тренд улучшения</p>
                   <p className="text-sm text-muted-foreground">
@@ -73,7 +79,7 @@ const EnergyTrends = () => {
 
             <div className="p-4 rounded-xl bg-gradient-to-r from-energy-good/10 to-transparent border-l-4 border-l-energy-good">
               <div className="flex items-start gap-3">
-                <Icon name="Heart" size={20} className="text-energy-good mt-1" />
+                <span className="text-2xl">🔥</span>
                 <div>
                   <p className="font-medium mb-1">Самый продуктивный период</p>
                   <p className="text-sm text-muted-foreground">
@@ -89,7 +95,7 @@ const EnergyTrends = () => {
       <Card className="shadow-lg bg-gradient-to-br from-primary/5 to-accent/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Icon name="Lightbulb" size={24} />
+            <span className="text-2xl">💡</span>
             Рекомендации
           </CardTitle>
         </CardHeader>
