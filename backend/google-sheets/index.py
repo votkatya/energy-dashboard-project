@@ -94,6 +94,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'entries': [], 'stats': {}})
             }
         
+        print(f'Total CSV lines: {len(lines)}')
         headers = [h.strip() for h in lines[0].split(',')]
         entries = []
         
@@ -144,8 +145,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'month': month
                     }
                     entries.append(entry)
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
+                    print(f'Error parsing line: {e}')
                     continue
+        
+        print(f'Parsed {len(entries)} entries from {len(lines)-1} lines')
         
         good_count = sum(1 for e in entries if e['score'] >= 4)
         neutral_count = sum(1 for e in entries if e['score'] == 3)
