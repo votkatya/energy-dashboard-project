@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
@@ -26,75 +26,39 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
     return day === 0 ? 6 : day - 1;
   };
 
+  const getColorClass = (score: number) => {
+    if (score >= 5) return 'bg-energy-excellent';
+    if (score >= 4) return 'bg-energy-good';
+    if (score >= 3) return 'bg-energy-neutral';
+    if (score >= 2) return 'bg-energy-medium-low';
+    return 'bg-energy-low';
+  };
+
+  const energyDataMap = useMemo(() => {
+    const map: Record<string, { score: number; color: string }> = {};
+    
+    if (data?.entries) {
+      data.entries.forEach((entry: any) => {
+        if (entry.date && entry.energy_level !== undefined) {
+          const date = new Date(entry.date);
+          const year = date.getFullYear();
+          const month = date.getMonth();
+          const day = date.getDate();
+          const key = `${year}-${month}-${day}`;
+          
+          map[key] = {
+            score: entry.energy_level,
+            color: getColorClass(entry.energy_level)
+          };
+        }
+      });
+    }
+    
+    return map;
+  }, [data]);
+
   const daysInMonth = getDaysInMonth(currentMonth, currentYear);
   const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
-
-  const energyData: Record<string, { score: number; color: string }> = {
-    '2025-7-15': { score: 4, color: 'bg-energy-good' },
-    '2025-7-16': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-17': { score: 3, color: 'bg-energy-neutral' },
-    '2025-7-18': { score: 4, color: 'bg-energy-good' },
-    '2025-7-19': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-20': { score: 4, color: 'bg-energy-good' },
-    '2025-7-21': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-22': { score: 3, color: 'bg-energy-neutral' },
-    '2025-7-23': { score: 4, color: 'bg-energy-good' },
-    '2025-7-24': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-25': { score: 4, color: 'bg-energy-good' },
-    '2025-7-26': { score: 3, color: 'bg-energy-neutral' },
-    '2025-7-27': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-28': { score: 4, color: 'bg-energy-good' },
-    '2025-7-29': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-30': { score: 5, color: 'bg-energy-excellent' },
-    '2025-7-31': { score: 4, color: 'bg-energy-good' },
-    '2025-8-1': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-2': { score: 4, color: 'bg-energy-good' },
-    '2025-8-3': { score: 3, color: 'bg-energy-neutral' },
-    '2025-8-4': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-5': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-6': { score: 4, color: 'bg-energy-good' },
-    '2025-8-7': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-8': { score: 3, color: 'bg-energy-neutral' },
-    '2025-8-9': { score: 4, color: 'bg-energy-good' },
-    '2025-8-10': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-11': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-12': { score: 4, color: 'bg-energy-good' },
-    '2025-8-13': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-14': { score: 3, color: 'bg-energy-neutral' },
-    '2025-8-15': { score: 4, color: 'bg-energy-good' },
-    '2025-8-16': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-17': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-18': { score: 4, color: 'bg-energy-good' },
-    '2025-8-19': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-20': { score: 3, color: 'bg-energy-neutral' },
-    '2025-8-21': { score: 4, color: 'bg-energy-good' },
-    '2025-8-22': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-23': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-24': { score: 4, color: 'bg-energy-good' },
-    '2025-8-25': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-26': { score: 3, color: 'bg-energy-neutral' },
-    '2025-8-27': { score: 4, color: 'bg-energy-good' },
-    '2025-8-28': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-29': { score: 5, color: 'bg-energy-excellent' },
-    '2025-8-30': { score: 4, color: 'bg-energy-good' },
-    '2025-8-31': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-7': { score: 3, color: 'bg-energy-neutral' },
-    '2025-9-8': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-9': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-10': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-11': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-12': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-13': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-14': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-15': { score: 3, color: 'bg-energy-neutral' },
-    '2025-9-16': { score: 3, color: 'bg-energy-neutral' },
-    '2025-9-17': { score: 4, color: 'bg-energy-good' },
-    '2025-9-18': { score: 5, color: 'bg-energy-excellent' },
-    '2025-9-19': { score: 4, color: 'bg-energy-good' },
-    '2025-9-20': { score: 2, color: 'bg-energy-low' },
-    '2025-9-21': { score: 4, color: 'bg-energy-good' },
-    '2025-9-22': { score: 5, color: 'bg-energy-excellent' },
-  };
 
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
@@ -166,14 +130,14 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           ))}
           {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
             const dateKey = `${currentYear}-${currentMonth}-${day}`;
-            const dayData = energyData[dateKey];
+            const dayData = energyDataMap[dateKey];
             return (
               <div
                 key={day}
                 className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
                   dayData 
                     ? `${dayData.color} text-white shadow-md` 
-                    : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'
+                    : 'bg-white border border-border text-foreground hover:bg-secondary/20'
                 }`}
               >
                 <span className="text-sm font-medium">{day}</span>
