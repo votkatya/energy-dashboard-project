@@ -154,7 +154,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             },
             'isBase64Encoded': False,
             'body': json.dumps({
-                'entries': entries[-20:],
+                'entries': entries,
                 'stats': stats
             }, ensure_ascii=False)
         }
