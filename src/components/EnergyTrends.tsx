@@ -167,33 +167,33 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
               )}
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="p-4 rounded-xl bg-gradient-to-br from-energy-excellent/10 to-transparent border border-energy-excellent/30">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xl">😊</span>
-                  <div className="text-2xl font-heading font-bold text-energy-excellent">
+            <div className="grid grid-cols-3 gap-3 md:gap-4">
+              <div className="p-2 md:p-4 rounded-xl bg-gradient-to-br from-energy-excellent/10 to-transparent border border-energy-excellent/30">
+                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-1">
+                  <span className="text-lg md:text-xl">😊</span>
+                  <div className="text-xl md:text-2xl font-heading font-bold text-energy-excellent">
                     {analytics.goodPercent}%
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground">Хорошие дни</p>
+                <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">Хорошие</p>
               </div>
-              <div className="p-4 rounded-xl bg-gradient-to-br from-energy-neutral/10 to-transparent border border-energy-neutral/30">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xl">😐</span>
-                  <div className="text-2xl font-heading font-bold text-energy-neutral">
+              <div className="p-2 md:p-4 rounded-xl bg-gradient-to-br from-energy-neutral/10 to-transparent border border-energy-neutral/30">
+                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-1">
+                  <span className="text-lg md:text-xl">😐</span>
+                  <div className="text-xl md:text-2xl font-heading font-bold text-energy-neutral">
                     {analytics.neutralPercent}%
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground">Нейтральные дни</p>
+                <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">Средние</p>
               </div>
-              <div className="p-4 rounded-xl bg-gradient-to-br from-energy-low/10 to-transparent border border-energy-low/30">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xl">😔</span>
-                  <div className="text-2xl font-heading font-bold text-energy-low">
+              <div className="p-2 md:p-4 rounded-xl bg-gradient-to-br from-energy-low/10 to-transparent border border-energy-low/30">
+                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-1">
+                  <span className="text-lg md:text-xl">😔</span>
+                  <div className="text-xl md:text-2xl font-heading font-bold text-energy-low">
                     {analytics.badPercent}%
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground">Плохие дни</p>
+                <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">Плохие</p>
               </div>
             </div>
           </div>
