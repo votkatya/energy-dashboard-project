@@ -40,18 +40,22 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             {'date': '08.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
             {'date': '09.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
             {'date': '15.10.2025', 'score': 3, 'thoughts': 'вернулась с отпуска', 'category': 'Нейтральный', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '16.10.2025', 'score': 3, 'thoughts': 'акклиматизация из отпуска в работу', 'category': 'Нейтральный', 'week': '13.10.2025', 'month': '01.10.2025'},
             {'date': '17.10.2025', 'score': 4, 'thoughts': 'постепенно в ритм вхожу', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '18.10.2025', 'score': 5, 'thoughts': 'отличный спокойный выходной', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '19.10.2025', 'score': 4, 'thoughts': 'была у Риммы, обсуждали работу, гуляли', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
             {'date': '20.10.2025', 'score': 2, 'thoughts': 'сложный был понедельник', 'category': 'Плохой', 'week': '20.10.2025', 'month': '01.10.2025'},
             {'date': '21.10.2025', 'score': 4, 'thoughts': 'утром гулять не ходила', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
             {'date': '22.10.2025', 'score': 5, 'thoughts': 'день был классный', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
+            {'date': '23.10.2025', 'score': 5, 'thoughts': 'хорошо поработала, прогулялась, запустили приложение в ГС', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
         ]
         
         demo_stats = {
-            'good': 5,
-            'neutral': 2,
+            'good': 8,
+            'neutral': 3,
             'bad': 1,
             'average': 4.1,
-            'total': 8
+            'total': 12
         }
         
         return {
@@ -113,8 +117,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             if len(values) >= 7:
                 try:
+                    date_str = values[0].strip()
                     score_str = values[1].strip()
-                    if not score_str or not score_str.isdigit():
+                    
+                    if not date_str or not score_str:
+                        continue
+                    
+                    if not score_str.replace('.', '').replace(',', '').isdigit():
                         continue
                     
                     score = int(score_str)
@@ -165,18 +174,22 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             {'date': '08.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
             {'date': '09.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
             {'date': '15.10.2025', 'score': 3, 'thoughts': 'вернулась с отпуска', 'category': 'Нейтральный', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '16.10.2025', 'score': 3, 'thoughts': 'акклиматизация из отпуска в работу', 'category': 'Нейтральный', 'week': '13.10.2025', 'month': '01.10.2025'},
             {'date': '17.10.2025', 'score': 4, 'thoughts': 'постепенно в ритм вхожу', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '18.10.2025', 'score': 5, 'thoughts': 'отличный спокойный выходной', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '19.10.2025', 'score': 4, 'thoughts': 'была у Риммы, обсуждали работу, гуляли', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
             {'date': '20.10.2025', 'score': 2, 'thoughts': 'сложный был понедельник', 'category': 'Плохой', 'week': '20.10.2025', 'month': '01.10.2025'},
             {'date': '21.10.2025', 'score': 4, 'thoughts': 'утром гулять не ходила', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
             {'date': '22.10.2025', 'score': 5, 'thoughts': 'день был классный', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
+            {'date': '23.10.2025', 'score': 5, 'thoughts': 'хорошо поработала, прогулялась, запустили приложение в ГС', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
         ]
         
         demo_stats = {
-            'good': 5,
-            'neutral': 2,
+            'good': 8,
+            'neutral': 3,
             'bad': 1,
             'average': 4.1,
-            'total': 8
+            'total': 12
         }
         
         return {
