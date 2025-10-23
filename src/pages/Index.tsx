@@ -48,42 +48,29 @@ const Index = () => {
     
     console.log('All entries:', data.entries.map(e => ({ date: e.date, score: e.score })));
     
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Начало сегодняшнего дня
-    
-    let daysBack: number;
+    let limit: number;
     
     switch (timePeriod) {
       case '3days':
-        daysBack = 3;
+        limit = 3;
         break;
       case 'week':
-        daysBack = 7;
+        limit = 7;
         break;
       case 'month':
-        daysBack = 30;
+        limit = 30;
         break;
       case 'year':
-        daysBack = 365;
+        limit = 365;
         break;
       default:
-        daysBack = 7;
+        limit = 7;
     }
     
-    const cutoffDate = new Date(today);
-    cutoffDate.setDate(cutoffDate.getDate() - daysBack + 1); // +1 чтобы включить текущий день
-    const cutoffMs = cutoffDate.getTime();
+    // Берём последние N записей
+    const filtered = data.entries.slice(-limit);
     
-    const filtered = data.entries.filter(e => {
-      const entryDate = parseDate(e.date);
-      entryDate.setHours(0, 0, 0, 0);
-      const entryMs = entryDate.getTime();
-      const isInRange = entryMs >= cutoffMs;
-      console.log('Entry:', e.date, 'parsed:', entryDate, 'ms:', entryMs, 'cutoff:', cutoffMs, 'inRange:', isInRange);
-      return isInRange;
-    });
-    
-    console.log('Filtered entries:', filtered.length, 'from', data.entries.length);
+    console.log('Filtered entries:', filtered.length, 'last', limit, 'records');
     
     const good = filtered.filter(e => e.score >= 4).length;
     const neutral = filtered.filter(e => e.score === 3).length;
