@@ -313,6 +313,10 @@ const Index = () => {
                 </CardContent>
               </Card>
             )}
+
+            {!isLoading && !error && (
+              <EnergyCalendar data={data} isLoading={isLoading} />
+            )}
           </TabsContent>
 
           <TabsContent value="calendar" className="animate-fade-in">
