@@ -41,13 +41,18 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       data.entries.forEach((entry: any) => {
         const score = entry.score || entry.energy_level;
         if (entry.date && score !== undefined) {
-          const [year, month, day] = entry.date.split('-').map(Number);
-          const key = `${year}-${month - 1}-${day}`;
-          
-          map[key] = {
-            score: score,
-            color: getColorClass(score)
-          };
+          const parts = entry.date.split('.');
+          if (parts.length === 3) {
+            const day = parseInt(parts[0]);
+            const month = parseInt(parts[1]) - 1;
+            const year = parseInt(parts[2]);
+            const key = `${year}-${month}-${day}`;
+            
+            map[key] = {
+              score: score,
+              color: getColorClass(score)
+            };
+          }
         }
       });
     }
