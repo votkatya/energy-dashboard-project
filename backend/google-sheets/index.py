@@ -115,10 +115,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     current_value += char
             values.append(current_value.strip())
             
-            if len(values) >= 7:
+            if len(values) >= 4:
                 try:
-                    date_str = values[0].strip()
-                    score_str = values[1].strip()
+                    date_str = values[0].strip() if len(values) > 0 else ''
+                    score_str = values[1].strip() if len(values) > 1 else ''
                     
                     if not date_str or not score_str:
                         continue
@@ -130,13 +130,18 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     if score < 1 or score > 5:
                         continue
                     
+                    thoughts = values[2].strip() if len(values) > 2 else ''
+                    category = values[4].strip() if len(values) > 4 else ''
+                    week = values[5].strip() if len(values) > 5 else ''
+                    month = values[6].strip() if len(values) > 6 else ''
+                    
                     entry = {
-                        'date': values[0].strip(),
+                        'date': date_str,
                         'score': score,
-                        'thoughts': values[2].strip(),
-                        'category': values[4].strip(),
-                        'week': values[5].strip(),
-                        'month': values[6].strip()
+                        'thoughts': thoughts,
+                        'category': category,
+                        'week': week,
+                        'month': month
                     }
                     entries.append(entry)
                 except (ValueError, IndexError):
