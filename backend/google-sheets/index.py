@@ -98,8 +98,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         headers = [h.strip() for h in lines[0].split(',')]
         entries = []
         
+        skipped = []
         for idx, line in enumerate(lines[1:], start=2):
             if not line.strip():
+                skipped.append(f'Line {idx}: empty line')
                 continue
             
             values = []
