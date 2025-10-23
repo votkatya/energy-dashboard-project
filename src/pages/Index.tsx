@@ -231,9 +231,7 @@ const Index = () => {
                     size="sm"
                     onClick={() => setTimePeriod('year')}
                     className={timePeriod === 'year' ? 'bg-primary' : ''}
-                  >
-                    Этот год
-                  </Button>
+                  >Год</Button>
                 </div>
                 
                 {/* Goal Progress */}
