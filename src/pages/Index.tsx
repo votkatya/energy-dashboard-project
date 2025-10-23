@@ -37,6 +37,8 @@ const Index = () => {
   const getFilteredStats = () => {
     if (!data?.entries) return { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
     
+    console.log('All entries:', data.entries.map(e => ({ date: e.date, score: e.score })));
+    
     let filtered = data.entries;
     
     if (timePeriod !== 'all') {
@@ -66,8 +68,12 @@ const Index = () => {
       
       filtered = data.entries.filter(e => {
         const entryMs = parseDate(e.date).getTime();
-        return entryMs >= cutoffMs;
+        const isInRange = entryMs >= cutoffMs;
+        console.log('Entry:', e.date, 'parsed:', parseDate(e.date), 'ms:', entryMs, 'cutoff:', cutoffMs, 'inRange:', isInRange);
+        return isInRange;
       });
+      
+      console.log('Filtered entries:', filtered.length, 'from', data.entries.length);
     }
     
     const good = filtered.filter(e => e.score >= 4).length;
