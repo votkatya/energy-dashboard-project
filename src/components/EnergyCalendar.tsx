@@ -1,33 +1,109 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
-const EnergyCalendar = () => {
-  const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
-  const energyData: Record<number, { score: number; color: string }> = {
-    7: { score: 3, color: 'bg-energy-neutral' },
-    8: { score: 5, color: 'bg-energy-excellent' },
-    9: { score: 5, color: 'bg-energy-excellent' },
-    10: { score: 5, color: 'bg-energy-excellent' },
-    11: { score: 5, color: 'bg-energy-excellent' },
-    12: { score: 5, color: 'bg-energy-excellent' },
-    13: { score: 5, color: 'bg-energy-excellent' },
-    14: { score: 5, color: 'bg-energy-excellent' },
-    15: { score: 3, color: 'bg-energy-neutral' },
-    16: { score: 3, color: 'bg-energy-neutral' },
-    17: { score: 4, color: 'bg-energy-good' },
-    18: { score: 5, color: 'bg-energy-excellent' },
-    19: { score: 4, color: 'bg-energy-good' },
-    20: { score: 2, color: 'bg-energy-low' },
-    21: { score: 4, color: 'bg-energy-good' },
-    22: { score: 5, color: 'bg-energy-excellent' },
+interface EnergyCalendarProps {
+  data?: any;
+  isLoading?: boolean;
+}
+
+const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
+  const [currentMonth, setCurrentMonth] = useState(9);
+  const [currentYear, setCurrentYear] = useState(2025);
+
+  const monthNames = [
+    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+  ];
+
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate();
   };
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1;
+  };
+
+  const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+  const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+
+  const energyData: Record<string, { score: number; color: string }> = {
+    '2025-9-7': { score: 3, color: 'bg-energy-neutral' },
+    '2025-9-8': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-9': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-10': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-11': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-12': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-13': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-14': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-15': { score: 3, color: 'bg-energy-neutral' },
+    '2025-9-16': { score: 3, color: 'bg-energy-neutral' },
+    '2025-9-17': { score: 4, color: 'bg-energy-good' },
+    '2025-9-18': { score: 5, color: 'bg-energy-excellent' },
+    '2025-9-19': { score: 4, color: 'bg-energy-good' },
+    '2025-9-20': { score: 2, color: 'bg-energy-low' },
+    '2025-9-21': { score: 4, color: 'bg-energy-good' },
+    '2025-9-22': { score: 5, color: 'bg-energy-excellent' },
+  };
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Card className="shadow-lg">
+        <CardContent className="py-12">
+          <div className="flex items-center justify-center">
+            <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="shadow-lg">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Icon name="Calendar" size={24} />
-          Октябрь 2025
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Icon name="Calendar" size={24} />
+            {monthNames[currentMonth]} {currentYear}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handlePrevMonth}
+              className="h-8 w-8"
+            >
+              <Icon name="ChevronLeft" size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleNextMonth}
+              className="h-8 w-8"
+            >
+              <Icon name="ChevronRight" size={16} />
+            </Button>
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -37,22 +113,22 @@ const EnergyCalendar = () => {
               {day}
             </div>
           ))}
-          {Array(2).fill(null).map((_, idx) => (
+          {Array(firstDay).fill(null).map((_, idx) => (
             <div key={`empty-${idx}`} />
           ))}
-          {daysInMonth.map((day) => {
-            const data = energyData[day];
+          {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
+            const dateKey = `${currentYear}-${currentMonth}-${day}`;
+            const dayData = energyData[dateKey];
             return (
               <div
                 key={day}
-                className={`aspect-square rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-110 ${
-                  data 
-                    ? `${data.color} text-white shadow-md` 
+                className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
+                  dayData 
+                    ? `${dayData.color} text-white shadow-md` 
                     : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'
                 }`}
               >
                 <span className="text-sm font-medium">{day}</span>
-                {data && <span className="text-xs font-bold mt-1">{data.score}</span>}
               </div>
             );
           })}
