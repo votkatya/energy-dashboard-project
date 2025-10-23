@@ -124,20 +124,20 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     score_str = values[1].strip() if len(values) > 1 else ''
                     
                     if not date_str:
-                        print(f'Line {idx}: empty date')
+                        skipped.append(f'Line {idx}: empty date')
                         continue
                     
                     if not score_str:
-                        print(f'Line {idx}: empty score for date {date_str}')
+                        skipped.append(f'Line {idx}: empty score for date {date_str}')
                         continue
                     
                     if not score_str.replace('.', '').replace(',', '').isdigit():
-                        print(f'Line {idx}: invalid score "{score_str}" for date {date_str}')
+                        skipped.append(f'Line {idx}: invalid score "{score_str}" for date {date_str}')
                         continue
                     
                     score = int(score_str)
                     if score < 1 or score > 5:
-                        print(f'Line {idx}: score {score} out of range for date {date_str}')
+                        skipped.append(f'Line {idx}: score {score} out of range for date {date_str}')
                         continue
                     
                     thoughts = values[2].strip() if len(values) > 2 else ''
@@ -155,12 +155,17 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     }
                     entries.append(entry)
                 except (ValueError, IndexError) as e:
-                    print(f'Line {idx}: exception {e}')
+                    skipped.append(f'Line {idx}: exception {e}')
                     continue
             else:
-                print(f'Line {idx}: only {len(values)} columns, need at least 4')
+                skipped.append(f'Line {idx}: only {len(values)} columns, need at least 4')
         
         print(f'Parsed {len(entries)} entries from {len(lines)-1} lines')
+        if skipped:
+            for s in skipped[:10]:
+                print(s)
+            if len(skipped) > 10:
+                print(f'... and {len(skipped)-10} more skipped lines')
         
         good_count = sum(1 for e in entries if e['score'] >= 4)
         neutral_count = sum(1 for e in entries if e['score'] == 3)
