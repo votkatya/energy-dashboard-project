@@ -221,43 +221,46 @@ const Index = () => {
                     Этот год
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-8">
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <span className="text-2xl">😊</span>
-                        Хорошие дни
+                    <CardHeader className="pb-2 md:pb-3">
+                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
+                        <span className="text-xl md:text-2xl">😊</span>
+                        <span className="hidden md:inline">Хорошие дни</span>
+                        <span className="md:hidden text-xs">Хорошие</span>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                      <div className="text-2xl md:text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
+                      <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
                   </Card>
 
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <span className="text-2xl">😐</span>
-                        Нейтральные
+                    <CardHeader className="pb-2 md:pb-3">
+                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
+                        <span className="text-xl md:text-2xl">😐</span>
+                        <span className="hidden md:inline">Нейтральные</span>
+                        <span className="md:hidden text-xs">Средние</span>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                      <div className="text-2xl md:text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
+                      <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
                   </Card>
 
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <span className="text-2xl">😔</span>
-                        Плохие дни
+                    <CardHeader className="pb-2 md:pb-3">
+                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
+                        <span className="text-xl md:text-2xl">😔</span>
+                        <span className="hidden md:inline">Плохие дни</span>
+                        <span className="md:hidden text-xs">Плохие</span>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                      <div className="text-2xl md:text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
+                      <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
                   </Card>
                 </div>
