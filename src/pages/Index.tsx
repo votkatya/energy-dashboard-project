@@ -213,9 +213,7 @@ const Index = () => {
                     size="sm"
                     onClick={() => setTimePeriod('3days')}
                     className={timePeriod === '3days' ? 'bg-primary' : ''}
-                  >
-                    Последние 3 дня
-                  </Button>
+                  >3 дня</Button>
                   <Button
                     variant={timePeriod === 'week' ? 'default' : 'outline'}
                     size="sm"
