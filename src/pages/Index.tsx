@@ -30,20 +30,20 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <header className="mb-8 animate-fade-in">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-energy-excellent to-energy-good flex items-center justify-center shadow-lg">
                 <Icon name="Zap" size={24} className="text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-heading font-bold text-foreground">Energy Tracker</h1>
+                <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">Energy Tracker</h1>
                 <p className="text-sm text-muted-foreground">Отслеживай свою энергию каждый день</p>
               </div>
             </div>
             <Button 
               onClick={() => setShowAddDialog(true)}
               size="lg"
-              className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+              className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
             >
               <Icon name="Plus" size={20} className="mr-2" />
               Добавить запись
@@ -52,41 +52,41 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 bg-card shadow-md p-1 h-14">
+          <TabsList className="grid w-full grid-cols-5 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="home" 
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
-              <Icon name="Home" size={18} className="mr-2" />
-              Главная
+              <Icon name="Home" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Главная</span>
             </TabsTrigger>
             <TabsTrigger 
               value="calendar"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
-              <Icon name="Calendar" size={18} className="mr-2" />
-              Календарь
+              <Icon name="Calendar" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Календарь</span>
             </TabsTrigger>
             <TabsTrigger 
               value="stats"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
-              <Icon name="BarChart3" size={18} className="mr-2" />
-              Статистика
+              <Icon name="BarChart3" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Статистика</span>
             </TabsTrigger>
             <TabsTrigger 
               value="charts"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
-              <Icon name="TrendingUp" size={18} className="mr-2" />
-              Графики
+              <Icon name="TrendingUp" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Графики</span>
             </TabsTrigger>
             <TabsTrigger 
               value="trends"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
-              <Icon name="Activity" size={18} className="mr-2" />
-              Тренды
+              <Icon name="Activity" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Тренды</span>
             </TabsTrigger>
           </TabsList>
 
