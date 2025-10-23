@@ -12,6 +12,7 @@ import { useEnergyData } from '@/hooks/useEnergyData';
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+  const [timePeriod, setTimePeriod] = useState<'all' | '3days' | 'week' | 'month' | 'year'>('all');
   const { data, isLoading, error } = useEnergyData();
 
   const getColorClass = (score: number) => {
@@ -22,7 +23,43 @@ const Index = () => {
     return 'energy-low';
   };
 
-  const stats = data?.stats || { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
+  const getFilteredStats = () => {
+    if (!data?.entries) return { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
+    
+    const now = new Date();
+    let filtered = data.entries;
+    
+    switch (timePeriod) {
+      case '3days':
+        const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+        filtered = data.entries.filter(e => new Date(e.date) >= threeDaysAgo);
+        break;
+      case 'week':
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        filtered = data.entries.filter(e => new Date(e.date) >= weekAgo);
+        break;
+      case 'month':
+        const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
+        filtered = data.entries.filter(e => new Date(e.date) >= monthAgo);
+        break;
+      case 'year':
+        const yearAgo = new Date(now.setFullYear(now.getFullYear() - 1));
+        filtered = data.entries.filter(e => new Date(e.date) >= yearAgo);
+        break;
+      default:
+        filtered = data.entries;
+    }
+    
+    const good = filtered.filter(e => e.score >= 4).length;
+    const neutral = filtered.filter(e => e.score === 3).length;
+    const bad = filtered.filter(e => e.score <= 2).length;
+    const total = filtered.length;
+    const average = total > 0 ? filtered.reduce((sum, e) => sum + e.score, 0) / total : 0;
+    
+    return { good, neutral, bad, average, total };
+  };
+
+  const stats = getFilteredStats();
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
 
   return (
@@ -105,6 +142,48 @@ const Index = () => {
 
             {!isLoading && !error && (
               <>
+                <div className="mb-6 flex flex-wrap gap-2 justify-center">
+                  <Button
+                    variant={timePeriod === 'all' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setTimePeriod('all')}
+                    className={timePeriod === 'all' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                  >
+                    За всё время
+                  </Button>
+                  <Button
+                    variant={timePeriod === '3days' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setTimePeriod('3days')}
+                    className={timePeriod === '3days' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                  >
+                    Последние 3 дня
+                  </Button>
+                  <Button
+                    variant={timePeriod === 'week' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setTimePeriod('week')}
+                    className={timePeriod === 'week' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                  >
+                    Эта неделя
+                  </Button>
+                  <Button
+                    variant={timePeriod === 'month' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setTimePeriod('month')}
+                    className={timePeriod === 'month' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                  >
+                    Этот месяц
+                  </Button>
+                  <Button
+                    variant={timePeriod === 'year' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setTimePeriod('year')}
+                    className={timePeriod === 'year' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                  >
+                    Этот год
+                  </Button>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
                     <CardHeader className="pb-3">
