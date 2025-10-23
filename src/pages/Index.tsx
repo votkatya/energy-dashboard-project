@@ -111,22 +111,22 @@ const Index = () => {
           <div className="flex flex-col gap-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg hidden sm:flex">
+                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
                   <Icon name="Zap" size={24} className="text-white" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
-                  <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Выгорание? Не сегодня</p>
+                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
                 </div>
               </div>
               <div className="flex gap-2">
                 <Button 
                   onClick={() => refetch()}
                   size="icon"
-                  variant="ghost"
-                  className="sm:hidden h-10 w-10"
+                  variant="outline"
+                  className="sm:hidden"
                 >
-                  <Icon name="RefreshCw" size={18} />
+                  <Icon name="RefreshCw" size={20} />
                 </Button>
                 <Button 
                   onClick={() => refetch()}
@@ -150,7 +150,7 @@ const Index = () => {
             <Button 
               onClick={() => setShowAddDialog(true)}
               size="lg"
-              className="sm:hidden w-full bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl text-base font-medium"
+              className="sm:hidden w-full bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
             >
               Как ты сегодня?
             </Button>
