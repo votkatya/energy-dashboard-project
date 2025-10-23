@@ -6,41 +6,41 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 10%;
+    --background: 210 20% 95%;
+    --foreground: 210 15% 20%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card: 210 10% 25%;
+    --card-foreground: 210 10% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 210 10% 25%;
+    --popover-foreground: 210 10% 95%;
 
-    --primary: 211 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 158 55% 55%;
+    --primary-foreground: 210 10% 15%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 210 10% 30%;
+    --secondary-foreground: 210 10% 95%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 210 10% 35%;
+    --muted-foreground: 210 10% 70%;
 
-    --accent: 211 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 195 65% 60%;
+    --accent-foreground: 210 10% 15%;
 
-    --destructive: 0 100% 50%;
+    --destructive: 5 75% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 211 100% 50%;
+    --border: 210 10% 35%;
+    --input: 210 10% 30%;
+    --ring: 158 55% 55%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;
 
-    --energy-low: 0 100% 50%;
-    --energy-medium-low: 14 100% 50%;
-    --energy-neutral: 45 100% 50%;
-    --energy-good: 90 65% 45%;
-    --energy-excellent: 142 76% 36%;
+    --energy-low: 5 75% 65%;
+    --energy-medium-low: 25 85% 60%;
+    --energy-neutral: 45 90% 65%;
+    --energy-good: 158 55% 55%;
+    --energy-excellent: 140 60% 50%;
 
     --sidebar-background: 0 0% 98%;
 
