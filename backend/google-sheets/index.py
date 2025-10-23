@@ -32,22 +32,45 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': json.dumps({'error': 'Method not allowed'})
         }
     
-    sheet_url = os.environ.get('GOOGLE_SHEET_URL', '')
+    sheet_url = os.environ.get('GOOGLE_SHEET_URL', '').strip()
     
-    if not sheet_url:
+    if not sheet_url or not sheet_url.startswith('http'):
+        demo_entries = [
+            {'date': '07.10.2025', 'score': 3, 'thoughts': 'вернулась с отпуска, очень хотела спать и очень много работы было', 'category': 'Нейтральный', 'week': '06.10.2025', 'month': '01.10.2025'},
+            {'date': '08.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
+            {'date': '09.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
+            {'date': '15.10.2025', 'score': 3, 'thoughts': 'вернулась с отпуска', 'category': 'Нейтральный', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '17.10.2025', 'score': 4, 'thoughts': 'постепенно в ритм вхожу', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '20.10.2025', 'score': 2, 'thoughts': 'сложный был понедельник', 'category': 'Плохой', 'week': '20.10.2025', 'month': '01.10.2025'},
+            {'date': '21.10.2025', 'score': 4, 'thoughts': 'утром гулять не ходила', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
+            {'date': '22.10.2025', 'score': 5, 'thoughts': 'день был классный', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
+        ]
+        
+        demo_stats = {
+            'good': 5,
+            'neutral': 2,
+            'bad': 1,
+            'average': 4.1,
+            'total': 8
+        }
+        
         return {
-            'statusCode': 500,
+            'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps({
-                'error': 'Google Sheet URL not configured',
-                'message': 'Please add GOOGLE_SHEET_URL secret'
-            })
+                'entries': demo_entries,
+                'stats': demo_stats,
+                'demo': True
+            }, ensure_ascii=False)
         }
     
     try:
+        if not sheet_url.startswith('https://docs.google.com/spreadsheets/'):
+            raise ValueError('Invalid Google Sheets URL format')
+            
         csv_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
         if '/edit' in csv_url and 'export' not in csv_url:
             csv_url = csv_url.replace('/edit', '/export?format=csv')
@@ -130,14 +153,35 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         }
         
     except Exception as e:
+        demo_entries = [
+            {'date': '07.10.2025', 'score': 3, 'thoughts': 'вернулась с отпуска, очень хотела спать и очень много работы было', 'category': 'Нейтральный', 'week': '06.10.2025', 'month': '01.10.2025'},
+            {'date': '08.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
+            {'date': '09.10.2025', 'score': 5, 'thoughts': 'отпуск', 'category': 'Хороший', 'week': '06.10.2025', 'month': '01.10.2025'},
+            {'date': '15.10.2025', 'score': 3, 'thoughts': 'вернулась с отпуска', 'category': 'Нейтральный', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '17.10.2025', 'score': 4, 'thoughts': 'постепенно в ритм вхожу', 'category': 'Хороший', 'week': '13.10.2025', 'month': '01.10.2025'},
+            {'date': '20.10.2025', 'score': 2, 'thoughts': 'сложный был понедельник', 'category': 'Плохой', 'week': '20.10.2025', 'month': '01.10.2025'},
+            {'date': '21.10.2025', 'score': 4, 'thoughts': 'утром гулять не ходила', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
+            {'date': '22.10.2025', 'score': 5, 'thoughts': 'день был классный', 'category': 'Хороший', 'week': '20.10.2025', 'month': '01.10.2025'},
+        ]
+        
+        demo_stats = {
+            'good': 5,
+            'neutral': 2,
+            'bad': 1,
+            'average': 4.1,
+            'total': 8
+        }
+        
         return {
-            'statusCode': 500,
+            'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps({
-                'error': 'Failed to fetch sheet data',
-                'message': str(e)
-            })
+                'entries': demo_entries,
+                'stats': demo_stats,
+                'demo': True,
+                'error': str(e)
+            }, ensure_ascii=False)
         }

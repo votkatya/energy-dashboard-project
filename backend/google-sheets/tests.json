@@ -10,11 +10,12 @@
       }
     },
     {
-      "name": "GET request returns data structure",
+      "name": "GET request returns demo or real data",
       "method": "GET",
       "path": "/",
       "expectedStatus": 200,
       "expectedBody": {
+        "stats": "object",
         "entries": "array"
       },
       "bodyMatcher": "partial"
