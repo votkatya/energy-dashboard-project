@@ -221,151 +221,43 @@ const Index = () => {
                     Этот год
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div className="space-y-4">
-                    <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <span className="text-2xl">😊</span>
-                          Хорошие дни
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
-                        <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
-                      </CardContent>
-                    </Card>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <span className="text-2xl">😊</span>
+                        Хорошие дни
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
+                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                    </CardContent>
+                  </Card>
 
-                    <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <span className="text-2xl">😐</span>
-                          Нейтральные
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
-                        <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
-                      </CardContent>
-                    </Card>
+                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <span className="text-2xl">😐</span>
+                        Нейтральные
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
+                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
+                    </CardContent>
+                  </Card>
 
-                    <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <span className="text-2xl">😔</span>
-                          Плохие дни
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
-                        <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <Card className="shadow-lg relative overflow-hidden">
-                    <CardContent className="p-8 h-full flex items-center justify-center">
-                      <div className="relative w-48 h-96">
-                        <svg viewBox="0 0 100 200" className="w-full h-full drop-shadow-lg">
-                          <defs>
-                            <clipPath id="wine-glass">
-                              <path d="M 35 20 L 30 65 Q 30 85 50 85 Q 70 85 70 65 L 65 20 M 48 85 L 48 160 M 35 160 Q 35 165 40 165 L 60 165 Q 65 165 65 160" />
-                            </clipPath>
-                            <linearGradient id="wine-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                              <stop offset="0%" stopColor="#8B0000" stopOpacity="1" />
-                              <stop offset="50%" stopColor="#A00000" stopOpacity="1" />
-                              <stop offset="100%" stopColor="#8B0000" stopOpacity="1" />
-                            </linearGradient>
-                            <radialGradient id="glass-shine">
-                              <stop offset="0%" stopColor="white" stopOpacity="0.3" />
-                              <stop offset="100%" stopColor="white" stopOpacity="0" />
-                            </radialGradient>
-                          </defs>
-                          
-                          <path 
-                            d="M 35 20 L 30 65 Q 30 85 50 85 Q 70 85 70 65 L 65 20 Z"
-                            fill="white"
-                            fillOpacity="0.05"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            className="text-foreground/30"
-                          />
-                          
-                          <line x1="48" y1="85" x2="48" y2="160" stroke="currentColor" strokeWidth="1.5" className="text-foreground/30" />
-                          
-                          <path 
-                            d="M 35 160 Q 35 165 40 165 L 60 165 Q 65 165 65 160 L 60 160 L 40 160 Z"
-                            fill="currentColor"
-                            fillOpacity="0.1"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            className="text-foreground/30"
-                          />
-                          
-                          <g clipPath="url(#wine-glass)">
-                            <rect
-                              x="30"
-                              y={85 - (stats.total > 0 ? (stats.good / stats.total) * 65 : 0)}
-                              width="40"
-                              height={(stats.total > 0 ? (stats.good / stats.total) * 65 : 0)}
-                              fill="url(#wine-gradient)"
-                              className="transition-all duration-1000 ease-out"
-                            />
-                            
-                            <ellipse
-                              cx="50"
-                              cy={85 - (stats.total > 0 ? (stats.good / stats.total) * 65 : 0)}
-                              rx="18"
-                              ry="3"
-                              className="fill-red-900/60"
-                              style={{
-                                animation: 'sway 3s ease-in-out infinite'
-                              }}
-                            >
-                              <animate
-                                attributeName="ry"
-                                values="3;4;3"
-                                dur="3s"
-                                repeatCount="indefinite"
-                              />
-                            </ellipse>
-                            
-                            <ellipse
-                              cx="50"
-                              cy={85 - (stats.total > 0 ? (stats.good / stats.total) * 65 : 0) + 1}
-                              rx="16"
-                              ry="2.5"
-                              className="fill-red-700/40"
-                              style={{
-                                animation: 'sway 2.5s ease-in-out infinite reverse'
-                              }}
-                            >
-                              <animate
-                                attributeName="rx"
-                                values="16;17;16"
-                                dur="2.5s"
-                                repeatCount="indefinite"
-                              />
-                            </ellipse>
-                          </g>
-                          
-                          <ellipse
-                            cx="42"
-                            cy="35"
-                            rx="8"
-                            ry="15"
-                            fill="url(#glass-shine)"
-                            opacity="0.4"
-                          />
-                        </svg>
-                        
-                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-center w-full">
-                          <p className="text-2xl font-heading font-bold text-primary">
-                            {stats.total > 0 ? Math.round((stats.good / stats.total) * 100) : 0}%
-                          </p>
-                          <p className="text-xs text-muted-foreground">хороших дней</p>
-                        </div>
-                      </div>
+                  <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <span className="text-2xl">😔</span>
+                        Плохие дни
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
+                      <p className="text-sm text-muted-foreground mt-1">Всего записей</p>
                     </CardContent>
                   </Card>
                 </div>
