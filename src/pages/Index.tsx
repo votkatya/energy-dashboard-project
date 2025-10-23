@@ -23,6 +23,17 @@ const Index = () => {
     return 'energy-low';
   };
 
+  const parseDate = (dateStr: string): Date => {
+    const parts = dateStr.split('.');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+    }
+    return new Date(dateStr);
+  };
+
   const getFilteredStats = () => {
     if (!data?.entries) return { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
     
@@ -54,7 +65,7 @@ const Index = () => {
       const cutoffMs = todayMs - (daysBack * 24 * 60 * 60 * 1000);
       
       filtered = data.entries.filter(e => {
-        const entryMs = new Date(e.date).getTime();
+        const entryMs = parseDate(e.date).getTime();
         return entryMs >= cutoffMs;
       });
     }
