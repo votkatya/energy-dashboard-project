@@ -113,7 +113,8 @@ export default {
 				'slide-up': 'slide-up 0.3s ease-out'
 			},
 			fontFamily: {
-				sans: ['-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'Inter', 'sans-serif']
+				sans: ['Inter', 'sans-serif'],
+				heading: ['Poppins', 'sans-serif']
 			}
 		}
 	},
