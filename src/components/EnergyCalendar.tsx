@@ -39,7 +39,8 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
     
     if (data?.entries) {
       data.entries.forEach((entry: any) => {
-        if (entry.date && entry.energy_level !== undefined) {
+        const score = entry.score || entry.energy_level;
+        if (entry.date && score !== undefined) {
           const date = new Date(entry.date);
           const year = date.getFullYear();
           const month = date.getMonth();
@@ -47,8 +48,8 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           const key = `${year}-${month}-${day}`;
           
           map[key] = {
-            score: entry.energy_level,
-            color: getColorClass(entry.energy_level)
+            score: score,
+            color: getColorClass(score)
           };
         }
       });
