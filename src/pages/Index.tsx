@@ -95,6 +95,26 @@ const Index = () => {
   };
 
   const stats = getFilteredStats();
+  
+  // Отдельная статистика для месячной цели
+  const getMonthlyStats = () => {
+    if (!data?.entries) return { average: 0, total: 0 };
+    
+    const todayMs = Date.now();
+    const cutoffMs = todayMs - (30 * 24 * 60 * 60 * 1000);
+    
+    const monthlyEntries = data.entries.filter(e => {
+      const entryMs = parseDate(e.date).getTime();
+      return entryMs >= cutoffMs;
+    });
+    
+    const total = monthlyEntries.length;
+    const average = total > 0 ? monthlyEntries.reduce((sum, e) => sum + e.score, 0) / total : 0;
+    
+    return { average, total };
+  };
+  
+  const monthlyStats = getMonthlyStats();
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
 
   return (
@@ -223,7 +243,7 @@ const Index = () => {
                 </div>
                 
                 {/* Goal Progress */}
-                {timePeriod === 'month' && stats.total > 0 && (
+                {monthlyStats.total > 0 && (
                   <Card className="shadow-lg mb-6 border-l-4 border-l-primary">
                     <CardContent className="pt-6">
                       <div className="space-y-3">
@@ -234,7 +254,7 @@ const Index = () => {
                           </div>
                           <div className="text-right">
                             <div className="text-2xl font-heading font-bold text-primary">
-                              {stats.average.toFixed(1)}
+                              {monthlyStats.average.toFixed(1)}
                             </div>
                             <div className="text-xs text-muted-foreground">из 4.0</div>
                           </div>
@@ -242,19 +262,19 @@ const Index = () => {
                         <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                           <div 
                             className={`absolute top-0 left-0 h-full rounded-full transition-all ${
-                              stats.average >= 4 
+                              monthlyStats.average >= 4 
                                 ? 'bg-energy-excellent' 
-                                : stats.average >= 3.5 
+                                : monthlyStats.average >= 3.5 
                                   ? 'bg-energy-good' 
                                   : 'bg-energy-neutral'
                             }`}
-                            style={{ width: `${Math.min((stats.average / 4) * 100, 100)}%` }}
+                            style={{ width: `${Math.min((monthlyStats.average / 4) * 100, 100)}%` }}
                           />
                         </div>
                         <p className="text-sm text-muted-foreground text-center">
-                          {stats.average >= 4 
+                          {monthlyStats.average >= 4 
                             ? '🎉 Цель достигнута!' 
-                            : `Еще ${(4 - stats.average).toFixed(1)} до цели`
+                            : `Еще ${(4 - monthlyStats.average).toFixed(1)} до цели`
                           }
                         </p>
                       </div>
