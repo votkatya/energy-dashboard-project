@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import Icon from '@/components/ui/icon';
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Icon from "@/components/ui/icon";
 
 interface EnergyCalendarProps {
   data?: any;
@@ -13,8 +13,18 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   const [currentYear, setCurrentYear] = useState(2025);
 
   const monthNames = [
-    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
   ];
 
   const getDaysInMonth = (month: number, year: number) => {
@@ -27,36 +37,36 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   };
 
   const getColorClass = (score: number) => {
-    if (score >= 5) return 'bg-energy-excellent';
-    if (score >= 4) return 'bg-energy-good';
-    if (score >= 3) return 'bg-energy-neutral';
-    if (score >= 2) return 'bg-energy-medium-low';
-    return 'bg-energy-low';
+    if (score >= 5) return "bg-energy-excellent";
+    if (score >= 4) return "bg-energy-good";
+    if (score >= 3) return "bg-energy-low";
+    if (score >= 2) return "bg-energy-medium-low";
+    return "bg-energy-low";
   };
 
   const energyDataMap = useMemo(() => {
     const map: Record<string, { score: number; color: string }> = {};
-    
+
     if (data?.entries) {
       data.entries.forEach((entry: any) => {
         const score = entry.score || entry.energy_level;
         if (entry.date && score !== undefined) {
-          const parts = entry.date.split('.');
+          const parts = entry.date.split(".");
           if (parts.length === 3) {
             const day = parseInt(parts[0]);
             const month = parseInt(parts[1]) - 1;
             const year = parseInt(parts[2]);
             const key = `${year}-${month}-${day}`;
-            
+
             map[key] = {
               score: score,
-              color: getColorClass(score)
+              color: getColorClass(score),
             };
           }
         }
       });
     }
-    
+
     return map;
   }, [data]);
 
@@ -86,7 +96,11 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       <Card className="shadow-lg">
         <CardContent className="py-12">
           <div className="flex items-center justify-center">
-            <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+            <Icon
+              name="Loader2"
+              size={32}
+              className="animate-spin text-primary"
+            />
           </div>
         </CardContent>
       </Card>
@@ -123,14 +137,19 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-7 gap-3">
-          {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
-            <div key={day} className="text-center font-medium text-muted-foreground text-sm py-2">
+          {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
+            <div
+              key={day}
+              className="text-center font-medium text-muted-foreground text-sm py-2"
+            >
               {day}
             </div>
           ))}
-          {Array(firstDay).fill(null).map((_, idx) => (
-            <div key={`empty-${idx}`} />
-          ))}
+          {Array(firstDay)
+            .fill(null)
+            .map((_, idx) => (
+              <div key={`empty-${idx}`} />
+            ))}
           {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
             const dateKey = `${currentYear}-${currentMonth}-${day}`;
             const dayData = energyDataMap[dateKey];
@@ -138,9 +157,9 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
               <div
                 key={day}
                 className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
-                  dayData 
-                    ? `${dayData.color} text-white shadow-md` 
-                    : 'bg-white border border-border text-foreground hover:bg-secondary/20'
+                  dayData
+                    ? `${dayData.color} text-white shadow-md`
+                    : "bg-white border border-border text-foreground hover:bg-secondary/20"
                 }`}
               >
                 <span className="text-sm font-medium">{day}</span>
@@ -148,7 +167,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
             );
           })}
         </div>
-        
+
         <div className="mt-6 flex items-center justify-center gap-6 flex-wrap">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-energy-low"></div>
