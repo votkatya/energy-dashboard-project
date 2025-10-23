@@ -12,7 +12,7 @@ import { useEnergyData } from '@/hooks/useEnergyData';
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
-  const [timePeriod, setTimePeriod] = useState<'all' | '3days' | 'week' | 'month' | 'year'>('all');
+  const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
   const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
   const { data, isLoading, error, refetch } = useEnergyData();
 
@@ -48,42 +48,37 @@ const Index = () => {
     
     console.log('All entries:', data.entries.map(e => ({ date: e.date, score: e.score })));
     
-    let filtered = data.entries;
+    const todayMs = Date.now();
     
-    if (timePeriod !== 'all') {
-      const now = new Date();
-      const todayMs = Date.now();
-      
-      let daysBack: number;
-      
-      switch (timePeriod) {
-        case '3days':
-          daysBack = 3;
-          break;
-        case 'week':
-          daysBack = 7;
-          break;
-        case 'month':
-          daysBack = 30;
-          break;
-        case 'year':
-          daysBack = 365;
-          break;
-        default:
-          daysBack = 0;
-      }
-      
-      const cutoffMs = todayMs - (daysBack * 24 * 60 * 60 * 1000);
-      
-      filtered = data.entries.filter(e => {
-        const entryMs = parseDate(e.date).getTime();
-        const isInRange = entryMs >= cutoffMs;
-        console.log('Entry:', e.date, 'parsed:', parseDate(e.date), 'ms:', entryMs, 'cutoff:', cutoffMs, 'inRange:', isInRange);
-        return isInRange;
-      });
-      
-      console.log('Filtered entries:', filtered.length, 'from', data.entries.length);
+    let daysBack: number;
+    
+    switch (timePeriod) {
+      case '3days':
+        daysBack = 3;
+        break;
+      case 'week':
+        daysBack = 7;
+        break;
+      case 'month':
+        daysBack = 30;
+        break;
+      case 'year':
+        daysBack = 365;
+        break;
+      default:
+        daysBack = 7;
     }
+    
+    const cutoffMs = todayMs - (daysBack * 24 * 60 * 60 * 1000);
+    
+    const filtered = data.entries.filter(e => {
+      const entryMs = parseDate(e.date).getTime();
+      const isInRange = entryMs >= cutoffMs;
+      console.log('Entry:', e.date, 'parsed:', parseDate(e.date), 'ms:', entryMs, 'cutoff:', cutoffMs, 'inRange:', isInRange);
+      return isInRange;
+    });
+    
+    console.log('Filtered entries:', filtered.length, 'from', data.entries.length);
     
     const good = filtered.filter(e => e.score >= 4).length;
     const neutral = filtered.filter(e => e.score === 3).length;
@@ -202,12 +197,6 @@ const Index = () => {
             {!isLoading && !error && (
               <>
                 <div className="mb-6 flex flex-wrap gap-2 justify-center">
-                  <Button
-                    variant={timePeriod === 'all' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setTimePeriod('all')}
-                    className={timePeriod === 'all' ? 'bg-primary' : ''}
-                  >Всё время</Button>
                   <Button
                     variant={timePeriod === '3days' ? 'default' : 'outline'}
                     size="sm"
