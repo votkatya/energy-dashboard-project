@@ -159,7 +159,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                 className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
                   dayData
                     ? `${dayData.color} text-white shadow-md`
-                    : "bg-black border border-border text-foreground hover:bg-secondary/20"
+                    : "bg-background border border-border text-foreground hover:bg-secondary/20"
                 }`}
               >
                 <span className="text-sm font-medium">{day}</span>
