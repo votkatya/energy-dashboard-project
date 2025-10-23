@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import EnergyCalendar from '@/components/EnergyCalendar';
 import EnergyStats from '@/components/EnergyStats';
-import EnergyCharts from '@/components/EnergyCharts';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
 import { useEnergyData } from '@/hooks/useEnergyData';
@@ -52,7 +51,7 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="home" 
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
@@ -73,13 +72,6 @@ const Index = () => {
             >
               <Icon name="BarChart3" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Статистика</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="charts"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
-            >
-              <Icon name="TrendingUp" size={18} className="sm:mr-0" />
-              <span className="hidden sm:inline">Графики</span>
             </TabsTrigger>
             <TabsTrigger 
               value="trends"
@@ -204,10 +196,6 @@ const Index = () => {
 
           <TabsContent value="stats" className="animate-fade-in">
             <EnergyStats data={data} isLoading={isLoading} />
-          </TabsContent>
-
-          <TabsContent value="charts" className="animate-fade-in">
-            <EnergyCharts data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in">
