@@ -233,7 +233,7 @@ const Index = () => {
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
-                        <Icon name="TrendingUp" size={20} className="text-energy-excellent" />
+                        <span className="text-2xl">😊</span>
                         Хорошие дни
                       </CardTitle>
                     </CardHeader>
@@ -246,7 +246,7 @@ const Index = () => {
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
-                        <Icon name="Minus" size={20} className="text-energy-neutral" />
+                        <span className="text-2xl">😐</span>
                         Нейтральные
                       </CardTitle>
                     </CardHeader>
@@ -259,7 +259,7 @@ const Index = () => {
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-low">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
-                        <Icon name="TrendingDown" size={20} className="text-energy-low" />
+                        <span className="text-2xl">😔</span>
                         Плохие дни
                       </CardTitle>
                     </CardHeader>
