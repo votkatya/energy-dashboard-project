@@ -193,9 +193,7 @@ const Index = () => {
                     size="sm"
                     onClick={() => setTimePeriod('all')}
                     className={timePeriod === 'all' ? 'bg-primary' : ''}
-                  >
-                    За всё время
-                  </Button>
+                  >Всё время</Button>
                   <Button
                     variant={timePeriod === '3days' ? 'default' : 'outline'}
                     size="sm"
