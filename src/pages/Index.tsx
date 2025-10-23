@@ -227,9 +227,7 @@ const Index = () => {
                     size="sm"
                     onClick={() => setTimePeriod('month')}
                     className={timePeriod === 'month' ? 'bg-primary' : ''}
-                  >
-                    Этот месяц
-                  </Button>
+                  >Месяц</Button>
                   <Button
                     variant={timePeriod === 'year' ? 'default' : 'outline'}
                     size="sm"
