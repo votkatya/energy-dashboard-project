@@ -39,7 +39,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   const getColorClass = (score: number) => {
     if (score >= 5) return "bg-energy-excellent";
     if (score >= 4) return "bg-energy-good";
-    if (score >= 3) return "bg-energy-low";
+    if (score >= 3) return "bg-energy-neutral";
     if (score >= 2) return "bg-energy-medium-low";
     return "bg-energy-low";
   };
@@ -159,7 +159,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                 className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
                   dayData
                     ? `${dayData.color} text-white shadow-md`
-                    : "bg-white border border-border text-foreground hover:bg-secondary/20"
+                    : "bg-black border border-border text-foreground hover:bg-secondary/20"
                 }`}
               >
                 <span className="text-sm font-medium">{day}</span>
