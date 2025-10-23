@@ -48,7 +48,8 @@ const Index = () => {
     
     console.log('All entries:', data.entries.map(e => ({ date: e.date, score: e.score })));
     
-    const todayMs = Date.now();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Начало сегодняшнего дня
     
     let daysBack: number;
     
@@ -69,12 +70,16 @@ const Index = () => {
         daysBack = 7;
     }
     
-    const cutoffMs = todayMs - (daysBack * 24 * 60 * 60 * 1000);
+    const cutoffDate = new Date(today);
+    cutoffDate.setDate(cutoffDate.getDate() - daysBack + 1); // +1 чтобы включить текущий день
+    const cutoffMs = cutoffDate.getTime();
     
     const filtered = data.entries.filter(e => {
-      const entryMs = parseDate(e.date).getTime();
+      const entryDate = parseDate(e.date);
+      entryDate.setHours(0, 0, 0, 0);
+      const entryMs = entryDate.getTime();
       const isInRange = entryMs >= cutoffMs;
-      console.log('Entry:', e.date, 'parsed:', parseDate(e.date), 'ms:', entryMs, 'cutoff:', cutoffMs, 'inRange:', isInRange);
+      console.log('Entry:', e.date, 'parsed:', entryDate, 'ms:', entryMs, 'cutoff:', cutoffMs, 'inRange:', isInRange);
       return isInRange;
     });
     
