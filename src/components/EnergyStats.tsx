@@ -14,10 +14,6 @@ const EnergyStats = () => {
     { month: '01.08.2025', bad: 2, neutral: 4, good: 12, avg: 3.8 },
   ];
 
-  const calculatePercentage = (value: number, total: number) => {
-    return total > 0 ? (value / total) * 100 : 0;
-  };
-
   return (
     <div className="space-y-6">
       <Card className="shadow-lg">
@@ -29,37 +25,15 @@ const EnergyStats = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {weeklyStats.map((stat, idx) => {
-              const total = stat.good + stat.neutral + stat.bad;
-              const goodPercent = calculatePercentage(stat.good, total);
-              const neutralPercent = calculatePercentage(stat.neutral, total);
-              const badPercent = calculatePercentage(stat.bad, total);
-              
-              return (
-                <div key={idx} className="p-4 rounded-xl bg-gradient-to-r from-secondary/50 to-transparent border-l-4 border-l-primary">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-medium">Неделя {stat.week}</span>
-                    <span className="px-3 py-1 rounded-full bg-primary/20 text-primary font-bold">
-                      ø {stat.avg}
-                    </span>
-                  </div>
-                  
-                  <div className="mb-4 h-3 bg-secondary rounded-full overflow-hidden flex">
-                    <div 
-                      className="bg-energy-excellent transition-all" 
-                      style={{ width: `${goodPercent}%` }}
-                    />
-                    <div 
-                      className="bg-energy-neutral transition-all" 
-                      style={{ width: `${neutralPercent}%` }}
-                    />
-                    <div 
-                      className="bg-energy-low transition-all" 
-                      style={{ width: `${badPercent}%` }}
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-3 gap-4">
+            {weeklyStats.map((stat, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-gradient-to-r from-secondary/50 to-transparent border-l-4 border-l-primary">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-medium">Неделя {stat.week}</span>
+                  <span className="px-3 py-1 rounded-full bg-primary/20 text-primary font-bold">
+                    ø {stat.avg}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
                     <div className="text-center">
                       <div className="text-2xl font-heading font-bold text-energy-excellent">{stat.good}</div>
                       <div className="text-xs text-muted-foreground">Хорошие</div>
@@ -72,10 +46,9 @@ const EnergyStats = () => {
                       <div className="text-2xl font-heading font-bold text-energy-low">{stat.bad}</div>
                       <div className="text-xs text-muted-foreground">Плохие</div>
                     </div>
-                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -89,37 +62,15 @@ const EnergyStats = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {monthlyStats.map((stat, idx) => {
-              const total = stat.good + stat.neutral + stat.bad;
-              const goodPercent = calculatePercentage(stat.good, total);
-              const neutralPercent = calculatePercentage(stat.neutral, total);
-              const badPercent = calculatePercentage(stat.bad, total);
-              
-              return (
-                <div key={idx} className="p-4 rounded-xl bg-gradient-to-r from-accent/10 to-transparent border-l-4 border-l-accent">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-medium">Месяц {stat.month}</span>
-                    <span className="px-3 py-1 rounded-full bg-accent/20 text-accent font-bold">
-                      ø {stat.avg}
-                    </span>
-                  </div>
-                  
-                  <div className="mb-4 h-3 bg-secondary rounded-full overflow-hidden flex">
-                    <div 
-                      className="bg-energy-excellent transition-all" 
-                      style={{ width: `${goodPercent}%` }}
-                    />
-                    <div 
-                      className="bg-energy-neutral transition-all" 
-                      style={{ width: `${neutralPercent}%` }}
-                    />
-                    <div 
-                      className="bg-energy-low transition-all" 
-                      style={{ width: `${badPercent}%` }}
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-3 gap-4">
+            {monthlyStats.map((stat, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-gradient-to-r from-accent/10 to-transparent border-l-4 border-l-accent">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-medium">Месяц {stat.month}</span>
+                  <span className="px-3 py-1 rounded-full bg-accent/20 text-accent font-bold">
+                    ø {stat.avg}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
                     <div className="text-center">
                       <div className="text-2xl font-heading font-bold text-energy-excellent">{stat.good}</div>
                       <div className="text-xs text-muted-foreground">Хорошие</div>
@@ -132,10 +83,9 @@ const EnergyStats = () => {
                       <div className="text-2xl font-heading font-bold text-energy-low">{stat.bad}</div>
                       <div className="text-xs text-muted-foreground">Плохие</div>
                     </div>
-                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
