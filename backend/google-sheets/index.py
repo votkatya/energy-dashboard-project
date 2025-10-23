@@ -71,9 +71,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if not sheet_url.startswith('https://docs.google.com/spreadsheets/'):
             raise ValueError('Invalid Google Sheets URL format')
             
-        csv_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
-        if '/edit' in csv_url and 'export' not in csv_url:
-            csv_url = csv_url.replace('/edit', '/export?format=csv')
+        sheet_id = sheet_url.split('/d/')[1].split('/')[0]
+        gid = '1030040391'
+        csv_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}'
         
         req = urllib.request.Request(csv_url)
         with urllib.request.urlopen(req, timeout=10) as response:
@@ -113,14 +113,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             if len(values) >= 7:
                 try:
-                    score = int(values[1]) if values[1].isdigit() else 0
+                    score_str = values[1].strip()
+                    if not score_str or not score_str.isdigit():
+                        continue
+                    
+                    score = int(score_str)
+                    if score < 1 or score > 5:
+                        continue
+                    
                     entry = {
-                        'date': values[0],
+                        'date': values[0].strip(),
                         'score': score,
-                        'thoughts': values[2],
-                        'category': values[3],
-                        'week': values[4],
-                        'month': values[5]
+                        'thoughts': values[2].strip(),
+                        'category': values[4].strip(),
+                        'week': values[5].strip(),
+                        'month': values[6].strip()
                     }
                     entries.append(entry)
                 except (ValueError, IndexError):
