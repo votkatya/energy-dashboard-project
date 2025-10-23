@@ -134,20 +134,13 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
+          <TabsList className="grid w-full grid-cols-3 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="home" 
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
               <Icon name="Home" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Главная</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="calendar"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
-            >
-              <Icon name="Calendar" size={18} className="sm:mr-0" />
-              <span className="hidden sm:inline">Календарь</span>
             </TabsTrigger>
             <TabsTrigger 
               value="stats"
@@ -317,10 +310,6 @@ const Index = () => {
             {!isLoading && !error && (
               <EnergyCalendar data={data} isLoading={isLoading} />
             )}
-          </TabsContent>
-
-          <TabsContent value="calendar" className="animate-fade-in">
-            <EnergyCalendar data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in">
