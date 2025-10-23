@@ -221,6 +221,47 @@ const Index = () => {
                     Этот год
                   </Button>
                 </div>
+                
+                {/* Goal Progress */}
+                {timePeriod === 'month' && stats.total > 0 && (
+                  <Card className="shadow-lg mb-6 border-l-4 border-l-primary">
+                    <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Icon name="Target" size={20} className="text-primary" />
+                            <span className="font-medium">Месячная цель</span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-2xl font-heading font-bold text-primary">
+                              {stats.average.toFixed(1)}
+                            </div>
+                            <div className="text-xs text-muted-foreground">из 4.0</div>
+                          </div>
+                        </div>
+                        <div className="relative h-3 bg-muted rounded-full overflow-hidden">
+                          <div 
+                            className={`absolute top-0 left-0 h-full rounded-full transition-all ${
+                              stats.average >= 4 
+                                ? 'bg-energy-excellent' 
+                                : stats.average >= 3.5 
+                                  ? 'bg-energy-good' 
+                                  : 'bg-energy-neutral'
+                            }`}
+                            style={{ width: `${Math.min((stats.average / 4) * 100, 100)}%` }}
+                          />
+                        </div>
+                        <p className="text-sm text-muted-foreground text-center">
+                          {stats.average >= 4 
+                            ? '🎉 Цель достигнута!' 
+                            : `Еще ${(4 - stats.average).toFixed(1)} до цели`
+                          }
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-8">
                   <Card className="shadow-lg hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
                     <CardHeader className="pb-2 md:pb-3">
