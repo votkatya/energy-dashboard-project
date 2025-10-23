@@ -30,35 +30,32 @@ const Index = () => {
     
     if (timePeriod !== 'all') {
       const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const todayMs = Date.now();
       
-      let cutoffDate: Date;
+      let daysBack: number;
       
       switch (timePeriod) {
         case '3days':
-          cutoffDate = new Date(today);
-          cutoffDate.setDate(cutoffDate.getDate() - 3);
+          daysBack = 3;
           break;
         case 'week':
-          cutoffDate = new Date(today);
-          cutoffDate.setDate(cutoffDate.getDate() - 7);
+          daysBack = 7;
           break;
         case 'month':
-          cutoffDate = new Date(today);
-          cutoffDate.setMonth(cutoffDate.getMonth() - 1);
+          daysBack = 30;
           break;
         case 'year':
-          cutoffDate = new Date(today);
-          cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
+          daysBack = 365;
           break;
         default:
-          cutoffDate = new Date(0);
+          daysBack = 0;
       }
       
+      const cutoffMs = todayMs - (daysBack * 24 * 60 * 60 * 1000);
+      
       filtered = data.entries.filter(e => {
-        const entryDate = new Date(e.date);
-        const entryDateOnly = new Date(entryDate.getFullYear(), entryDate.getMonth(), entryDate.getDate());
-        return entryDateOnly > cutoffDate && entryDateOnly <= today;
+        const entryMs = new Date(e.date).getTime();
+        return entryMs >= cutoffMs;
       });
     }
     
