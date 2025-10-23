@@ -26,28 +26,43 @@ const Index = () => {
   const getFilteredStats = () => {
     if (!data?.entries) return { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
     
-    const now = new Date();
     let filtered = data.entries;
     
-    switch (timePeriod) {
-      case '3days':
-        const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
-        filtered = data.entries.filter(e => new Date(e.date) >= threeDaysAgo);
-        break;
-      case 'week':
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        filtered = data.entries.filter(e => new Date(e.date) >= weekAgo);
-        break;
-      case 'month':
-        const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
-        filtered = data.entries.filter(e => new Date(e.date) >= monthAgo);
-        break;
-      case 'year':
-        const yearAgo = new Date(now.setFullYear(now.getFullYear() - 1));
-        filtered = data.entries.filter(e => new Date(e.date) >= yearAgo);
-        break;
-      default:
-        filtered = data.entries;
+    if (timePeriod !== 'all') {
+      const now = new Date();
+      now.setHours(23, 59, 59, 999);
+      
+      let cutoffDate: Date;
+      
+      switch (timePeriod) {
+        case '3days':
+          cutoffDate = new Date(now);
+          cutoffDate.setDate(cutoffDate.getDate() - 3);
+          cutoffDate.setHours(0, 0, 0, 0);
+          break;
+        case 'week':
+          cutoffDate = new Date(now);
+          cutoffDate.setDate(cutoffDate.getDate() - 7);
+          cutoffDate.setHours(0, 0, 0, 0);
+          break;
+        case 'month':
+          cutoffDate = new Date(now);
+          cutoffDate.setMonth(cutoffDate.getMonth() - 1);
+          cutoffDate.setHours(0, 0, 0, 0);
+          break;
+        case 'year':
+          cutoffDate = new Date(now);
+          cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
+          cutoffDate.setHours(0, 0, 0, 0);
+          break;
+        default:
+          cutoffDate = new Date(0);
+      }
+      
+      filtered = data.entries.filter(e => {
+        const entryDate = new Date(e.date);
+        return entryDate >= cutoffDate;
+      });
     }
     
     const good = filtered.filter(e => e.score >= 4).length;
