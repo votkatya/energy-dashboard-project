@@ -219,9 +219,7 @@ const Index = () => {
                     size="sm"
                     onClick={() => setTimePeriod('week')}
                     className={timePeriod === 'week' ? 'bg-primary' : ''}
-                  >
-                    Эта неделя
-                  </Button>
+                  >Неделя</Button>
                   <Button
                     variant={timePeriod === 'month' ? 'default' : 'outline'}
                     size="sm"
