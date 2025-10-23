@@ -1,6 +1,12 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Icon from "@/components/ui/icon";
 
 interface EnergyCalendarProps {
@@ -11,6 +17,7 @@ interface EnergyCalendarProps {
 const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(9);
   const [currentYear, setCurrentYear] = useState(2025);
+  const [selectedDay, setSelectedDay] = useState<{ date: string; entry: any } | null>(null);
 
   const monthNames = [
     "Январь",
@@ -45,7 +52,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   };
 
   const energyDataMap = useMemo(() => {
-    const map: Record<string, { score: number; color: string }> = {};
+    const map: Record<string, { score: number; color: string; entry: any }> = {};
 
     if (data?.entries) {
       data.entries.forEach((entry: any) => {
@@ -61,6 +68,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
             map[key] = {
               score: score,
               color: getColorClass(score),
+              entry: entry,
             };
           }
         }
@@ -156,6 +164,14 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
             return (
               <div
                 key={day}
+                onClick={() => {
+                  if (dayData) {
+                    setSelectedDay({
+                      date: dayData.entry.date,
+                      entry: dayData.entry
+                    });
+                  }
+                }}
                 className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
                   dayData
                     ? `${dayData.color} text-white shadow-md`
@@ -187,6 +203,40 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           </div>
         </div>
       </CardContent>
+
+      <Dialog open={!!selectedDay} onOpenChange={() => setSelectedDay(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Icon name="Calendar" size={20} />
+              {selectedDay?.date}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className={`w-16 h-16 rounded-xl ${selectedDay?.entry ? getColorClass(selectedDay.entry.score) : ''} flex items-center justify-center text-white font-heading font-bold text-2xl shadow-md`}>
+                {selectedDay?.entry?.score}
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Уровень энергии</p>
+                <p className="font-medium">
+                  {selectedDay?.entry?.score >= 5 ? 'Отличный' :
+                   selectedDay?.entry?.score >= 4 ? 'Хороший' :
+                   selectedDay?.entry?.score >= 3 ? 'Нейтральный' :
+                   selectedDay?.entry?.score >= 2 ? 'Средне-низкий' : 'Плохой'}
+                </p>
+              </div>
+            </div>
+            
+            {selectedDay?.entry?.thoughts && (
+              <div className="p-4 rounded-lg bg-secondary/20">
+                <p className="text-sm font-medium mb-2">Заметки:</p>
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap">{selectedDay.entry.thoughts}</p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
