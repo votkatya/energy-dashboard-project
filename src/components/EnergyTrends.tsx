@@ -167,7 +167,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="p-4 rounded-xl bg-gradient-to-br from-energy-excellent/10 to-transparent border border-energy-excellent/30">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xl">😊</span>
@@ -185,6 +185,15 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">Нейтральные дни</p>
+              </div>
+              <div className="p-4 rounded-xl bg-gradient-to-br from-energy-low/10 to-transparent border border-energy-low/30">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xl">😔</span>
+                  <div className="text-2xl font-heading font-bold text-energy-low">
+                    {analytics.badPercent}%
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">Плохие дни</p>
               </div>
             </div>
           </div>
