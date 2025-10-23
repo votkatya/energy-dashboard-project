@@ -13,6 +13,7 @@ const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [timePeriod, setTimePeriod] = useState<'all' | '3days' | 'week' | 'month' | 'year'>('all');
+  const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
   const { data, isLoading, error, refetch } = useEnergyData();
 
   useEffect(() => {
@@ -285,18 +286,25 @@ const Index = () => {
                     <div className="space-y-3">
                       {recentEntries.map((entry, idx) => {
                         const colorClass = getColorClass(entry.score);
+                        const isExpanded = expandedEntry === idx;
                         return (
                           <div 
                             key={idx}
-                            className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all`}
+                            onClick={() => setExpandedEntry(isExpanded ? null : idx)}
+                            className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all cursor-pointer`}
                           >
                             <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
                               {entry.score}
                             </div>
                             <div className="flex-1">
                               <p className="font-medium text-foreground">{entry.date}</p>
-                              <p className="text-sm text-muted-foreground line-clamp-1">{entry.thoughts}</p>
+                              <p className={`text-sm text-muted-foreground ${isExpanded ? '' : 'line-clamp-1'}`}>{entry.thoughts}</p>
                             </div>
+                            <Icon 
+                              name={isExpanded ? "ChevronUp" : "ChevronDown"} 
+                              size={20} 
+                              className="text-muted-foreground flex-shrink-0"
+                            />
                           </div>
                         );
                       })}
