@@ -230,8 +230,8 @@ const Index = () => {
                         <span className="md:hidden text-xs">Хорошие</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl md:text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
+                    <CardContent className="text-center md:text-left">
+                      <div className="text-3xl md:text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
                       <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
                   </Card>
@@ -244,8 +244,8 @@ const Index = () => {
                         <span className="md:hidden text-xs">Средние</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl md:text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
+                    <CardContent className="text-center md:text-left">
+                      <div className="text-3xl md:text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
                       <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
                   </Card>
@@ -258,8 +258,8 @@ const Index = () => {
                         <span className="md:hidden text-xs">Плохие</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl md:text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
+                    <CardContent className="text-center md:text-left">
+                      <div className="text-3xl md:text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
                       <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
                   </Card>
