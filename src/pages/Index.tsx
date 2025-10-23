@@ -13,7 +13,7 @@ const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [timePeriod, setTimePeriod] = useState<'all' | '3days' | 'week' | 'month' | 'year'>('all');
-  const { data, isLoading, error } = useEnergyData();
+  const { data, isLoading, error, refetch } = useEnergyData();
 
   const getColorClass = (score: number) => {
     if (score >= 5) return 'energy-excellent';
@@ -88,14 +88,25 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
               </div>
             </div>
-            <Button 
-              onClick={() => setShowAddDialog(true)}
-              size="lg"
-              className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
-            >
-              <Icon name="Plus" size={20} className="mr-2" />
-              Добавить запись
-            </Button>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button 
+                onClick={() => refetch()}
+                size="lg"
+                variant="outline"
+                className="flex-1 sm:flex-initial"
+              >
+                <Icon name="RefreshCw" size={20} className="mr-2" />
+                Обновить
+              </Button>
+              <Button 
+                onClick={() => setShowAddDialog(true)}
+                size="lg"
+                className="flex-1 sm:flex-initial bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+              >
+                <Icon name="Plus" size={20} className="mr-2" />
+                Добавить запись
+              </Button>
+            </div>
           </div>
         </header>
 
