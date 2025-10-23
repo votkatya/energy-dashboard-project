@@ -35,7 +35,7 @@ const Index = () => {
                 <Icon name="Zap" size={24} className="text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">Energy Tracker</h1>
+                <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
                 <p className="text-sm text-muted-foreground">Отслеживай свою энергию каждый день</p>
               </div>
             </div>
