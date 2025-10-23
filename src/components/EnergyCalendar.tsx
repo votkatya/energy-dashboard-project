@@ -41,11 +41,8 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       data.entries.forEach((entry: any) => {
         const score = entry.score || entry.energy_level;
         if (entry.date && score !== undefined) {
-          const date = new Date(entry.date);
-          const year = date.getFullYear();
-          const month = date.getMonth();
-          const day = date.getDate();
-          const key = `${year}-${month}-${day}`;
+          const [year, month, day] = entry.date.split('-').map(Number);
+          const key = `${year}-${month - 1}-${day}`;
           
           map[key] = {
             score: score,
