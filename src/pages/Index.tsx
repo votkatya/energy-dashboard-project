@@ -97,12 +97,12 @@ const Index = () => {
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <header className="mb-8 animate-fade-in">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-energy-excellent to-energy-good flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
                 <Icon name="Zap" size={24} className="text-white" />
               </div>
               <div>
@@ -123,7 +123,7 @@ const Index = () => {
               <Button 
                 onClick={() => setShowAddDialog(true)}
                 size="lg"
-                className="flex-1 sm:flex-initial bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+                className="flex-1 sm:flex-initial bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
               >
                 <Icon name="Plus" size={20} className="mr-2" />
                 Добавить запись
@@ -143,21 +143,21 @@ const Index = () => {
             </TabsTrigger>
             <TabsTrigger 
               value="calendar"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
               <Icon name="Calendar" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Календарь</span>
             </TabsTrigger>
             <TabsTrigger 
               value="stats"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
               <Icon name="BarChart3" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Статистика</span>
             </TabsTrigger>
             <TabsTrigger 
               value="trends"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
               <Icon name="Activity" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Тренды</span>
@@ -192,7 +192,7 @@ const Index = () => {
                     variant={timePeriod === 'all' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setTimePeriod('all')}
-                    className={timePeriod === 'all' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                    className={timePeriod === 'all' ? 'bg-primary' : ''}
                   >
                     За всё время
                   </Button>
@@ -200,7 +200,7 @@ const Index = () => {
                     variant={timePeriod === '3days' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setTimePeriod('3days')}
-                    className={timePeriod === '3days' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                    className={timePeriod === '3days' ? 'bg-primary' : ''}
                   >
                     Последние 3 дня
                   </Button>
@@ -208,7 +208,7 @@ const Index = () => {
                     variant={timePeriod === 'week' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setTimePeriod('week')}
-                    className={timePeriod === 'week' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                    className={timePeriod === 'week' ? 'bg-primary' : ''}
                   >
                     Эта неделя
                   </Button>
@@ -216,7 +216,7 @@ const Index = () => {
                     variant={timePeriod === 'month' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setTimePeriod('month')}
-                    className={timePeriod === 'month' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                    className={timePeriod === 'month' ? 'bg-primary' : ''}
                   >
                     Этот месяц
                   </Button>
@@ -224,7 +224,7 @@ const Index = () => {
                     variant={timePeriod === 'year' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setTimePeriod('year')}
-                    className={timePeriod === 'year' ? 'bg-gradient-to-r from-primary to-accent' : ''}
+                    className={timePeriod === 'year' ? 'bg-primary' : ''}
                   >
                     Этот год
                   </Button>
