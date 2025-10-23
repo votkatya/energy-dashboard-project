@@ -136,7 +136,7 @@ const Index = () => {
           <TabsList className="grid w-full grid-cols-4 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="home" 
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
             >
               <Icon name="Home" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Главная</span>
