@@ -30,38 +30,39 @@ const Index = () => {
     
     if (timePeriod !== 'all') {
       const now = new Date();
-      now.setHours(23, 59, 59, 999);
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       
       let cutoffDate: Date;
       
       switch (timePeriod) {
         case '3days':
-          cutoffDate = new Date(now);
-          cutoffDate.setDate(cutoffDate.getDate() - 3);
-          cutoffDate.setHours(0, 0, 0, 0);
+          cutoffDate = new Date(today);
+          cutoffDate.setDate(cutoffDate.getDate() - 2);
           break;
         case 'week':
-          cutoffDate = new Date(now);
-          cutoffDate.setDate(cutoffDate.getDate() - 7);
-          cutoffDate.setHours(0, 0, 0, 0);
+          cutoffDate = new Date(today);
+          cutoffDate.setDate(cutoffDate.getDate() - 6);
           break;
         case 'month':
-          cutoffDate = new Date(now);
+          cutoffDate = new Date(today);
           cutoffDate.setMonth(cutoffDate.getMonth() - 1);
-          cutoffDate.setHours(0, 0, 0, 0);
           break;
         case 'year':
-          cutoffDate = new Date(now);
+          cutoffDate = new Date(today);
           cutoffDate.setFullYear(cutoffDate.getFullYear() - 1);
-          cutoffDate.setHours(0, 0, 0, 0);
           break;
         default:
           cutoffDate = new Date(0);
       }
       
+      console.log('Period:', timePeriod, 'Cutoff:', cutoffDate, 'Today:', today);
+      
       filtered = data.entries.filter(e => {
         const entryDate = new Date(e.date);
-        return entryDate >= cutoffDate;
+        const entryDateOnly = new Date(entryDate.getFullYear(), entryDate.getMonth(), entryDate.getDate());
+        const isInRange = entryDateOnly >= cutoffDate && entryDateOnly <= today;
+        console.log('Entry:', e.date, 'Score:', e.score, 'In range:', isInRange);
+        return isInRange;
       });
     }
     
