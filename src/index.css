@@ -17,6 +17,8 @@
 
     --primary: 81 54% 58%;
     --primary-foreground: 210 18% 12%;
+    --primary-light: 81 91% 67%;
+    --primary-dark: 81 63% 52%;
 
     --secondary: 210 10% 28%;
     --secondary-foreground: 210 5% 98%;
@@ -36,11 +38,11 @@
 
     --radius: 1.5rem;
 
-    --energy-low: 351 35% 73%;
-    --energy-medium-low: 351 35% 73%;
-    --energy-neutral: 45 95% 70%;
-    --energy-good: 73 45% 75%;
-    --energy-excellent: 81 54% 58%;
+    --energy-low: 351 65% 68%;
+    --energy-medium-low: 351 65% 68%;
+    --energy-neutral: 45 95% 65%;
+    --energy-good: 81 91% 67%;
+    --energy-excellent: 81 63% 52%;
 
     --sidebar-background: 0 0% 98%;
 

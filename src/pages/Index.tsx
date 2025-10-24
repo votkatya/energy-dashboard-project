@@ -251,13 +251,7 @@ const Index = () => {
                         </div>
                         <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                           <div 
-                            className={`absolute top-0 left-0 h-full rounded-full transition-all ${
-                              monthlyStats.average >= 4 
-                                ? 'bg-energy-excellent' 
-                                : monthlyStats.average >= 3.5 
-                                  ? 'bg-energy-good' 
-                                  : 'bg-energy-neutral'
-                            }`}
+                            className="absolute top-0 left-0 h-full rounded-full transition-all bg-gradient-to-r from-energy-good via-energy-excellent to-energy-good"
                             style={{ width: `${Math.min((monthlyStats.average / 4) * 100, 100)}%` }}
                           />
                         </div>
@@ -273,7 +267,7 @@ const Index = () => {
                 )}
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
-                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-excellent bg-gradient-to-br from-card to-card/95">
+                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-good bg-gradient-to-br from-card to-card/95 hover:border-l-energy-excellent">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😊</span>
@@ -287,7 +281,7 @@ const Index = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-neutral bg-gradient-to-br from-card to-card/95">
+                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-neutral bg-gradient-to-br from-card to-card/95 hover:border-l-yellow-400">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😐</span>
@@ -301,7 +295,7 @@ const Index = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-low bg-gradient-to-br from-card to-card/95">
+                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-low bg-gradient-to-br from-card to-card/95 hover:border-l-red-400">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😔</span>
