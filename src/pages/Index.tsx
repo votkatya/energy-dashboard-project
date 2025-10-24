@@ -234,7 +234,7 @@ const Index = () => {
                 
                 {/* Goal Progress */}
                 {monthlyStats.total > 0 && (
-                  <Card className="shadow-lg mb-6 md:mb-8 border-l-4 border-l-primary">
+                  <Card className="shadow-[0_2px_8px_rgba(0,0,0,0.25)] mb-8 md:mb-10 border-l-4 border-l-primary bg-gradient-to-br from-card to-card/95">
                     <CardContent className="pt-6">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -273,7 +273,7 @@ const Index = () => {
                 )}
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
-                  <Card className="shadow-md hover:shadow-xl transition-all border-l-4 border-l-energy-excellent">
+                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-excellent bg-gradient-to-br from-card to-card/95">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😊</span>
@@ -287,7 +287,7 @@ const Index = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="shadow-md hover:shadow-xl transition-all border-l-4 border-l-energy-neutral">
+                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-neutral bg-gradient-to-br from-card to-card/95">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😐</span>
@@ -301,7 +301,7 @@ const Index = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="shadow-md hover:shadow-xl transition-all border-l-4 border-l-energy-low">
+                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-low bg-gradient-to-br from-card to-card/95">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😔</span>
