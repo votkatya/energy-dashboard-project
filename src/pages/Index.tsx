@@ -7,14 +7,50 @@ import EnergyCalendar from '@/components/EnergyCalendar';
 import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
+import AuthDialog from '@/components/AuthDialog';
 import { useEnergyData } from '@/hooks/useEnergyData';
+import { authService } from '@/lib/auth';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
   const [activeTab, setActiveTab] = useState('home');
   const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
   const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
   const { data, isLoading, error, refetch } = useEnergyData();
+
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      setShowAuthDialog(true);
+    } else {
+      authService.verifyToken().then((user) => {
+        if (!user) {
+          setIsAuthenticated(false);
+          setShowAuthDialog(true);
+        }
+      });
+    }
+  }, []);
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+    refetch();
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    setShowAuthDialog(true);
+  };
+
+  const handleAddEntry = () => {
+    if (!isAuthenticated) {
+      setShowAuthDialog(true);
+      return;
+    }
+    setShowAddDialog(true);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -116,10 +152,22 @@ const Index = () => {
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
-                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
+                  <p className="text-sm text-muted-foreground">
+                    {isAuthenticated && authService.getUser()?.name ? `Привет, ${authService.getUser()?.name}!` : 'Выгорание? Не сегодня'}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-2">
+                {isAuthenticated && (
+                  <Button 
+                    onClick={handleLogout}
+                    size="icon"
+                    variant="ghost"
+                    title="Выйти"
+                  >
+                    <Icon name="LogOut" size={20} />
+                  </Button>
+                )}
                 <Button 
                   onClick={() => refetch()}
                   size="icon"
@@ -138,7 +186,7 @@ const Index = () => {
                   Обновить
                 </Button>
                 <Button 
-                  onClick={() => setShowAddDialog(true)}
+                  onClick={handleAddEntry}
                   size="lg"
                   className="hidden sm:flex bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
                 >
@@ -148,7 +196,7 @@ const Index = () => {
               </div>
             </div>
             <Button 
-              onClick={() => setShowAddDialog(true)}
+              onClick={handleAddEntry}
               size="lg"
               className="sm:hidden w-full bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
             >
@@ -370,7 +418,16 @@ const Index = () => {
         </Tabs>
       </div>
 
-      <AddEntryDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
+      <AddEntryDialog 
+        open={showAddDialog} 
+        onOpenChange={setShowAddDialog}
+        onSuccess={() => refetch()}
+      />
+      <AuthDialog 
+        open={showAuthDialog}
+        onOpenChange={setShowAuthDialog}
+        onAuthSuccess={handleAuthSuccess}
+      />
     </div>
   );
 };
