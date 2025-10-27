@@ -3,6 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
 import { calculateStats } from '@/utils/statsCalculator';
+import { 
+  analyzeBurnoutRisk, 
+  predictNextWeek, 
+  recommendRestDay 
+} from '@/utils/predictiveAnalytics';
 
 interface EnergyTrendsProps {
   data?: any;
@@ -10,6 +15,22 @@ interface EnergyTrendsProps {
 }
 
 const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
+  const predictions = useMemo(() => {
+    if (!data?.entries || data.entries.length === 0) {
+      return {
+        burnoutRisk: null,
+        weekPrediction: null,
+        restDay: null
+      };
+    }
+
+    return {
+      burnoutRisk: analyzeBurnoutRisk(data.entries),
+      weekPrediction: predictNextWeek(data.entries),
+      restDay: recommendRestDay(data.entries)
+    };
+  }, [data]);
+
   const analytics = useMemo(() => {
     if (!data?.entries || data.entries.length === 0) {
       return {
@@ -128,6 +149,107 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
 
   return (
     <div className="space-y-6">
+      {predictions.burnoutRisk && (
+        <Card className={`shadow-lg border-l-4 ${
+          predictions.burnoutRisk.level === 'critical' ? 'border-l-destructive bg-destructive/5' :
+          predictions.burnoutRisk.level === 'high' ? 'border-l-orange-600 bg-orange-50/50' :
+          predictions.burnoutRisk.level === 'medium' ? 'border-l-yellow-600 bg-yellow-50/50' :
+          'border-l-energy-excellent bg-energy-excellent/5'
+        }`}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Icon name={predictions.burnoutRisk.icon as any} size={24} className={predictions.burnoutRisk.color} />
+              Риск выгорания
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <p className={`text-lg font-medium ${predictions.burnoutRisk.color}`}>
+                    {predictions.burnoutRisk.message}
+                  </p>
+                  {predictions.burnoutRisk.level !== 'low' && (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      💡 Совет: Запланируй отдых, сократи нагрузку, уделяй время восстановлению
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {predictions.weekPrediction && (
+        <Card className="shadow-lg border-l-4 border-l-primary">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Icon name="TrendingUp" size={24} className="text-primary" />
+              Прогноз на следующую неделю
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="text-4xl font-heading font-bold text-primary">
+                      {predictions.weekPrediction.probability}%
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-muted-foreground uppercase">вероятность</span>
+                      <span className="text-xs text-muted-foreground">
+                        {predictions.weekPrediction.confidence === 'high' ? '🎯 Высокая точность' :
+                         predictions.weekPrediction.confidence === 'medium' ? '📊 Средняя точность' :
+                         '🔮 Низкая точность'}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {predictions.weekPrediction.message}
+                  </p>
+                </div>
+                <div className="text-5xl">
+                  {predictions.weekPrediction.trend === 'up' ? '📈' :
+                   predictions.weekPrediction.trend === 'down' ? '📉' : '➡️'}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {predictions.restDay && (
+        <Card className="shadow-lg border-l-4 border-l-accent">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Icon name="Coffee" size={24} className="text-accent" />
+              Рекомендация по отдыху
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="text-3xl">🛌</span>
+                <div className="flex-1">
+                  <p className="font-medium text-lg mb-1">
+                    Планируй отдых в {predictions.restDay.dayOfWeek}
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {predictions.restDay.reason}
+                  </p>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent text-sm">
+                    <Icon name="Activity" size={14} />
+                    Средняя энергия: {predictions.restDay.avgEnergy}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <Card className="shadow-lg border-l-4 border-l-energy-excellent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
