@@ -3,20 +3,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
-import { useAddEntry } from '@/hooks/useAddEntry';
+import { ENTRIES_API, authService } from '@/lib/auth';
 
 interface AddEntryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
-const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
+const AddEntryDialog = ({ open, onOpenChange, onSuccess }: AddEntryDialogProps) => {
   const [score, setScore] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
-  const { toast } = useToast();
-  const { addEntry, isSubmitting } = useAddEntry();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const scores = [
     { value: 1, label: 'Очень плохо', color: 'bg-energy-low hover:bg-energy-low/80' },
@@ -27,52 +27,53 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   ];
 
   const handleSave = async () => {
-    if (!score) {
-      toast({
-        title: "Выберите оценку",
-        description: "Пожалуйста, выберите оценку для дня",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (!score) return;
+    
+    setError('');
+    setLoading(true);
 
     try {
-      const result = await addEntry({ score, thoughts: notes });
+      const token = authService.getToken();
       
-      if (result.success) {
-        toast({
-          title: "Успешно!",
-          description: result.message || "Запись добавлена",
-        });
-        onOpenChange(false);
-        setScore(null);
-        setNotes('');
-      } else {
-        toast({
-          title: "Ошибка",
-          description: result.errors?.[0]?.message || "Не удалось добавить запись",
-          variant: "destructive",
-        });
+      if (!token) {
+        throw new Error('Необходима авторизация');
       }
-    } catch (error) {
-      toast({
-        title: "Ошибка",
-        description: "Произошла непредвиденная ошибка",
-        variant: "destructive",
-      });
-    }
-  };
 
-  const handleClose = () => {
-    if (!isSubmitting) {
+      const today = new Date();
+      const dateStr = `${String(today.getDate()).padStart(2, '0')}.${String(today.getMonth() + 1).padStart(2, '0')}.${today.getFullYear()}`;
+
+      const response = await fetch(ENTRIES_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Auth-Token': token,
+        },
+        body: JSON.stringify({
+          date: dateStr,
+          score,
+          thoughts: notes,
+          category: '',
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Ошибка сохранения');
+      }
+
+      onSuccess?.();
       onOpenChange(false);
       setScore(null);
       setNotes('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Произошла ошибка');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -89,70 +90,46 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
                 <button
                   key={item.value}
                   onClick={() => setScore(item.value)}
-                  disabled={isSubmitting}
                   className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-2xl transition-all ${
-                    score === item.value 
-                      ? 'ring-2 ring-white ring-offset-2 ring-offset-background scale-105' 
-                      : 'hover:scale-105'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    score === item.value ? 'ring-4 ring-primary scale-110' : 'opacity-70'
+                  }`}
                 >
                   {item.value}
                 </button>
               ))}
             </div>
-            <div className="mt-2 text-center">
-              {score && (
-                <span className="text-sm text-muted-foreground">
-                  {scores.find(s => s.value === score)?.label}
-                </span>
-              )}
-            </div>
+            {score && (
+              <p className="text-sm text-muted-foreground mt-2 text-center">
+                {scores.find(s => s.value === score)?.label}
+              </p>
+            )}
           </div>
 
           <div>
-            <Label htmlFor="notes" className="mb-2 block">
-              Заметки (необязательно)
-            </Label>
+            <Label htmlFor="notes" className="mb-2 block">Заметки о дне</Label>
             <Textarea
               id="notes"
-              placeholder="Как прошёл день? Что повлияло на настроение?"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              disabled={isSubmitting}
-              maxLength={500}
-              className="min-h-[100px]"
+              placeholder="Что происходило сегодня? Какие были мысли и чувства?"
+              className="min-h-32 resize-none"
             />
-            <div className="mt-1 text-right text-xs text-muted-foreground">
-              {notes.length}/500
-            </div>
           </div>
-        </div>
 
-        <div className="flex gap-2 pt-4">
-          <Button
-            variant="outline"
-            onClick={handleClose}
-            disabled={isSubmitting}
-            className="flex-1"
+          {error && (
+            <div className="text-sm text-red-500 bg-red-50 p-2 rounded">
+              {error}
+            </div>
+          )}
+
+          <Button 
+            onClick={handleSave} 
+            disabled={!score || loading}
+            className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
+            size="lg"
           >
-            Отмена
-          </Button>
-          <Button
-            onClick={handleSave}
-            disabled={!score || isSubmitting}
-            className="flex-1 bg-primary hover:bg-primary/90"
-          >
-            {isSubmitting ? (
-              <>
-                <Icon name="Loader2" size={16} className="mr-2 animate-spin" />
-                Сохранение...
-              </>
-            ) : (
-              <>
-                <Icon name="Save" size={16} className="mr-2" />
-                Сохранить
-              </>
-            )}
+            <Icon name="Save" size={20} className="mr-2" />
+            {loading ? 'Сохранение...' : 'Сохранить запись'}
           </Button>
         </div>
       </DialogContent>

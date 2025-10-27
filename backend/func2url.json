@@ -1,3 +1,5 @@
 {
+  "auth": "https://functions.poehali.dev/6ab3bea8-8d31-4166-b350-5a4b55a8acc7",
+  "entries": "https://functions.poehali.dev/2d4b8a75-8e94-40d2-8412-5e0040b74b86",
   "google-sheets": "https://functions.poehali.dev/0335f84a-22ea-47e1-ab0f-623e2884ffec"
 }

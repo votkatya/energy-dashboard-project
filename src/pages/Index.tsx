@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,17 +7,50 @@ import EnergyCalendar from '@/components/EnergyCalendar';
 import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
-import EnergyInsights from '@/components/EnergyInsights';
+import AuthDialog from '@/components/AuthDialog';
 import { useEnergyData } from '@/hooks/useEnergyData';
-import { calculateStats } from '@/lib/statsUtils';
-import { TIME_PERIODS } from '@/lib/constants';
+import { authService } from '@/lib/auth';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
   const [activeTab, setActiveTab] = useState('home');
   const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
   const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
   const { data, isLoading, error, refetch } = useEnergyData();
+
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      setShowAuthDialog(true);
+    } else {
+      authService.verifyToken().then((user) => {
+        if (!user) {
+          setIsAuthenticated(false);
+          setShowAuthDialog(true);
+        }
+      });
+    }
+  }, []);
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+    refetch();
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    setShowAuthDialog(true);
+  };
+
+  const handleAddEntry = () => {
+    if (!isAuthenticated) {
+      setShowAuthDialog(true);
+      return;
+    }
+    setShowAddDialog(true);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,16 +60,84 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  // Используем новую утилиту для расчета статистики
-  const stats = useMemo(() => {
-    return calculateStats(data?.entries || [], timePeriod);
-  }, [data?.entries, timePeriod]);
+  const getColorClass = (score: number) => {
+    if (score >= 5) return 'energy-excellent';
+    if (score >= 4) return 'energy-good';
+    if (score >= 3) return 'energy-neutral';
+    if (score >= 2) return 'energy-medium-low';
+    return 'energy-low';
+  };
 
+  const parseDate = (dateStr: string): Date => {
+    const parts = dateStr.split('.');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+    }
+    return new Date(dateStr);
+  };
+
+  const getFilteredStats = () => {
+    if (!data?.entries) return { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
+    
+    console.log('All entries:', data.entries.map(e => ({ date: e.date, score: e.score })));
+    
+    let limit: number;
+    
+    switch (timePeriod) {
+      case '3days':
+        limit = 3;
+        break;
+      case 'week':
+        limit = 7;
+        break;
+      case 'month':
+        limit = 30;
+        break;
+      case 'year':
+        limit = 365;
+        break;
+      default:
+        limit = 7;
+    }
+    
+    // Берём последние N записей
+    const filtered = data.entries.slice(-limit);
+    
+    console.log('Filtered entries:', filtered.length, 'last', limit, 'records');
+    
+    const good = filtered.filter(e => e.score >= 4).length;
+    const neutral = filtered.filter(e => e.score === 3).length;
+    const bad = filtered.filter(e => e.score <= 2).length;
+    const total = filtered.length;
+    const average = total > 0 ? filtered.reduce((sum, e) => sum + e.score, 0) / total : 0;
+    
+    return { good, neutral, bad, average, total };
+  };
+
+  const stats = getFilteredStats();
+  
   // Отдельная статистика для месячной цели
-  const monthlyStats = useMemo(() => {
-    return calculateStats(data?.entries || [], TIME_PERIODS.MONTH);
-  }, [data?.entries]);
-
+  const getMonthlyStats = () => {
+    if (!data?.entries) return { average: 0, total: 0 };
+    
+    const todayMs = Date.now();
+    const cutoffMs = todayMs - (30 * 24 * 60 * 60 * 1000);
+    
+    const monthlyEntries = data.entries.filter(e => {
+      const entryMs = parseDate(e.date).getTime();
+      return entryMs >= cutoffMs;
+    });
+    
+    const total = monthlyEntries.length;
+    const average = total > 0 ? monthlyEntries.reduce((sum, e) => sum + e.score, 0) / total : 0;
+    
+    return { average, total };
+  };
+  
+  const monthlyStats = getMonthlyStats();
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
 
   return (
@@ -51,10 +152,22 @@ const Index = () => {
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
-                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
+                  <p className="text-sm text-muted-foreground">
+                    {isAuthenticated && authService.getUser()?.name ? `Привет, ${authService.getUser()?.name}!` : 'Выгорание? Не сегодня'}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-2">
+                {isAuthenticated && (
+                  <Button 
+                    onClick={handleLogout}
+                    size="icon"
+                    variant="ghost"
+                    title="Выйти"
+                  >
+                    <Icon name="LogOut" size={20} />
+                  </Button>
+                )}
                 <Button 
                   onClick={() => refetch()}
                   size="icon"
@@ -73,7 +186,7 @@ const Index = () => {
                   Обновить
                 </Button>
                 <Button 
-                  onClick={() => setShowAddDialog(true)}
+                  onClick={handleAddEntry}
                   size="lg"
                   className="hidden sm:flex bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
                 >
@@ -83,7 +196,7 @@ const Index = () => {
               </div>
             </div>
             <Button 
-              onClick={() => setShowAddDialog(true)}
+              onClick={handleAddEntry}
               size="lg"
               className="sm:hidden w-full bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
             >
@@ -201,9 +314,6 @@ const Index = () => {
                   </Card>
                 )}
 
-                {/* Инсайты */}
-                <EnergyInsights stats={stats} />
-
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
                   <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-good bg-gradient-to-br from-card to-card/95 hover:border-l-energy-excellent">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
@@ -235,7 +345,7 @@ const Index = () => {
 
                   <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-low bg-gradient-to-br from-card to-card/95 hover:border-l-red-400">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
-                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:flex-row items-center gap-1 md:gap-2">
+                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😔</span>
                         <span className="hidden md:inline">Плохие дни</span>
                         <span className="md:hidden text-xs">Плохие</span>
@@ -264,14 +374,15 @@ const Index = () => {
                   ) : (
                     <div className="space-y-3">
                       {recentEntries.map((entry, idx) => {
+                        const colorClass = getColorClass(entry.score);
                         const isExpanded = expandedEntry === idx;
                         return (
                           <div 
                             key={idx}
                             onClick={() => setExpandedEntry(isExpanded ? null : idx)}
-                            className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-energy-${entry.score >= 4 ? 'good' : entry.score === 3 ? 'neutral' : 'low'}/10 to-transparent border-l-4 border-l-energy-${entry.score >= 4 ? 'good' : entry.score === 3 ? 'neutral' : 'low'} hover:shadow-md transition-all cursor-pointer`}
+                            className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all cursor-pointer`}
                           >
-                            <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-energy-${entry.score >= 4 ? 'good' : entry.score === 3 ? 'neutral' : 'low'} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
+                            <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
                               {entry.score}
                             </div>
                             <div className="flex-1">
@@ -307,7 +418,16 @@ const Index = () => {
         </Tabs>
       </div>
 
-      <AddEntryDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
+      <AddEntryDialog 
+        open={showAddDialog} 
+        onOpenChange={setShowAddDialog}
+        onSuccess={() => refetch()}
+      />
+      <AuthDialog 
+        open={showAuthDialog}
+        onOpenChange={setShowAuthDialog}
+        onAuthSuccess={handleAuthSuccess}
+      />
     </div>
   );
 };

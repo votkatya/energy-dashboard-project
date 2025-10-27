@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { API_URL, QUERY_CONFIG } from '@/lib/constants';
+import { ENTRIES_API, authService } from '@/lib/auth';
 
 interface EnergyEntry {
   date: string;
@@ -21,38 +21,35 @@ interface EnergyStats {
 interface EnergyData {
   entries: EnergyEntry[];
   stats: EnergyStats;
-  demo?: boolean;
-  error?: string;
 }
 
 export const useEnergyData = () => {
-  return useQuery<EnergyData, Error>({
-    queryKey: ['energy-data'],
+  return useQuery<EnergyData>({
+    queryKey: ['energy-data', authService.getToken()],
     queryFn: async () => {
-      try {
-        const response = await fetch(API_URL);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        // Validate data structure
-        if (!data.entries || !Array.isArray(data.entries)) {
-          throw new Error('Invalid data structure received from API');
-        }
-        
-        return data;
-      } catch (error) {
-        console.error('Error fetching energy data:', error);
-        throw error;
+      const token = authService.getToken();
+      
+      if (!token) {
+        return { entries: [], stats: { good: 0, neutral: 0, bad: 0, average: 0, total: 0 } };
       }
+
+      const response = await fetch(ENTRIES_API, {
+        method: 'GET',
+        headers: {
+          'X-Auth-Token': token,
+        },
+      });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          authService.logout();
+        }
+        throw new Error('Failed to fetch energy data');
+      }
+      
+      return response.json();
     },
-    refetchInterval: QUERY_CONFIG.refetchInterval,
-    staleTime: QUERY_CONFIG.staleTime,
-    gcTime: QUERY_CONFIG.gcTime,
-    retry: 2,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    refetchInterval: 30000,
+    enabled: authService.isAuthenticated(),
   });
 };
