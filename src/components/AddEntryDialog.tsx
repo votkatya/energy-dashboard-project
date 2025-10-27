@@ -4,19 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
-import { ENTRIES_API, authService } from '@/lib/auth';
 
 interface AddEntryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
 }
 
-const AddEntryDialog = ({ open, onOpenChange, onSuccess }: AddEntryDialogProps) => {
+const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   const [score, setScore] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const scores = [
     { value: 1, label: 'Очень плохо', color: 'bg-energy-low hover:bg-energy-low/80' },
@@ -26,50 +22,11 @@ const AddEntryDialog = ({ open, onOpenChange, onSuccess }: AddEntryDialogProps) 
     { value: 5, label: 'Отлично', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
   ];
 
-  const handleSave = async () => {
-    if (!score) return;
-    
-    setError('');
-    setLoading(true);
-
-    try {
-      const token = authService.getToken();
-      
-      if (!token) {
-        throw new Error('Необходима авторизация');
-      }
-
-      const today = new Date();
-      const dateStr = `${String(today.getDate()).padStart(2, '0')}.${String(today.getMonth() + 1).padStart(2, '0')}.${today.getFullYear()}`;
-
-      const response = await fetch(ENTRIES_API, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': token,
-        },
-        body: JSON.stringify({
-          date: dateStr,
-          score,
-          thoughts: notes,
-          category: '',
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Ошибка сохранения');
-      }
-
-      onSuccess?.();
-      onOpenChange(false);
-      setScore(null);
-      setNotes('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Произошла ошибка');
-    } finally {
-      setLoading(false);
-    }
+  const handleSave = () => {
+    console.log({ score, notes });
+    onOpenChange(false);
+    setScore(null);
+    setNotes('');
   };
 
   return (
@@ -116,20 +73,14 @@ const AddEntryDialog = ({ open, onOpenChange, onSuccess }: AddEntryDialogProps) 
             />
           </div>
 
-          {error && (
-            <div className="text-sm text-red-500 bg-red-50 p-2 rounded">
-              {error}
-            </div>
-          )}
-
           <Button 
             onClick={handleSave} 
-            disabled={!score || loading}
+            disabled={!score}
             className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
             size="lg"
           >
             <Icon name="Save" size={20} className="mr-2" />
-            {loading ? 'Сохранение...' : 'Сохранить запись'}
+            Сохранить запись
           </Button>
         </div>
       </DialogContent>

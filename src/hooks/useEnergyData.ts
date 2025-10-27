@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { ENTRIES_API, authService } from '@/lib/auth';
+
+const API_URL = 'https://functions.poehali.dev/0335f84a-22ea-47e1-ab0f-623e2884ffec';
 
 interface EnergyEntry {
   date: string;
@@ -25,31 +26,14 @@ interface EnergyData {
 
 export const useEnergyData = () => {
   return useQuery<EnergyData>({
-    queryKey: ['energy-data', authService.getToken()],
+    queryKey: ['energy-data'],
     queryFn: async () => {
-      const token = authService.getToken();
-      
-      if (!token) {
-        return { entries: [], stats: { good: 0, neutral: 0, bad: 0, average: 0, total: 0 } };
-      }
-
-      const response = await fetch(ENTRIES_API, {
-        method: 'GET',
-        headers: {
-          'X-Auth-Token': token,
-        },
-      });
-      
+      const response = await fetch(API_URL);
       if (!response.ok) {
-        if (response.status === 401) {
-          authService.logout();
-        }
         throw new Error('Failed to fetch energy data');
       }
-      
       return response.json();
     },
     refetchInterval: 30000,
-    enabled: authService.isAuthenticated(),
   });
 };
