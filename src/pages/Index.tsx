@@ -10,6 +10,7 @@ import AddEntryDialog from '@/components/AddEntryDialog';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { parseDate } from '@/utils/dateUtils';
 import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
+import { HeroGeometric } from '@/components/ui/shape-landing-hero';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -122,7 +123,14 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
+            <TabsTrigger 
+              value="welcome" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+            >
+              <Icon name="Sparkles" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Welcome</span>
+            </TabsTrigger>
             <TabsTrigger 
               value="home" 
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
@@ -145,6 +153,14 @@ const Index = () => {
               <span className="hidden sm:inline">Тренды</span>
             </TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="welcome" className="animate-fade-in">
+            <HeroGeometric 
+              badge="Energy Tracking"
+              title1="Твоя энергия"
+              title2="под контролем"
+            />
+          </TabsContent>
 
           <TabsContent value="home" className="animate-fade-in">
             {isLoading && (
