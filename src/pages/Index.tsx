@@ -7,10 +7,12 @@ import EnergyCalendar from '@/components/EnergyCalendar';
 import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
+import AnimatedCard from '@/components/AnimatedCard';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { parseDate } from '@/utils/dateUtils';
 import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
 import { HeroGeometric } from '@/components/ui/shape-landing-hero';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -70,17 +72,19 @@ const Index = () => {
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] via-transparent to-accent/[0.03] pointer-events-none" />
+      
+      <div className="container mx-auto px-4 py-6 max-w-7xl relative z-10">
         <header className="mb-8 animate-fade-in">
           <div className="flex flex-col gap-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-                  <Icon name="Zap" size={24} className="text-white" />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg glow-primary">
+                  <Icon name="Zap" size={24} className="text-background" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">KatFlow</h1>
+                  <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground">KatFlow</h1>
                   <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
                 </div>
               </div>
@@ -97,7 +101,7 @@ const Index = () => {
                   onClick={() => refetch()}
                   size="lg"
                   variant="outline"
-                  className="hidden sm:flex"
+                  className="hidden sm:flex glass-effect hover:glass-card transition-all"
                 >
                   <Icon name="RefreshCw" size={20} className="mr-2" />
                   Обновить
@@ -105,7 +109,7 @@ const Index = () => {
                 <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
-                  className="hidden sm:flex bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
+                  className="hidden sm:flex bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary transition-all shadow-lg hover:shadow-xl hover:glow-primary"
                 >
                   <Icon name="Plus" size={20} className="mr-2" />
                   Добавить запись
@@ -115,7 +119,7 @@ const Index = () => {
             <Button 
               onClick={() => setShowAddDialog(true)}
               size="lg"
-              className="sm:hidden w-full bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
+              className="sm:hidden w-full bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary transition-all shadow-lg hover:shadow-xl hover:glow-primary"
             >
               Как ты сегодня?
             </Button>
@@ -123,7 +127,7 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-card shadow-md p-1 h-auto sm:h-14">
+          <TabsList className="grid w-full grid-cols-4 mb-8 glass-card p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="welcome" 
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
@@ -214,7 +218,12 @@ const Index = () => {
                 
                 {/* Goal Progress */}
                 {monthlyStats.total > 0 && (
-                  <Card className="shadow-[0_2px_8px_rgba(0,0,0,0.25)] mb-8 md:mb-10 border-l-4 border-l-primary bg-gradient-to-br from-card to-card/95">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Card className="glass-card mb-8 md:mb-10 border-l-4 border-l-primary glow-primary">
                     <CardContent className="pt-6">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -229,10 +238,12 @@ const Index = () => {
                             <div className="text-xs text-muted-foreground">из 4.0</div>
                           </div>
                         </div>
-                        <div className="relative h-3 bg-muted rounded-full overflow-hidden">
-                          <div 
-                            className="absolute top-0 left-0 h-full rounded-full transition-all bg-gradient-to-r from-energy-good via-energy-excellent to-energy-good"
-                            style={{ width: `${Math.min((monthlyStats.average / 4) * 100, 100)}%` }}
+                        <div className="relative h-3 bg-muted/50 rounded-full overflow-hidden backdrop-blur-sm">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min((monthlyStats.average / 4) * 100, 100)}%` }}
+                            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
+                            className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-primary via-primary-light to-primary glow-primary"
                           />
                         </div>
                         <p className="text-sm text-muted-foreground text-center">
@@ -244,10 +255,11 @@ const Index = () => {
                       </div>
                     </CardContent>
                   </Card>
+                  </motion.div>
                 )}
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
-                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-good bg-gradient-to-br from-card to-card/95 hover:border-l-energy-excellent">
+                  <AnimatedCard delay={0.1} className="glass-card border-l-4 border-l-primary hover:glow-primary">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😊</span>
@@ -259,9 +271,9 @@ const Index = () => {
                       <div className="text-3xl md:text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
                       <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
-                  </Card>
+                  </AnimatedCard>
 
-                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-neutral bg-gradient-to-br from-card to-card/95 hover:border-l-yellow-400">
+                  <AnimatedCard delay={0.2} className="glass-card border-l-4 border-l-accent hover:glow-accent">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😐</span>
@@ -273,9 +285,9 @@ const Index = () => {
                       <div className="text-3xl md:text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
                       <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
-                  </Card>
+                  </AnimatedCard>
 
-                  <Card className="shadow-[0_2px_6px_rgba(0,0,0,0.2)] hover:shadow-xl transition-all border-l-4 border-l-energy-low bg-gradient-to-br from-card to-card/95 hover:border-l-red-400">
+                  <AnimatedCard delay={0.3} className="glass-card border-l-4 border-l-destructive">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😔</span>
@@ -287,16 +299,16 @@ const Index = () => {
                       <div className="text-3xl md:text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
                       <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
                     </CardContent>
-                  </Card>
+                  </AnimatedCard>
                 </div>
               </>
             )}
 
             {!isLoading && !error && (
-              <Card className="shadow-lg mb-6">
+              <AnimatedCard delay={0.4} className="glass-card mb-6">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Icon name="Calendar" size={20} />
+                    <Icon name="Calendar" size={20} className="text-primary" />
                     Последние записи
                   </CardTitle>
                 </CardHeader>
@@ -309,12 +321,15 @@ const Index = () => {
                         const colorClass = getColorClass(entry.score);
                         const isExpanded = expandedEntry === idx;
                         return (
-                          <div 
+                          <motion.div 
                             key={idx}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 + idx * 0.1 }}
                             onClick={() => setExpandedEntry(isExpanded ? null : idx)}
-                            className={`flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-${colorClass}/10 to-transparent border-l-4 border-l-${colorClass} hover:shadow-md transition-all cursor-pointer`}
+                            className={`flex items-center gap-4 p-4 rounded-xl glass-effect border-l-4 border-l-${colorClass} hover:glass-card transition-all cursor-pointer`}
                           >
-                            <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-white font-heading font-bold text-xl shadow-md`}>
+                            <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-background font-heading font-bold text-xl shadow-lg`}>
                               {entry.score}
                             </div>
                             <div className="flex-1">
@@ -326,13 +341,13 @@ const Index = () => {
                               size={20} 
                               className="text-muted-foreground flex-shrink-0"
                             />
-                          </div>
+                          </motion.div>
                         );
                       })}
                     </div>
                   )}
                 </CardContent>
-              </Card>
+              </AnimatedCard>
             )}
 
             {!isLoading && !error && (

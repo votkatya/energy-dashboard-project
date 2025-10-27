@@ -119,3 +119,46 @@
     font-family: "Poppins", sans-serif;
   }
 }
+
+@layer utilities {
+  .glass-card {
+    @apply backdrop-blur-xl bg-card/40 border border-primary/10 shadow-xl;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-md bg-background/30 border border-primary/5;
+  }
+
+  .glow-primary {
+    box-shadow:
+      0 0 20px rgba(159, 226, 191, 0.3),
+      0 0 40px rgba(159, 226, 191, 0.15);
+  }
+
+  .glow-accent {
+    box-shadow:
+      0 0 20px rgba(116, 209, 230, 0.3),
+      0 0 40px rgba(116, 209, 230, 0.15);
+  }
+
+  .animated-gradient {
+    background: linear-gradient(
+      120deg,
+      hsl(var(--primary)),
+      hsl(var(--accent)),
+      hsl(var(--primary))
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+}
