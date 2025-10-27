@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-
-const API_URL = 'https://functions.poehali.dev/0335f84a-22ea-47e1-ab0f-623e2884ffec';
+import { API_URL, QUERY_CONFIG } from '@/lib/constants';
 
 interface EnergyEntry {
   date: string;
@@ -22,18 +21,38 @@ interface EnergyStats {
 interface EnergyData {
   entries: EnergyEntry[];
   stats: EnergyStats;
+  demo?: boolean;
+  error?: string;
 }
 
 export const useEnergyData = () => {
-  return useQuery<EnergyData>({
+  return useQuery<EnergyData, Error>({
     queryKey: ['energy-data'],
     queryFn: async () => {
-      const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error('Failed to fetch energy data');
+      try {
+        const response = await fetch(API_URL);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Validate data structure
+        if (!data.entries || !Array.isArray(data.entries)) {
+          throw new Error('Invalid data structure received from API');
+        }
+        
+        return data;
+      } catch (error) {
+        console.error('Error fetching energy data:', error);
+        throw error;
       }
-      return response.json();
     },
-    refetchInterval: 30000,
+    refetchInterval: QUERY_CONFIG.refetchInterval,
+    staleTime: QUERY_CONFIG.staleTime,
+    gcTime: QUERY_CONFIG.gcTime,
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 };
