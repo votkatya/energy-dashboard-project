@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,6 +8,8 @@ import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
 import { useEnergyData } from '@/hooks/useEnergyData';
+import { parseDate } from '@/utils/dateUtils';
+import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -15,14 +17,6 @@ const Index = () => {
   const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
   const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
   const { data, isLoading, error, refetch } = useEnergyData();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
-    }, 5 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [refetch]);
 
   const getColorClass = (score: number) => {
     if (score >= 5) return 'energy-excellent';
@@ -32,73 +26,43 @@ const Index = () => {
     return 'energy-low';
   };
 
-  const parseDate = (dateStr: string): Date => {
-    const parts = dateStr.split('.');
-    if (parts.length === 3) {
-      const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1;
-      const year = parseInt(parts[2], 10);
-      return new Date(year, month, day);
-    }
-    return new Date(dateStr);
-  };
+
 
   const getFilteredStats = () => {
     if (!data?.entries) return { good: 0, neutral: 0, bad: 0, average: 0, total: 0 };
     
-    console.log('All entries:', data.entries.map(e => ({ date: e.date, score: e.score })));
-    
-    let limit: number;
+    let days: number;
     
     switch (timePeriod) {
       case '3days':
-        limit = 3;
+        days = 3;
         break;
       case 'week':
-        limit = 7;
+        days = 7;
         break;
       case 'month':
-        limit = 30;
+        days = 30;
         break;
       case 'year':
-        limit = 365;
+        days = 365;
         break;
       default:
-        limit = 7;
+        days = 7;
     }
     
-    // Берём последние N записей
-    const filtered = data.entries.slice(-limit);
-    
-    console.log('Filtered entries:', filtered.length, 'last', limit, 'records');
-    
-    const good = filtered.filter(e => e.score >= 4).length;
-    const neutral = filtered.filter(e => e.score === 3).length;
-    const bad = filtered.filter(e => e.score <= 2).length;
-    const total = filtered.length;
-    const average = total > 0 ? filtered.reduce((sum, e) => sum + e.score, 0) / total : 0;
-    
-    return { good, neutral, bad, average, total };
+    const filtered = filterEntriesByDays(data.entries, days);
+    return calculateStats(filtered);
   };
 
   const stats = getFilteredStats();
   
-  // Отдельная статистика для месячной цели
   const getMonthlyStats = () => {
     if (!data?.entries) return { average: 0, total: 0 };
     
-    const todayMs = Date.now();
-    const cutoffMs = todayMs - (30 * 24 * 60 * 60 * 1000);
+    const monthlyEntries = filterEntriesByDays(data.entries, 30);
+    const stats = calculateStats(monthlyEntries);
     
-    const monthlyEntries = data.entries.filter(e => {
-      const entryMs = parseDate(e.date).getTime();
-      return entryMs >= cutoffMs;
-    });
-    
-    const total = monthlyEntries.length;
-    const average = total > 0 ? monthlyEntries.reduce((sum, e) => sum + e.score, 0) / total : 0;
-    
-    return { average, total };
+    return { average: stats.average, total: stats.total };
   };
   
   const monthlyStats = getMonthlyStats();

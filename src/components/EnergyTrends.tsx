@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { parseDate } from '@/utils/dateUtils';
+import { calculateStats } from '@/utils/statsCalculator';
 
 interface EnergyTrendsProps {
   data?: any;
@@ -29,17 +31,6 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
-    const parseDate = (dateStr: string): Date => {
-      const parts = dateStr.split('.');
-      if (parts.length === 3) {
-        const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1;
-        const year = parseInt(parts[2], 10);
-        return new Date(year, month, day);
-      }
-      return new Date(dateStr);
-    };
-
     const currentMonthEntries = entries.filter((e: any) => {
       const date = parseDate(e.date);
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
@@ -52,18 +43,13 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       return date.getMonth() === prevMonth && date.getFullYear() === prevYear;
     });
 
-    const currentMonthAvg = currentMonthEntries.length > 0
-      ? currentMonthEntries.reduce((sum: number, e: any) => sum + e.score, 0) / currentMonthEntries.length
-      : 0;
+    const currentMonthStats = calculateStats(currentMonthEntries);
+    const previousMonthStats = calculateStats(previousMonthEntries);
+    const allStats = calculateStats(entries);
 
-    const previousMonthAvg = previousMonthEntries.length > 0
-      ? previousMonthEntries.reduce((sum: number, e: any) => sum + e.score, 0) / previousMonthEntries.length
-      : 0;
-
-    const good = entries.filter((e: any) => e.score >= 4).length;
-    const neutral = entries.filter((e: any) => e.score === 3).length;
-    const bad = entries.filter((e: any) => e.score <= 2).length;
-    const total = entries.length;
+    const currentMonthAvg = currentMonthStats.average;
+    const previousMonthAvg = previousMonthStats.average;
+    const { good, neutral, bad, total } = allStats;
 
     const dayOfWeekScores: { [key: number]: { sum: number; count: number } } = {};
     entries.forEach((e: any) => {

@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { parseDate, getWeekNumber, formatDateRu } from '@/utils/dateUtils';
+import { calculateStats } from '@/utils/statsCalculator';
 
 interface EnergyEntry {
   date: string;
@@ -27,22 +29,6 @@ interface EnergyStatsProps {
 }
 
 const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
-  const parseDate = (dateStr: string): Date => {
-    const parts = dateStr.split('.');
-    if (parts.length === 3) {
-      const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1;
-      const year = parseInt(parts[2], 10);
-      return new Date(year, month, day);
-    }
-    return new Date(dateStr);
-  };
-
-  const getWeekNumber = (date: Date): number => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-  };
 
   const calculateWeeklyStats = () => {
     if (!data?.entries || data.entries.length === 0) return [];
@@ -65,19 +51,16 @@ const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
       .map(([weekKey, entries]) => {
         const latestEntry = entries[entries.length - 1];
         const date = parseDate(latestEntry.date);
-        const good = entries.filter(e => e.score >= 4).length;
-        const neutral = entries.filter(e => e.score === 3).length;
-        const bad = entries.filter(e => e.score <= 2).length;
-        const avg = entries.reduce((sum, e) => sum + e.score, 0) / entries.length;
+        const stats = calculateStats(entries);
 
         return {
-          week: date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+          week: formatDateRu(date),
           weekKey,
           timestamp: date.getTime(),
-          bad,
-          neutral,
-          good,
-          avg: Math.round(avg * 10) / 10
+          bad: stats.bad,
+          neutral: stats.neutral,
+          good: stats.good,
+          avg: Math.round(stats.average * 10) / 10
         };
       })
       .sort((a, b) => b.timestamp - a.timestamp)
@@ -105,19 +88,16 @@ const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
       .map(([monthKey, entries]) => {
         const latestEntry = entries[entries.length - 1];
         const date = parseDate(latestEntry.date);
-        const good = entries.filter(e => e.score >= 4).length;
-        const neutral = entries.filter(e => e.score === 3).length;
-        const bad = entries.filter(e => e.score <= 2).length;
-        const avg = entries.reduce((sum, e) => sum + e.score, 0) / entries.length;
+        const stats = calculateStats(entries);
 
         return {
-          month: date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+          month: formatDateRu(date),
           monthKey,
           timestamp: date.getTime(),
-          bad,
-          neutral,
-          good,
-          avg: Math.round(avg * 10) / 10
+          bad: stats.bad,
+          neutral: stats.neutral,
+          good: stats.good,
+          avg: Math.round(stats.average * 10) / 10
         };
       })
       .sort((a, b) => b.timestamp - a.timestamp)
