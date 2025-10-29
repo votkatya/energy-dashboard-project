@@ -24,6 +24,7 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'highest' | 'lowest'>('newest');
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   const getColorClass = (score: number) => {
     if (score >= 5) return 'bg-energy-excellent text-energy-excellent-foreground';
@@ -109,55 +110,64 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   return (
     <div className="space-y-4">
       <Card className="glass-card">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Icon name="Filter" size={20} />
-            Фильтры и поиск
-          </CardTitle>
+        <CardHeader className="pb-3">
+          <Button
+            variant="ghost"
+            onClick={() => setFiltersExpanded(!filtersExpanded)}
+            className="w-full justify-between hover:bg-transparent p-0"
+          >
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Icon name="Filter" size={20} />
+              Фильтры и поиск
+            </CardTitle>
+            <Icon name={filtersExpanded ? "ChevronUp" : "ChevronDown"} size={20} />
+          </Button>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="relative">
-            <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Поиск по мыслям..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Период</label>
-              <Select value={dateFilter} onValueChange={(value: any) => setDateFilter(value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Все время</SelectItem>
-                  <SelectItem value="today">Сегодня</SelectItem>
-                  <SelectItem value="week">Неделя</SelectItem>
-                  <SelectItem value="month">Месяц</SelectItem>
-                </SelectContent>
-              </Select>
+        {filtersExpanded && (
+          <CardContent className="space-y-4 pt-0">
+            <div className="relative">
+              <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Поиск по мыслям..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Сортировка</label>
-              <Select value={sortOrder} onValueChange={(value: any) => setSortOrder(value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">Сначала новые</SelectItem>
-                  <SelectItem value="oldest">Сначала старые</SelectItem>
-                  <SelectItem value="highest">По убыванию оценки</SelectItem>
-                  <SelectItem value="lowest">По возрастанию оценки</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Период</label>
+                <Select value={dateFilter} onValueChange={(value: any) => setDateFilter(value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Все время</SelectItem>
+                    <SelectItem value="today">Сегодня</SelectItem>
+                    <SelectItem value="week">Неделя</SelectItem>
+                    <SelectItem value="month">Месяц</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Сортировка</label>
+                <Select value={sortOrder} onValueChange={(value: any) => setSortOrder(value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">Сначала новые</SelectItem>
+                    <SelectItem value="oldest">Сначала старые</SelectItem>
+                    <SelectItem value="highest">По убыванию оценки</SelectItem>
+                    <SelectItem value="lowest">По возрастанию оценки</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-        </CardContent>
+          </CardContent>
+        )}
       </Card>
 
       <div className="text-sm text-muted-foreground mb-2">
