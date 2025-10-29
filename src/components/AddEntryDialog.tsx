@@ -128,13 +128,10 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
                 <PopoverContent className="w-auto p-0" align="center">
                   <Calendar
                     mode="single"
-                    selected={dateMode === 'custom' ? selectedDate : undefined}
-                    defaultMonth={selectedDate}
+                    selected={selectedDate}
                     onSelect={(date) => {
-                      if (date) {
-                        setSelectedDate(date);
-                        setDateMode('custom');
-                      }
+                      setSelectedDate(date);
+                      setDateMode('custom');
                     }}
                     locale={ru}
                     disabled={(date) => date > new Date()}
