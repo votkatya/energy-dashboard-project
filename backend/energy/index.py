@@ -120,6 +120,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             score = body_data.get('score')
             thoughts = body_data.get('thoughts', '')
             
+            print(f"POST request: date={entry_date_str}, score={score}, thoughts={thoughts}")
+            
             if not entry_date_str or score is None:
                 return {
                     'statusCode': 400,
@@ -137,6 +139,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     entry_date = entry_date_str
             else:
                 entry_date = entry_date_str
+            
+            print(f"Parsed date: {entry_date}")
             
             if score < 1 or score > 5:
                 return {
@@ -215,10 +219,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     except Exception as e:
         if conn:
             conn.rollback()
+        print(f"ERROR: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return {
             'statusCode': 500,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps({'error': str(e)}),
+            'body': json.dumps({'error': str(e), 'type': type(e).__name__}),
             'isBase64Encoded': False
         }
     
