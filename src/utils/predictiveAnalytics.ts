@@ -46,9 +46,6 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
   const consecutiveLowDays = getConsecutiveLowEnergyDays(last7Days);
   const avgLast7 = last7Days.reduce((sum, e) => sum + e.score, 0) / last7Days.length;
   const lowDaysCount = last7Days.filter(e => e.score < 3).length;
-  
-  console.log('🔍 Риск выгорания - последние 7 дней:', last7Days.map(e => `${e.date}: ${e.score}`));
-  console.log('📊 Средняя за 7 дней:', avgLast7.toFixed(2), '| Низких дней:', lowDaysCount, '| Подряд:', consecutiveLowDays);
 
   if (consecutiveLowDays >= 5 || avgLast7 < 2.5) {
     return {
@@ -128,10 +125,6 @@ export const predictNextWeek = (entries: EnergyEntry[]): WeekPrediction => {
   const lastWeekGood = lastWeek.filter(e => e.score >= 4).length;
   const prevWeekGood = prevWeek.length > 0 ? prevWeek.filter(e => e.score >= 4).length : lastWeekGood;
   const lastWeekAvg = lastWeek.reduce((sum, e) => sum + e.score, 0) / lastWeek.length;
-
-  console.log('📈 Прогноз - последняя неделя:', lastWeek.map(e => `${e.date}: ${e.score}`));
-  console.log('📈 Прогноз - предыдущая неделя:', prevWeek.map(e => `${e.date}: ${e.score}`));
-  console.log('📊 Хороших дней: последняя', lastWeekGood, '/ предыдущая', prevWeekGood, '| Средняя:', lastWeekAvg.toFixed(2));
 
   const trend = lastWeekGood > prevWeekGood ? 'up' : lastWeekGood < prevWeekGood ? 'down' : 'stable';
   

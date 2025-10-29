@@ -38,7 +38,15 @@ const calculateStats = (entries: EnergyEntry[]): EnergyStats => {
 };
 
 const addDerivedFields = (entry: EnergyEntry): EnergyEntry => {
-  const date = new Date(entry.date);
+  let date: Date;
+  
+  if (entry.date.includes('.')) {
+    const [day, month, year] = entry.date.split('.').map(Number);
+    date = new Date(year, month - 1, day);
+  } else {
+    date = new Date(entry.date);
+  }
+  
   const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
                       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
   
