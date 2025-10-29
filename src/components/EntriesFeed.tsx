@@ -183,7 +183,7 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <h3 className="font-semibold text-lg">
-                        Оценка: {entry.score}/5
+                        {entry.score}
                       </h3>
                       <div className="text-sm text-muted-foreground flex items-center gap-1">
                         <Icon name="Calendar" size={14} />
