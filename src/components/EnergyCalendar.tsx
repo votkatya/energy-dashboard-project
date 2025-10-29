@@ -68,19 +68,29 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       data.entries.forEach((entry: any) => {
         const score = entry.score || entry.energy_level;
         if (entry.date && score !== undefined) {
-          const parts = entry.date.split(".");
-          if (parts.length === 3) {
-            const day = parseInt(parts[0]);
-            const month = parseInt(parts[1]) - 1;
-            const year = parseInt(parts[2]);
-            const key = `${year}-${month}-${day}`;
-
-            map[key] = {
-              score: score,
-              color: getColorClass(score),
-              entry: entry,
-            };
+          let day: number, month: number, year: number;
+          
+          if (entry.date.includes('.')) {
+            const parts = entry.date.split(".");
+            day = parseInt(parts[0]);
+            month = parseInt(parts[1]) - 1;
+            year = parseInt(parts[2]);
+          } else if (entry.date.includes('-')) {
+            const parts = entry.date.split("-");
+            year = parseInt(parts[0]);
+            month = parseInt(parts[1]) - 1;
+            day = parseInt(parts[2]);
+          } else {
+            return;
           }
+          
+          const key = `${year}-${month}-${day}`;
+
+          map[key] = {
+            score: score,
+            color: getColorClass(score),
+            entry: entry,
+          };
         }
       });
     }
