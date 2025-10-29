@@ -9,20 +9,32 @@ import json
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from typing import Dict, Any
-import jwt
+from typing import Dict, Any, Optional
 from datetime import datetime
+import hashlib
+import base64
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
-JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key')
+JWT_SECRET = os.environ.get('JWT_SECRET', 'default-secret-key-change-in-production')
 
-def verify_token(token: str) -> Dict[str, Any]:
+def verify_token(token: str) -> Optional[Dict[str, Any]]:
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+        decoded = base64.b64decode(token.encode()).decode()
+        payload_str, signature = decoded.split('::')
+        
+        expected_signature = hashlib.sha256(f"{payload_str}{JWT_SECRET}".encode()).hexdigest()
+        
+        if signature != expected_signature:
+            return None
+        
+        payload = json.loads(payload_str)
+        
+        exp_time = datetime.fromisoformat(payload['exp'])
+        if datetime.utcnow() > exp_time:
+            return None
+        
         return payload
-    except jwt.ExpiredSignatureError:
-        return None
-    except jwt.InvalidTokenError:
+    except Exception:
         return None
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
