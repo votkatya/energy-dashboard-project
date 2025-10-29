@@ -31,8 +31,9 @@ export const formatDateRu = (date: Date): string => {
 };
 
 export const formatMonthRu = (date: Date): string => {
-  return date.toLocaleDateString('ru-RU', { 
+  const formatted = date.toLocaleDateString('ru-RU', { 
     month: 'long', 
     year: 'numeric' 
   });
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
