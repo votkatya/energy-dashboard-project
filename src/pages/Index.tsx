@@ -109,15 +109,6 @@ const Index = () => {
                   Выйти
                 </Button>
                 <Button 
-                  onClick={() => refetch()}
-                  size="lg"
-                  variant="outline"
-                  className="hidden sm:flex glass-effect hover:glass-card transition-all"
-                >
-                  <Icon name="RefreshCw" size={20} className="mr-2" />
-                  Обновить
-                </Button>
-                <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
                   className="hidden sm:flex bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary transition-all shadow-lg hover:shadow-xl hover:glow-primary"
