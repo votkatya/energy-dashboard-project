@@ -89,7 +89,7 @@ const Index = () => {
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground">KatFlow</h1>
-                  <p className="text-sm text-muted-foreground">Твоя энергия под контролем</p>
+                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня!</p>
                 </div>
               </div>
               <div className="flex gap-2">
