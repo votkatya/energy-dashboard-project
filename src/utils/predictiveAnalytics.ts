@@ -45,6 +45,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
   const last7Days = entries.slice(-7);
   const consecutiveLowDays = getConsecutiveLowEnergyDays(last7Days);
   const avgLast7 = last7Days.reduce((sum, e) => sum + e.score, 0) / last7Days.length;
+  const lowDaysCount = last7Days.filter(e => e.score < 3).length;
 
   if (consecutiveLowDays >= 5 || avgLast7 < 2.5) {
     return {
@@ -56,17 +57,17 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     };
   }
 
-  if (consecutiveLowDays >= 3 || avgLast7 < 3) {
+  if (consecutiveLowDays >= 3 || lowDaysCount >= 4) {
     return {
       level: 'high',
       daysLow: consecutiveLowDays,
-      message: `Высокий риск выгорания. ${consecutiveLowDays} дней энергия ниже нормы. Запланируй отдых.`,
+      message: `Высокий риск выгорания. ${lowDaysCount} дней за неделю с низкой энергией. Запланируй отдых.`,
       color: 'text-orange-600',
       icon: 'AlertCircle'
     };
   }
 
-  if (consecutiveLowDays === 2 || avgLast7 < 3.5) {
+  if (consecutiveLowDays >= 2 || lowDaysCount >= 2 || avgLast7 < 3.5) {
     return {
       level: 'medium',
       daysLow: consecutiveLowDays,
@@ -76,10 +77,20 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     };
   }
 
+  if (avgLast7 >= 4) {
+    return {
+      level: 'low',
+      daysLow: 0,
+      message: 'Отлично! Энергия на высоком уровне, риск выгорания минимален.',
+      color: 'text-energy-excellent',
+      icon: 'CheckCircle2'
+    };
+  }
+
   return {
     level: 'low',
     daysLow: 0,
-    message: 'Всё отлично! Энергия стабильна, риск выгорания низкий.',
+    message: 'Всё хорошо! Энергия стабильна, риск выгорания низкий.',
     color: 'text-energy-excellent',
     icon: 'CheckCircle2'
   };
@@ -109,23 +120,34 @@ export const predictNextWeek = (entries: EnergyEntry[]): WeekPrediction => {
 
   const last14Days = entries.slice(-14);
   const lastWeek = last14Days.slice(-7);
-  const prevWeek = last14Days.slice(0, 7);
+  const prevWeek = last14Days.length >= 14 ? last14Days.slice(0, 7) : [];
 
   const lastWeekGood = lastWeek.filter(e => e.score >= 4).length;
-  const prevWeekGood = prevWeek.filter(e => e.score >= 4).length;
-  const lastWeekAvg = lastWeek.reduce((sum, e) => sum + e.score, 0) / 7;
+  const prevWeekGood = prevWeek.length > 0 ? prevWeek.filter(e => e.score >= 4).length : lastWeekGood;
+  const lastWeekAvg = lastWeek.reduce((sum, e) => sum + e.score, 0) / lastWeek.length;
 
   const trend = lastWeekGood > prevWeekGood ? 'up' : lastWeekGood < prevWeekGood ? 'down' : 'stable';
   
-  const probability = Math.min(95, Math.max(5, (lastWeekGood / 7) * 100 + (lastWeekAvg - 3) * 10));
+  let baseProbability = (lastWeekGood / lastWeek.length) * 100;
+  
+  if (lastWeekAvg >= 4.5) baseProbability = Math.max(baseProbability, 85);
+  else if (lastWeekAvg >= 4) baseProbability = Math.max(baseProbability, 75);
+  else if (lastWeekAvg >= 3.5) baseProbability = Math.max(baseProbability, 65);
+  
+  if (trend === 'up') baseProbability += 10;
+  else if (trend === 'down') baseProbability -= 15;
+
+  const probability = Math.min(95, Math.max(10, baseProbability));
 
   const last4Weeks = entries.slice(-28);
   const variance = calculateVariance(last4Weeks.map(e => e.score));
   const confidence = variance < 0.5 ? 'high' : variance < 1.2 ? 'medium' : 'low';
 
   let message = '';
-  if (probability >= 70 && trend === 'up') {
+  if (probability >= 75 && trend === 'up') {
     message = `Отличный прогноз! Тренд растёт, вероятность хорошей недели ${Math.round(probability)}%`;
+  } else if (probability >= 70) {
+    message = `Отличные шансы! Вероятность хорошей недели ${Math.round(probability)}%`;
   } else if (probability >= 50) {
     message = `Неплохие шансы. Вероятность хорошей недели около ${Math.round(probability)}%`;
   } else if (trend === 'down') {
