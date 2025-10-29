@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import EnergyCalendar from '@/components/EnergyCalendar';
+import EntriesFeed from '@/components/EntriesFeed';
 import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
@@ -18,8 +19,8 @@ import { motion } from 'framer-motion';
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+  const [homeView, setHomeView] = useState<'calendar' | 'feed'>('calendar');
   const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
-  const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
   const { user, logout } = useAuth();
   const { data, isLoading, error, refetch } = useEnergyData();
 
@@ -292,53 +293,32 @@ const Index = () => {
             )}
 
             {!isLoading && !error && (
-              <AnimatedCard delay={0.4} className="glass-card mb-6">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Icon name="Calendar" size={20} className="text-primary" />
-                    Последние записи
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {recentEntries.length === 0 ? (
-                    <p className="text-center text-muted-foreground py-8">Пока нет записей</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {recentEntries.map((entry, idx) => {
-                        const colorClass = getColorClass(entry.score);
-                        const isExpanded = expandedEntry === idx;
-                        return (
-                          <motion.div 
-                            key={idx}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.5 + idx * 0.1 }}
-                            onClick={() => setExpandedEntry(isExpanded ? null : idx)}
-                            className={`flex items-center gap-4 p-4 rounded-xl glass-effect border-l-4 border-l-${colorClass} hover:glass-card transition-all cursor-pointer`}
-                          >
-                            <div className={`min-w-[3rem] w-12 h-12 rounded-xl bg-${colorClass} flex items-center justify-center text-background font-heading font-bold text-xl shadow-lg`}>
-                              {entry.score}
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium text-foreground">{entry.date}</p>
-                              <p className={`text-sm text-muted-foreground ${isExpanded ? '' : 'line-clamp-1'}`}>{entry.thoughts}</p>
-                            </div>
-                            <Icon 
-                              name={isExpanded ? "ChevronUp" : "ChevronDown"} 
-                              size={20} 
-                              className="text-muted-foreground flex-shrink-0"
-                            />
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </CardContent>
-              </AnimatedCard>
-            )}
+              <>
+                <div className="flex gap-2 mb-6 justify-center">
+                  <Button
+                    variant={homeView === 'calendar' ? 'default' : 'outline'}
+                    onClick={() => setHomeView('calendar')}
+                    className="flex items-center gap-2"
+                  >
+                    <Icon name="Calendar" size={18} />
+                    Календарь
+                  </Button>
+                  <Button
+                    variant={homeView === 'feed' ? 'default' : 'outline'}
+                    onClick={() => setHomeView('feed')}
+                    className="flex items-center gap-2"
+                  >
+                    <Icon name="List" size={18} />
+                    Лента
+                  </Button>
+                </div>
 
-            {!isLoading && !error && (
-              <EnergyCalendar data={data} isLoading={isLoading} />
+                {homeView === 'calendar' ? (
+                  <EnergyCalendar data={data} isLoading={isLoading} />
+                ) : (
+                  <EntriesFeed entries={data?.entries || []} />
+                )}
+              </>
             )}
           </TabsContent>
 
