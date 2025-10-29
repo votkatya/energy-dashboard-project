@@ -20,11 +20,11 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   const queryClient = useQueryClient();
 
   const scores = [
-    { value: 0, label: 'Ужасно', color: 'bg-energy-low hover:bg-energy-low/80' },
-    { value: 1, label: 'Плохо', color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
-    { value: 2, label: 'Нейтрально', color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
-    { value: 3, label: 'Хорошо', color: 'bg-energy-good hover:bg-energy-good/80' },
-    { value: 4, label: 'Отлично', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
+    { value: 1, label: 'Ужасно', color: 'bg-energy-low hover:bg-energy-low/80' },
+    { value: 2, label: 'Плохо', color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
+    { value: 3, label: 'Нейтрально', color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
+    { value: 4, label: 'Хорошо', color: 'bg-energy-good hover:bg-energy-good/80' },
+    { value: 5, label: 'Отлично', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
   ];
 
   const handleSave = async () => {

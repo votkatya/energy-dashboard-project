@@ -302,11 +302,11 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                 <Label className="mb-3 block">Как прошёл день?</Label>
                 <div className="grid grid-cols-5 gap-2">
                   {[
-                    { value: 0, color: 'bg-energy-low hover:bg-energy-low/80' },
-                    { value: 1, color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
-                    { value: 2, color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
-                    { value: 3, color: 'bg-energy-good hover:bg-energy-good/80' },
-                    { value: 4, color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
+                    { value: 1, color: 'bg-energy-low hover:bg-energy-low/80' },
+                    { value: 2, color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
+                    { value: 3, color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
+                    { value: 4, color: 'bg-energy-good hover:bg-energy-good/80' },
+                    { value: 5, color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
                   ].map((item) => (
                     <button
                       key={item.value}
