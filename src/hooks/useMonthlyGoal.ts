@@ -51,7 +51,11 @@ export const useMonthlyGoal = (year?: number, month?: number) => {
 
   const setGoalMutation = useMutation({
     mutationFn: async ({ year, month, goalScore }: { year: number; month: number; goalScore: number }) => {
+      console.log('Setting goal - token exists:', !!token);
+      console.log('Setting goal - payload:', { year, month, goalScore });
+      
       if (!token) {
+        console.error('No token available');
         throw new Error('No auth token available');
       }
       
@@ -64,12 +68,17 @@ export const useMonthlyGoal = (year?: number, month?: number) => {
         body: JSON.stringify({ year, month, goalScore }),
       });
 
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error('Error response:', errorData);
         throw new Error(errorData.error || 'Failed to set goal');
       }
 
-      return response.json();
+      const result = await response.json();
+      console.log('Success result:', result);
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['monthlyGoal'] });
