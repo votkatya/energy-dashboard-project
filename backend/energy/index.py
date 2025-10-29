@@ -116,11 +116,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         elif method == 'POST':
             body_data = json.loads(event.get('body', '{}'))
-            entry_date = body_data.get('date')
+            entry_date_str = body_data.get('date')
             score = body_data.get('score')
             thoughts = body_data.get('thoughts', '')
             
-            if not entry_date or score is None:
+            if not entry_date_str or score is None:
                 return {
                     'statusCode': 400,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -128,11 +128,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            if score < 0 or score > 4:
+            # Парсим дату в формате DD.MM.YYYY или YYYY-MM-DD
+            if '.' in entry_date_str:
+                parts = entry_date_str.split('.')
+                if len(parts) == 3:
+                    entry_date = f"{parts[2]}-{parts[1]}-{parts[0]}"
+                else:
+                    entry_date = entry_date_str
+            else:
+                entry_date = entry_date_str
+            
+            if score < 1 or score > 5:
                 return {
                     'statusCode': 400,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'score должен быть от 0 до 4'}),
+                    'body': json.dumps({'error': 'score должен быть от 1 до 5'}),
                     'isBase64Encoded': False
                 }
             
@@ -160,21 +170,31 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         elif method == 'DELETE':
-            query_params = event.get('queryStringParameters') or {}
-            entry_id = query_params.get('id')
+            body_data = json.loads(event.get('body', '{}'))
+            entry_date_str = body_data.get('date')
             
-            if not entry_id:
+            if not entry_date_str:
                 return {
                     'statusCode': 400,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'id параметр обязателен'}),
+                    'body': json.dumps({'error': 'date параметр обязателен'}),
                     'isBase64Encoded': False
                 }
             
+            # Парсим дату в формате DD.MM.YYYY или YYYY-MM-DD
+            if '.' in entry_date_str:
+                parts = entry_date_str.split('.')
+                if len(parts) == 3:
+                    entry_date = f"{parts[2]}-{parts[1]}-{parts[0]}"
+                else:
+                    entry_date = entry_date_str
+            else:
+                entry_date = entry_date_str
+            
             cur.execute('''
                 DELETE FROM t_p45717398_energy_dashboard_pro.energy_entries 
-                WHERE id = %s AND user_id = %s
-            ''', (entry_id, user_id))
+                WHERE entry_date = %s AND user_id = %s
+            ''', (entry_date, user_id))
             conn.commit()
             
             return {
