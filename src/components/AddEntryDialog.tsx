@@ -3,8 +3,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
 import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 interface AddEntryDialogProps {
   open: boolean;
@@ -17,6 +21,8 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   const [score, setScore] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [dateMode, setDateMode] = useState<'today' | 'yesterday' | 'custom'>('today');
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const queryClient = useQueryClient();
 
   const scores = [
@@ -27,13 +33,23 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
     { value: 5, label: 'Отлично', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
   ];
 
+  const getDateForSave = () => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (dateMode === 'today') return today.toISOString().split('T')[0];
+    if (dateMode === 'yesterday') return yesterday.toISOString().split('T')[0];
+    return selectedDate ? selectedDate.toISOString().split('T')[0] : today.toISOString().split('T')[0];
+  };
+
   const handleSave = async () => {
     if (score === null) return;
     
     setIsSaving(true);
     try {
       const token = localStorage.getItem('auth_token');
-      const today = new Date().toISOString().split('T')[0];
+      const dateToSave = getDateForSave();
       
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -42,7 +58,7 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
           'X-Auth-Token': token || '',
         },
         body: JSON.stringify({
-          date: today,
+          date: dateToSave,
           score: score,
           thoughts: notes,
         }),
@@ -76,6 +92,55 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
         </DialogHeader>
         
         <div className="space-y-6 py-4">
+          <div>
+            <Label className="mb-3 block">Выберите дату</Label>
+            <div className="flex gap-2 mb-4">
+              <Button
+                type="button"
+                variant={dateMode === 'today' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setDateMode('today')}
+                className="flex-1"
+              >
+                Сегодня
+              </Button>
+              <Button
+                type="button"
+                variant={dateMode === 'yesterday' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setDateMode('yesterday')}
+                className="flex-1"
+              >
+                Вчера
+              </Button>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant={dateMode === 'custom' ? 'default' : 'outline'}
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <Icon name="Calendar" size={16} className="mr-1" />
+                    {dateMode === 'custom' && selectedDate ? format(selectedDate, 'd MMM', { locale: ru }) : 'Дата'}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="center">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) => {
+                      setSelectedDate(date);
+                      setDateMode('custom');
+                    }}
+                    locale={ru}
+                    disabled={(date) => date > new Date()}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
           <div>
             <Label className="mb-3 block">Как прошёл твой день?</Label>
             <div className="grid grid-cols-5 gap-2">
