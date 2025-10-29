@@ -83,11 +83,11 @@ const Index = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg glow-primary">
-                  <Icon name="Zap" size={24} className="text-background" />
+                  <Icon name="Activity" size={24} className="text-background" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground">KatFlow</h1>
-                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня</p>
+                  <p className="text-sm text-muted-foreground">Твоя энергия под контролем</p>
                 </div>
               </div>
               <div className="flex gap-2">
