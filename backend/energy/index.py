@@ -1,6 +1,7 @@
 '''
-Backend функция для работы с записями энергии в PostgreSQL
-Поддерживает GET (получение всех записей), POST (добавление новой записи), PUT (обновление), DELETE (удаление)
+Backend функция для работы с записями энергии пользователей
+Поддерживает GET (получение записей пользователя), POST (добавление записи), DELETE (удаление записи)
+Требует авторизации через заголовок X-Auth-Token
 '''
 
 import json
@@ -8,7 +9,32 @@ import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+import hashlib
+import base64
+
+JWT_SECRET = os.environ.get('JWT_SECRET', '')
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
+
+def verify_jwt(token: str) -> Optional[Dict[str, Any]]:
+    try:
+        decoded = base64.b64decode(token.encode()).decode()
+        payload_str, signature = decoded.split('::')
+        
+        expected_signature = hashlib.sha256(f"{payload_str}{JWT_SECRET}".encode()).hexdigest()
+        
+        if signature != expected_signature:
+            return None
+        
+        payload = json.loads(payload_str)
+        
+        exp_time = datetime.fromisoformat(payload['exp'])
+        if datetime.utcnow() > exp_time:
+            return None
+        
+        return payload
+    except Exception:
+        return None
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     method: str = event.get('httpMethod', 'GET')
@@ -18,22 +44,43 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, X-Auth-Token',
                 'Access-Control-Max-Age': '86400'
             },
             'body': '',
             'isBase64Encoded': False
         }
     
-    DATABASE_URL = os.environ.get('DATABASE_URL')
-    if not DATABASE_URL:
+    if not DATABASE_URL or not JWT_SECRET:
         return {
             'statusCode': 500,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps({'error': 'DATABASE_URL not configured'}),
+            'body': json.dumps({'error': 'Server configuration error'}),
             'isBase64Encoded': False
         }
+    
+    headers = event.get('headers', {})
+    token = headers.get('X-Auth-Token') or headers.get('x-auth-token')
+    
+    if not token:
+        return {
+            'statusCode': 401,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': 'Требуется авторизация'}),
+            'isBase64Encoded': False
+        }
+    
+    payload = verify_jwt(token)
+    if not payload:
+        return {
+            'statusCode': 401,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': 'Невалидный или истёкший токен'}),
+            'isBase64Encoded': False
+        }
+    
+    user_id = payload['user_id']
     
     conn = None
     try:
@@ -43,9 +90,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if method == 'GET':
             cur.execute('''
                 SELECT id, entry_date, score, thoughts, created_at, updated_at
-                FROM energy_entries
+                FROM t_p45717398_energy_dashboard_pro.energy_entries
+                WHERE user_id = %s
                 ORDER BY entry_date DESC
-            ''')
+            ''', (user_id,))
             entries = cur.fetchall()
             
             result = []
@@ -76,7 +124,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 return {
                     'statusCode': 400,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'date and score are required'}),
+                    'body': json.dumps({'error': 'date и score обязательны'}),
                     'isBase64Encoded': False
                 }
             
@@ -84,17 +132,17 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 return {
                     'statusCode': 400,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'score must be between 0 and 4'}),
+                    'body': json.dumps({'error': 'score должен быть от 0 до 4'}),
                     'isBase64Encoded': False
                 }
             
             cur.execute('''
-                INSERT INTO energy_entries (entry_date, score, thoughts)
-                VALUES (%s, %s, %s)
-                ON CONFLICT (entry_date) 
+                INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (user_id, entry_date) 
                 DO UPDATE SET score = EXCLUDED.score, thoughts = EXCLUDED.thoughts, updated_at = CURRENT_TIMESTAMP
                 RETURNING id, entry_date, score, thoughts
-            ''', (entry_date, score, thoughts))
+            ''', (user_id, entry_date, score, thoughts))
             
             conn.commit()
             new_entry = cur.fetchone()
@@ -119,11 +167,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 return {
                     'statusCode': 400,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'id parameter is required'}),
+                    'body': json.dumps({'error': 'id параметр обязателен'}),
                     'isBase64Encoded': False
                 }
             
-            cur.execute('DELETE FROM energy_entries WHERE id = %s', (entry_id,))
+            cur.execute('''
+                DELETE FROM t_p45717398_energy_dashboard_pro.energy_entries 
+                WHERE id = %s AND user_id = %s
+            ''', (entry_id, user_id))
             conn.commit()
             
             return {
@@ -137,7 +188,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             return {
                 'statusCode': 405,
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                'body': json.dumps({'error': 'Method not allowed'}),
+                'body': json.dumps({'error': 'Метод не поддерживается'}),
                 'isBase64Encoded': False
             }
     

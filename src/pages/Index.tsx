@@ -9,6 +9,7 @@ import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import { useEnergyData } from '@/hooks/useEnergyData';
+import { useAuth } from '@/contexts/AuthContext';
 import { parseDate } from '@/utils/dateUtils';
 import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
 import { HeroGeometric } from '@/components/ui/shape-landing-hero';
@@ -19,6 +20,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
   const [expandedEntry, setExpandedEntry] = useState<number | null>(null);
+  const { user, logout } = useAuth();
   const { data, isLoading, error, refetch } = useEnergyData();
 
   const getColorClass = (score: number) => {
@@ -90,12 +92,21 @@ const Index = () => {
               </div>
               <div className="flex gap-2">
                 <Button 
-                  onClick={() => refetch()}
+                  onClick={logout}
                   size="icon"
                   variant="outline"
                   className="sm:hidden"
                 >
-                  <Icon name="RefreshCw" size={20} />
+                  <Icon name="LogOut" size={20} />
+                </Button>
+                <Button 
+                  onClick={logout}
+                  size="lg"
+                  variant="outline"
+                  className="hidden sm:flex glass-effect hover:glass-card transition-all"
+                >
+                  <Icon name="LogOut" size={20} className="mr-2" />
+                  Выйти
                 </Button>
                 <Button 
                   onClick={() => refetch()}

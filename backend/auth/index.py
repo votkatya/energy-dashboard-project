@@ -80,7 +80,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Access-Control-Allow-Headers': 'Content-Type, X-Auth-Token',
                 'Access-Control-Max-Age': '86400'
             },
-            'body': ''
+            'body': '',
+            'isBase64Encoded': False
         }
     
     try:
@@ -107,23 +108,25 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     return {
                         'statusCode': 400,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                        'body': json.dumps({'error': 'Пароль должен быть минимум 6 символов'})
+                        'body': json.dumps({'error': 'Пароль должен быть минимум 6 символов'}),
+                        'isBase64Encoded': False
                     }
                 
-                cur.execute("SELECT id FROM users WHERE email = %s", (email,))
+                cur.execute("SELECT id FROM t_p45717398_energy_dashboard_pro.users WHERE email = %s", (email,))
                 existing = cur.fetchone()
                 
                 if existing:
                     return {
                         'statusCode': 400,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                        'body': json.dumps({'error': 'Пользователь с таким email уже существует'})
+                        'body': json.dumps({'error': 'Пользователь с таким email уже существует'}),
+                        'isBase64Encoded': False
                     }
                 
                 password_hash = hash_password(password)
                 
                 cur.execute(
-                    "INSERT INTO users (email, password_hash, name) VALUES (%s, %s, %s) RETURNING id, email, name",
+                    "INSERT INTO t_p45717398_energy_dashboard_pro.users (email, password_hash, full_name) VALUES (%s, %s, %s) RETURNING id, email, full_name",
                     (email, password_hash, name)
                 )
                 user = cur.fetchone()
@@ -139,9 +142,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'user': {
                             'id': user['id'],
                             'email': user['email'],
-                            'name': user['name']
+                            'name': user['full_name']
                         }
-                    })
+                    }),
+                    'isBase64Encoded': False
                 }
             
             elif action == 'login':
@@ -155,14 +159,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'body': json.dumps({'error': 'Email и пароль обязательны'})
                     }
                 
-                cur.execute("SELECT id, email, name, password_hash FROM users WHERE email = %s", (email,))
+                cur.execute("SELECT id, email, full_name, password_hash FROM t_p45717398_energy_dashboard_pro.users WHERE email = %s", (email,))
                 user = cur.fetchone()
                 
                 if not user or not verify_password(password, user['password_hash']):
                     return {
                         'statusCode': 401,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                        'body': json.dumps({'error': 'Неверный email или пароль'})
+                        'body': json.dumps({'error': 'Неверный email или пароль'}),
+                        'isBase64Encoded': False
                     }
                 
                 token = create_jwt(user['id'], user['email'])
@@ -175,9 +180,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'user': {
                             'id': user['id'],
                             'email': user['email'],
-                            'name': user['name']
+                            'name': user['full_name']
                         }
-                    })
+                    }),
+                    'isBase64Encoded': False
                 }
         
         elif method == 'GET':
@@ -187,7 +193,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 return {
                     'statusCode': 401,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'Токен не предоставлен'})
+                    'body': json.dumps({'error': 'Токен не предоставлен'}),
+                    'isBase64Encoded': False
                 }
             
             payload = verify_jwt(auth_header)
@@ -196,17 +203,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 return {
                     'statusCode': 401,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'Невалидный или истекший токен'})
+                    'body': json.dumps({'error': 'Невалидный или истекший токен'}),
+                    'isBase64Encoded': False
                 }
             
-            cur.execute("SELECT id, email, name FROM users WHERE id = %s", (payload['user_id'],))
+            cur.execute("SELECT id, email, full_name FROM t_p45717398_energy_dashboard_pro.users WHERE id = %s", (payload['user_id'],))
             user = cur.fetchone()
             
             if not user:
                 return {
                     'statusCode': 404,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': 'Пользователь не найден'})
+                    'body': json.dumps({'error': 'Пользователь не найден'}),
+                    'isBase64Encoded': False
                 }
             
             return {
@@ -216,9 +225,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'user': {
                         'id': user['id'],
                         'email': user['email'],
-                        'name': user['name']
+                        'name': user['full_name']
                     }
-                })
+                }),
+                'isBase64Encoded': False
             }
         
         cur.close()
@@ -227,12 +237,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         return {
             'statusCode': 405,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps({'error': 'Метод не поддерживается'})
+            'body': json.dumps({'error': 'Метод не поддерживается'}),
+            'isBase64Encoded': False
         }
     
     except Exception as e:
         return {
             'statusCode': 500,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps({'error': f'Ошибка сервера: {str(e)}'})
+            'body': json.dumps({'error': f'Ошибка сервера: {str(e)}'}),
+            'isBase64Encoded': False
         }
