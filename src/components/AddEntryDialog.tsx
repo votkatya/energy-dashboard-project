@@ -34,13 +34,20 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   ];
 
   const getDateForSave = () => {
+    const formatLocalDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    
     const today = new Date();
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     
-    if (dateMode === 'today') return today.toISOString().split('T')[0];
-    if (dateMode === 'yesterday') return yesterday.toISOString().split('T')[0];
-    return selectedDate ? selectedDate.toISOString().split('T')[0] : today.toISOString().split('T')[0];
+    if (dateMode === 'today') return formatLocalDate(today);
+    if (dateMode === 'yesterday') return formatLocalDate(yesterday);
+    return selectedDate ? formatLocalDate(selectedDate) : formatLocalDate(today);
   };
 
   const handleSave = async () => {
