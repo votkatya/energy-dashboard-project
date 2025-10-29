@@ -9,6 +9,7 @@ import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
 import AnimatedCard from '@/components/AnimatedCard';
+import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
 import { parseDate } from '@/utils/dateUtils';
@@ -204,47 +205,12 @@ const Index = () => {
                   >Год</Button>
                 </div>
                 
-                {/* Goal Progress */}
-                {monthlyStats.total > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Card className="glass-card mb-8 md:mb-10 border-l-4 border-l-primary glow-primary">
-                    <CardContent className="pt-6">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Icon name="Target" size={20} className="text-primary" />
-                            <span className="font-medium">Цель на месяц</span>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-heading font-bold text-primary">
-                              {monthlyStats.average.toFixed(1)}
-                            </div>
-                            <div className="text-xs text-muted-foreground">из 4.0</div>
-                          </div>
-                        </div>
-                        <div className="relative h-3 bg-muted/50 rounded-full overflow-hidden backdrop-blur-sm">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.min((monthlyStats.average / 4) * 100, 100)}%` }}
-                            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-                            className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-primary via-primary-light to-primary glow-primary"
-                          />
-                        </div>
-                        <p className="text-sm text-muted-foreground text-center">
-                          {monthlyStats.average >= 4 
-                            ? '🎉 Цель достигнута!' 
-                            : `Еще ${(4 - monthlyStats.average).toFixed(1)} до цели`
-                          }
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  </motion.div>
-                )}
+                <MonthlyGoalCard
+                  currentAverage={monthlyStats.average}
+                  totalEntries={monthlyStats.total}
+                  currentYear={new Date().getFullYear()}
+                  currentMonth={new Date().getMonth() + 1}
+                />
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
                   <AnimatedCard delay={0.1} className="glass-card border-l-4 border-l-primary hover:glow-primary">

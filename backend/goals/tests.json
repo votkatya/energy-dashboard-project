@@ -1,0 +1,29 @@
+{
+  "tests": [
+    {
+      "name": "Get current month goal (without auth - should fail)",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Set goal for current month (without auth - should fail)",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "year": 2025,
+        "month": 10,
+        "goalScore": 4.0
+      },
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
