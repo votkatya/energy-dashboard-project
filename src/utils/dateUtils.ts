@@ -29,3 +29,10 @@ export const formatDateRu = (date: Date): string => {
     year: 'numeric' 
   });
 };
+
+export const formatMonthRu = (date: Date): string => {
+  return date.toLocaleDateString('ru-RU', { 
+    month: 'long', 
+    year: 'numeric' 
+  });
+};

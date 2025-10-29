@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { parseDate, getWeekNumber, formatDateRu } from '@/utils/dateUtils';
+import { parseDate, getWeekNumber, formatDateRu, formatMonthRu } from '@/utils/dateUtils';
 import { calculateStats } from '@/utils/statsCalculator';
 
 interface EnergyEntry {
@@ -91,7 +91,7 @@ const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
         const stats = calculateStats(entries);
 
         return {
-          month: formatDateRu(date),
+          month: formatMonthRu(date),
           monthKey,
           timestamp: date.getTime(),
           bad: stats.bad,
@@ -189,7 +189,7 @@ const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
             {monthlyStats.map((stat, idx) => (
               <div key={idx} className="p-4 rounded-xl bg-gradient-to-r from-accent/10 to-transparent border-l-4 border-l-accent">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-medium">Месяц {stat.month}</span>
+                  <span className="font-medium">{stat.month}</span>
                   <span className="px-3 py-1 rounded-full bg-accent/20 text-accent font-bold">
                     ø {stat.avg}
                   </span>
