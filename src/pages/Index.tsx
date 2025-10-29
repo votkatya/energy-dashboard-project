@@ -171,7 +171,7 @@ const Index = () => {
           
           <TabsContent value="welcome" className="animate-fade-in">
             <HeroGeometric 
-              badge="KatFlow"
+              badge=""
               title1="Твоя энергия"
               title2="под контролем"
             />
