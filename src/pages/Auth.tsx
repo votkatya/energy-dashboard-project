@@ -11,7 +11,7 @@ import { HeroGeometric } from '@/components/ui/shape-landing-hero';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
+  const [telegram, setTelegram] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
@@ -27,9 +27,9 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        await login(email, password);
+        await login(telegram, password);
       } else {
-        await register(email, password, name);
+        await register(telegram, password, name);
       }
       navigate('/');
     } catch (err) {
@@ -59,13 +59,16 @@ const Auth = () => {
                 className="mx-auto mb-4"
               >
                 <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl">
-                  <Icon name="Zap" size={40} className="text-background" />
+                  <Icon name="Activity" size={40} className="text-background" />
                 </div>
               </motion.div>
-              <CardTitle className="text-3xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                Energy Tracker
+              <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
+                KatFlow
               </CardTitle>
-              <CardDescription className="text-base">
+              <CardDescription className="text-lg font-medium">
+                Твоя энергия под контролем
+              </CardDescription>
+              <CardDescription className="text-sm mt-1">
                 {isLogin ? 'Войдите в свой аккаунт' : 'Создайте новый аккаунт'}
               </CardDescription>
             </CardHeader>
@@ -88,13 +91,13 @@ const Auth = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="telegram">Имя в Telegram</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="telegram"
+                    type="text"
+                    placeholder="@username"
+                    value={telegram}
+                    onChange={(e) => setTelegram(e.target.value)}
                     required
                     className="glass-effect"
                   />
