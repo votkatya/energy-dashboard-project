@@ -73,9 +73,9 @@ function ElegantShape({
 }
 
 function HeroGeometric({
-    badge = "Design Collective",
-    title1 = "Elevate Your Digital Vision",
-    title2 = "Crafting Exceptional Websites",
+    badge = "KatFlow",
+    title1 = "Твоя энергия",
+    title2 = "под контролем",
 }: {
     badge?: string;
     title1?: string;
