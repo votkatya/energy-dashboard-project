@@ -17,6 +17,10 @@ export const useMonthlyGoal = (year?: number, month?: number) => {
   const queryClient = useQueryClient();
 
   const fetchGoal = async (): Promise<MonthlyGoal | null> => {
+    if (!token) {
+      return null;
+    }
+    
     const params = new URLSearchParams();
     if (year) params.append('year', year.toString());
     if (month) params.append('month', month.toString());
@@ -25,11 +29,14 @@ export const useMonthlyGoal = (year?: number, month?: number) => {
     
     const response = await fetch(url, {
       headers: {
-        'X-Auth-Token': token || '',
+        'X-Auth-Token': token,
       },
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        return null;
+      }
       throw new Error('Failed to fetch goal');
     }
 
@@ -44,17 +51,22 @@ export const useMonthlyGoal = (year?: number, month?: number) => {
 
   const setGoalMutation = useMutation({
     mutationFn: async ({ year, month, goalScore }: { year: number; month: number; goalScore: number }) => {
+      if (!token) {
+        throw new Error('No auth token available');
+      }
+      
       const response = await fetch(GOALS_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Auth-Token': token || '',
+          'X-Auth-Token': token,
         },
         body: JSON.stringify({ year, month, goalScore }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to set goal');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to set goal');
       }
 
       return response.json();
