@@ -37,3 +37,24 @@ export const formatMonthRu = (date: Date): string => {
   });
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
+
+export const getWeekRange = (date: Date): { weekNum: number; startDate: Date; endDate: Date } => {
+  const weekNum = getWeekNumber(date);
+  const dayOfWeek = date.getDay();
+  const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  
+  const startDate = new Date(date);
+  startDate.setDate(date.getDate() + diff);
+  
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+  
+  return { weekNum, startDate, endDate };
+};
+
+export const formatWeekRu = (date: Date): string => {
+  const { weekNum, startDate, endDate } = getWeekRange(date);
+  const start = startDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  const end = endDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  return `Неделя ${weekNum} (${start} — ${end})`;
+};

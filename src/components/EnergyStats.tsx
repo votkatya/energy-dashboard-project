@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { parseDate, getWeekNumber, formatDateRu, formatMonthRu } from '@/utils/dateUtils';
+import { parseDate, getWeekNumber, formatWeekRu, formatMonthRu } from '@/utils/dateUtils';
 import { calculateStats } from '@/utils/statsCalculator';
 
 interface EnergyEntry {
@@ -54,7 +54,7 @@ const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
         const stats = calculateStats(entries);
 
         return {
-          week: formatDateRu(date),
+          week: formatWeekRu(date),
           weekKey,
           timestamp: date.getTime(),
           bad: stats.bad,
@@ -152,7 +152,7 @@ const EnergyStats = ({ data, isLoading }: EnergyStatsProps) => {
             {weeklyStats.map((stat, idx) => (
               <div key={idx} className="p-4 rounded-xl bg-gradient-to-r from-secondary/50 to-transparent border-l-4 border-l-primary">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-medium">Неделя {stat.week}</span>
+                  <span className="font-medium">{stat.week}</span>
                   <span className="px-3 py-1 rounded-full bg-primary/20 text-primary font-bold">
                     ø {stat.avg}
                   </span>
