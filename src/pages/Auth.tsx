@@ -65,9 +65,7 @@ const Auth = () => {
               <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
                 KatFlow
               </CardTitle>
-              <CardDescription className="text-lg font-medium">
-                Твоя энергия под контролем
-              </CardDescription>
+              <CardDescription className="text-lg font-medium"></CardDescription>
               <CardDescription className="text-sm mt-1">
                 {isLogin ? 'Войдите в свой аккаунт' : 'Создайте новый аккаунт'}
               </CardDescription>
