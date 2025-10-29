@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
+import { HeroBackground } from '@/components/ui/shape-landing-hero';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -40,7 +41,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-radial from-background via-background to-primary/5">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.08] blur-3xl" />
+      <HeroBackground />
       
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <motion.div

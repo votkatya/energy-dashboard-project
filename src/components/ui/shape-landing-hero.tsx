@@ -199,4 +199,48 @@ function HeroGeometric({
     );
 }
 
-export { HeroGeometric }
+function HeroBackground() {
+    return (
+        <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.08] blur-3xl" />
+            
+            <ElegantShape
+                delay={0.3}
+                width={400}
+                height={100}
+                rotate={12}
+                gradient="from-primary/[0.15]"
+                className="left-[-10%] top-[20%]"
+            />
+
+            <ElegantShape
+                delay={0.5}
+                width={350}
+                height={90}
+                rotate={-15}
+                gradient="from-accent/[0.12]"
+                className="right-[-5%] top-[60%]"
+            />
+
+            <ElegantShape
+                delay={0.4}
+                width={250}
+                height={70}
+                rotate={-8}
+                gradient="from-primary/[0.15]"
+                className="left-[5%] bottom-[10%]"
+            />
+
+            <ElegantShape
+                delay={0.6}
+                width={180}
+                height={50}
+                rotate={20}
+                gradient="from-accent/[0.18]"
+                className="right-[15%] top-[15%]"
+            />
+        </div>
+    );
+}
+
+export { HeroGeometric, HeroBackground }
