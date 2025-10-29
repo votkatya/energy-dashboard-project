@@ -1,0 +1,17 @@
+{
+  "tests": [
+    {
+      "name": "Migrate data from Google Sheets",
+      "method": "POST",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": "boolean",
+        "inserted": "number",
+        "updated": "number",
+        "total": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
