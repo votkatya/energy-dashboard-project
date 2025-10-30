@@ -7,6 +7,7 @@ import EnergyCalendar from '@/components/EnergyCalendar';
 import EntriesFeed from '@/components/EntriesFeed';
 import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
+import EnergyChart from '@/components/EnergyChart';
 import AddEntryDialog from '@/components/AddEntryDialog';
 import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
@@ -359,7 +360,10 @@ const Index = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="stats" className="animate-fade-in">
+          <TabsContent value="stats" className="animate-fade-in space-y-6">
+            {data?.entries && data.entries.length > 0 && (
+              <EnergyChart entries={data.entries} />
+            )}
             <EnergyStats data={data} isLoading={isLoading} />
           </TabsContent>
 
