@@ -32,6 +32,8 @@ const NotificationsDialog = () => {
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<NotificationSettings>(defaultSettings);
   const [hasPermission, setHasPermission] = useState<'granted' | 'denied' | 'default'>('default');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const platform = getPlatform();
   const telegramUser = getTelegramUser();
 
@@ -62,7 +64,7 @@ const NotificationsDialog = () => {
     
     if (token && userId) {
       try {
-        await fetch(funcUrls['save-notification-settings'], {
+        const response = await fetch(funcUrls['save-notification-settings'], {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -73,10 +75,19 @@ const NotificationsDialog = () => {
             telegramChatId: newSettings.telegramChatId
           })
         });
+        
+        if (!response.ok) {
+          throw new Error('Failed to save settings');
+        }
+        
+        console.log('✅ Настройки сохранены в БД:', newSettings);
+        return true;
       } catch (error) {
-        console.error('Failed to save notification settings:', error);
+        console.error('❌ Ошибка сохранения:', error);
+        throw error;
       }
     }
+    return false;
   };
 
   const requestPermission = async () => {
@@ -108,8 +119,22 @@ const NotificationsDialog = () => {
   };
 
   const handleSave = async () => {
-    await saveSettings(settings);
-    setOpen(false);
+    setIsSaving(true);
+    setSaveSuccess(false);
+    
+    try {
+      await saveSettings(settings);
+      setSaveSuccess(true);
+      
+      setTimeout(() => {
+        setOpen(false);
+        setSaveSuccess(false);
+      }, 1500);
+    } catch (error) {
+      console.error('Ошибка сохранения настроек');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -382,9 +407,27 @@ const NotificationsDialog = () => {
           )}
 
           <div className="flex justify-end pt-4 border-t">
-            <Button onClick={handleSave} className="w-full sm:w-auto">
-              <Icon name="Check" size={16} className="mr-2" />
-              Сохранить
+            <Button 
+              onClick={handleSave} 
+              className="w-full sm:w-auto"
+              disabled={isSaving || saveSuccess}
+            >
+              {isSaving ? (
+                <>
+                  <Icon name="Loader2" size={16} className="mr-2 animate-spin" />
+                  Сохранение...
+                </>
+              ) : saveSuccess ? (
+                <>
+                  <Icon name="Check" size={16} className="mr-2" />
+                  Сохранено!
+                </>
+              ) : (
+                <>
+                  <Icon name="Save" size={16} className="mr-2" />
+                  Сохранить
+                </>
+              )}
             </Button>
           </div>
         </div>
