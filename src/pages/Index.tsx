@@ -92,13 +92,13 @@ const Index = () => {
         <header className="mb-8 animate-fade-in">
           <div className="flex flex-col gap-4 mb-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-                  <Icon name="Zap" size={24} className="text-primary-foreground" />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                  <Icon name="Zap" size={18} className="text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">FlowKat</h1>
-                  <p className="text-sm text-muted-foreground">Выгорание? Не сегодня!</p>
+                  <h1 className="text-lg sm:text-xl font-heading font-bold text-foreground">FlowKat</h1>
+                  <p className="text-xs text-muted-foreground hidden sm:block">Выгорание? Не сегодня!</p>
                 </div>
               </div>
               <div className="flex gap-2">
