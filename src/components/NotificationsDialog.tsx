@@ -127,12 +127,15 @@ const NotificationsDialog = () => {
   };
 
   const handleSave = async () => {
+    console.log('🟡 handleSave вызван!');
     setIsSaving(true);
     setSaveSuccess(false);
     
     try {
       const savedSettings = localStorage.getItem('notification-settings');
+      console.log('🟡 savedSettings из localStorage:', savedSettings);
       const currentSettings = savedSettings ? JSON.parse(savedSettings) : settings;
+      console.log('🟡 currentSettings:', currentSettings);
       
       await saveSettings(currentSettings);
       setSaveSuccess(true);
@@ -424,7 +427,10 @@ const NotificationsDialog = () => {
 
           <div className="flex justify-end pt-4 border-t">
             <Button 
-              onClick={handleSave} 
+              onClick={() => {
+                console.log('🟢 Кнопка нажата!');
+                handleSave();
+              }} 
               className="w-full sm:w-auto"
               disabled={isSaving || saveSuccess}
             >
