@@ -137,22 +137,6 @@ const NotificationsDialog = () => {
                   />
                 </div>
               </Card>
-              
-              <div 
-                className="p-4 bg-primary text-primary-foreground rounded-lg cursor-pointer active:opacity-80"
-                onClick={() => {
-                  if (telegramUser) {
-                    const newSettings = { ...settings, telegramChatId: telegramUser.id };
-                    setSettings(newSettings);
-                    localStorage.setItem('notification-settings', JSON.stringify(newSettings));
-                    setHasPermission('granted');
-                  }
-                }}
-              >
-                <p className="text-sm font-medium text-center">
-                  👆 Нажмите здесь для активации
-                </p>
-              </div>
             </>
           )}
           
