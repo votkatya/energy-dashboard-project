@@ -26,10 +26,10 @@
     --muted: 210 10% 32%;
     --muted-foreground: 210 8% 75%;
 
-    --accent: 195 75% 65%;
+    --accent: 204 96% 69%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 5 85% 70%;
+    --destructive: 353 93% 70%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 210 10% 35%;
@@ -38,9 +38,9 @@
 
     --radius: 1.5rem;
 
-    --energy-low: 351 65% 68%;
-    --energy-medium-low: 351 65% 68%;
-    --energy-neutral: 45 95% 65%;
+    --energy-low: 353 93% 70%;
+    --energy-medium-low: 353 93% 70%;
+    --energy-neutral: 204 96% 69%;
     --energy-good: 81 91% 67%;
     --energy-excellent: 81 63% 52%;
 
