@@ -160,6 +160,11 @@ const NotificationsDialog = () => {
         </DialogHeader>
 
         <div className="space-y-6">
+          <Card className="p-3 bg-yellow-500/10 border-yellow-500/30">
+            <p className="text-xs font-mono break-all">
+              {JSON.stringify(settings, null, 2)}
+            </p>
+          </Card>
           {platform === 'telegram' && (
             <>
               <Card className="p-4 bg-accent/10 border-accent/20">
