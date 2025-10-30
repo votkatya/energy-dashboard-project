@@ -104,21 +104,21 @@ const Index = () => {
               <div className="flex gap-2">
                 <NotificationsDialog />
                 <Button 
-                  onClick={logout}
+                  onClick={() => setActiveTab('settings')}
                   size="icon"
                   variant="outline"
                   className="sm:hidden"
                 >
-                  <Icon name="LogOut" size={20} />
+                  <Icon name="Settings" size={20} />
                 </Button>
                 <Button 
-                  onClick={logout}
+                  onClick={() => setActiveTab('settings')}
                   size="lg"
                   variant="outline"
                   className="hidden sm:flex glass-effect hover:glass-card transition-all"
                 >
-                  <Icon name="LogOut" size={20} className="mr-2" />
-                  Выйти
+                  <Icon name="Settings" size={20} className="mr-2" />
+                  Настройки
                 </Button>
                 <Button 
                   onClick={() => setShowAddDialog(true)}
@@ -141,7 +141,7 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 glass-card p-1 h-auto sm:h-14">
+          <TabsList className="grid w-full grid-cols-4 mb-8 glass-card p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="home" 
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
@@ -162,6 +162,13 @@ const Index = () => {
             >
               <Icon name="Activity" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Тренды</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="settings"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+            >
+              <Icon name="Settings" size={18} className="sm:mr-0" />
+              <span className="hidden sm:inline">Настройки</span>
             </TabsTrigger>
           </TabsList>
 
@@ -369,6 +376,67 @@ const Index = () => {
 
           <TabsContent value="trends" className="animate-fade-in">
             <EnergyTrends data={data} isLoading={isLoading} />
+          </TabsContent>
+
+          <TabsContent value="settings" className="animate-fade-in">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="User" size={24} />
+                    Профиль
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+                      <Icon name="User" size={24} className="text-primary-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{user?.email || 'Пользователь'}</p>
+                      <p className="text-sm text-muted-foreground">ID: {user?.id}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Info" size={24} />
+                    О приложении
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm text-muted-foreground">
+                  <p><strong className="text-foreground">FlowKat</strong> — персональный трекер энергии и настроения</p>
+                  <p>Версия: 1.0.0</p>
+                  <p>Всего записей: {data?.entries?.length || 0}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-destructive/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-destructive">
+                    <Icon name="LogOut" size={24} />
+                    Выход из аккаунта
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Вы уверены, что хотите выйти? Все несохраненные данные будут потеряны.
+                  </p>
+                  <Button 
+                    onClick={logout}
+                    variant="destructive"
+                    size="lg"
+                    className="w-full"
+                  >
+                    <Icon name="LogOut" size={20} className="mr-2" />
+                    Выйти
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
