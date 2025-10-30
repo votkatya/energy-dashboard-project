@@ -167,22 +167,21 @@ const Auth = () => {
           className="w-full max-w-md"
         >
           <Card className="border-2 shadow-2xl bg-card">
-            <CardHeader className="text-center">
+            <CardHeader className="text-center pb-6">
               <motion.div
                 initial={{ scale: 0.5 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, type: "spring" }}
-                className="mx-auto mb-4"
+                className="mx-auto mb-3"
               >
-                <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-xl">
-                  <Icon name="Zap" size={40} className="text-primary-foreground" />
+                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                  <Icon name="Zap" size={24} className="text-primary-foreground" />
                 </div>
               </motion.div>
-              <CardTitle className="text-4xl font-heading text-primary mb-2">
+              <CardTitle className="text-2xl font-heading text-primary mb-1">
                 FlowKat
               </CardTitle>
-              <CardDescription className="text-lg font-medium"></CardDescription>
-              <CardDescription className="text-sm mt-1">
+              <CardDescription className="text-sm">
                 {isLogin ? 'Войдите в свой аккаунт' : 'Создайте новый аккаунт'}
               </CardDescription>
             </CardHeader>
