@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { Card } from '@/components/ui/card';
 import { getPlatform, canUseBrowserNotifications, getTelegramUser } from '@/utils/platformDetector';
+import { useAuth } from '@/contexts/AuthContext';
 import funcUrls from '../../backend/func2url.json';
 
 interface NotificationSettings {
@@ -36,6 +37,7 @@ const NotificationsDialog = () => {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const platform = getPlatform();
   const telegramUser = getTelegramUser();
+  const { user, token } = useAuth();
 
   useEffect(() => {
     const saved = localStorage.getItem('notification-settings');
@@ -59,15 +61,9 @@ const NotificationsDialog = () => {
     setSettings(newSettings);
     localStorage.setItem('notification-settings', JSON.stringify(newSettings));
     
-    const token = localStorage.getItem('auth_token');
-    const userDataStr = localStorage.getItem('user');
-    
-    if (token && userDataStr) {
-      const userData = JSON.parse(userDataStr);
-      const userId = userData.id;
-      
+    if (user && token) {
       const payload = {
-        userId: userId,
+        userId: user.id,
         settings: newSettings,
         telegramChatId: newSettings.telegramChatId
       };
