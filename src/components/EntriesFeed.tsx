@@ -203,7 +203,7 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
           <>
             {visibleEntries.map((entry) => {
               const isExpanded = expandedEntries.has(entry.id);
-              const needsExpansion = entry.thoughts && entry.thoughts.length > 120;
+              const needsExpansion = entry.thoughts && entry.thoughts.length > 200;
 
               return (
                 <Card key={entry.id} className="glass-card hover:shadow-lg transition-shadow">
