@@ -150,12 +150,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
   return (
     <div className="space-y-6">
       {predictions.burnoutRisk && (
-        <Card className={`shadow-lg border-l-4 ${
-          predictions.burnoutRisk.level === 'critical' ? 'border-l-destructive bg-destructive/5' :
-          predictions.burnoutRisk.level === 'high' ? 'border-l-orange-600 bg-orange-50/50' :
-          predictions.burnoutRisk.level === 'medium' ? 'border-l-yellow-600 bg-yellow-50/50' :
-          'border-l-energy-excellent bg-energy-excellent/5'
-        }`}>
+        <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Icon name={predictions.burnoutRisk.icon as any} size={24} className={predictions.burnoutRisk.color} />
@@ -182,7 +177,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       )}
 
       {predictions.weekPrediction && (
-        <Card className="shadow-lg border-l-4 border-l-primary">
+        <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Icon name="TrendingUp" size={24} className="text-primary" />
@@ -221,7 +216,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       )}
 
       {predictions.restDay && (
-        <Card className="shadow-lg border-l-4 border-l-accent">
+        <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Icon name="Coffee" size={24} className="text-accent" />
