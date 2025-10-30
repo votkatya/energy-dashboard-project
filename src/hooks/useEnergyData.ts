@@ -61,7 +61,7 @@ export const useEnergyData = () => {
   const token = localStorage.getItem('auth_token');
   
   return useQuery<EnergyData>({
-    queryKey: ['energy-data'],
+    queryKey: ['energy-data', 'v2'],
     queryFn: async () => {
       const response = await fetch(API_URL, {
         headers: {
@@ -79,5 +79,6 @@ export const useEnergyData = () => {
     },
     refetchInterval: 30000,
     enabled: !!token,
+    staleTime: 0,
   });
 };
