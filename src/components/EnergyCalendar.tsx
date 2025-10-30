@@ -234,21 +234,9 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       <Dialog open={!!selectedDay} onOpenChange={() => { setSelectedDay(null); setIsEditing(false); }}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Icon name="Calendar" size={20} />
-                {selectedDay?.date}
-              </div>
-              {selectedDay?.entry && !isEditing && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <Icon name="Edit" size={16} className="mr-1" />
-                  Изменить
-                </Button>
-              )}
+            <DialogTitle className="flex items-center gap-2">
+              <Icon name="Calendar" size={20} />
+              {selectedDay?.date}
             </DialogTitle>
           </DialogHeader>
           
@@ -276,35 +264,44 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                 </div>
               )}
               
-              <Button
-                variant="destructive"
-                className="w-full"
-                onClick={async () => {
-                  if (!confirm('Удалить эту запись?')) return;
-                  setIsSaving(true);
-                  try {
-                    const token = localStorage.getItem('auth_token');
-                    const response = await fetch(API_URL, {
-                      method: 'DELETE',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'X-Auth-Token': token || '',
-                      },
-                      body: JSON.stringify({ date: selectedDay.date }),
-                    });
-                    if (!response.ok) throw new Error('Failed to delete');
-                    await queryClient.invalidateQueries({ queryKey: ['energy-data'] });
-                    setSelectedDay(null);
-                  } catch (error) {
-                    alert('Не удалось удалить запись');
-                  } finally {
-                    setIsSaving(false);
-                  }
-                }}
-              >
-                <Icon name="Trash2" size={16} className="mr-2" />
-                Удалить запись
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="destructive"
+                  className="flex-1"
+                  onClick={async () => {
+                    if (!confirm('Удалить эту запись?')) return;
+                    setIsSaving(true);
+                    try {
+                      const token = localStorage.getItem('auth_token');
+                      const response = await fetch(API_URL, {
+                        method: 'DELETE',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'X-Auth-Token': token || '',
+                        },
+                        body: JSON.stringify({ date: selectedDay.date }),
+                      });
+                      if (!response.ok) throw new Error('Failed to delete');
+                      await queryClient.invalidateQueries({ queryKey: ['energy-data'] });
+                      setSelectedDay(null);
+                    } catch (error) {
+                      alert('Не удалось удалить запись');
+                    } finally {
+                      setIsSaving(false);
+                    }
+                  }}
+                >
+                  <Icon name="Trash2" size={16} className="mr-2" />
+                  Удалить
+                </Button>
+                <Button
+                  className="flex-[1.5] bg-gradient-to-r from-primary to-accent"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <Icon name="Edit" size={16} className="mr-2" />
+                  Изменить запись
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">
