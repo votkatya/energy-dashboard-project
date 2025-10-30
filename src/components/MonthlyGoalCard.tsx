@@ -70,7 +70,7 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="glass-card mb-8 md:mb-10 border-l-4 border-l-primary glow-primary">
+      <Card className="glass-card mb-8 md:mb-10">
         <CardContent className="pt-6">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
