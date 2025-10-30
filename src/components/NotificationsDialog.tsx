@@ -59,12 +59,15 @@ const NotificationsDialog = () => {
     setSettings(newSettings);
     localStorage.setItem('notification-settings', JSON.stringify(newSettings));
     
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('auth_token');
+    const userDataStr = localStorage.getItem('user');
     
-    if (token && userId) {
+    if (token && userDataStr) {
+      const userData = JSON.parse(userDataStr);
+      const userId = userData.id;
+      
       const payload = {
-        userId: parseInt(userId),
+        userId: userId,
         settings: newSettings,
         telegramChatId: newSettings.telegramChatId
       };
