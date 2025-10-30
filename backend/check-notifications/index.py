@@ -109,7 +109,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         UPDATE t_p45717398_energy_dashboard_pro.users 
                         SET last_notification_sent = %s 
                         WHERE id = %s
-                    """, (current_time_msk, user_id))
+                    """, (current_time_utc, user_id))
                     conn.commit()
                     print(f"✅ Notification sent to user {user_id} ({full_name})")
                 else:
