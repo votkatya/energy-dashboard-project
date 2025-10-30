@@ -53,8 +53,8 @@ export const getWeekRange = (date: Date): { weekNum: number; startDate: Date; en
 };
 
 export const formatWeekRu = (date: Date): string => {
-  const { weekNum, startDate, endDate } = getWeekRange(date);
+  const { startDate, endDate } = getWeekRange(date);
   const start = startDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
   const end = endDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-  return `Неделя ${weekNum} (${start} — ${end})`;
+  return `${start} — ${end}`;
 };
