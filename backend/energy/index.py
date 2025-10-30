@@ -88,12 +88,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur = conn.cursor(cursor_factory=RealDictCursor)
         
         if method == 'GET':
-            cur.execute('''
+            cur.execute(f'''
                 SELECT id, entry_date, score, thoughts, created_at, updated_at
                 FROM t_p45717398_energy_dashboard_pro.energy_entries
-                WHERE user_id = %s
+                WHERE user_id = {user_id}
                 ORDER BY entry_date DESC
-            ''', (user_id,))
+            ''')
             entries = cur.fetchall()
             
             result = []
@@ -150,13 +150,29 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            cur.execute('''
-                INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
-                VALUES (%s, %s, %s, %s)
-                ON CONFLICT (user_id, entry_date) 
-                DO UPDATE SET score = EXCLUDED.score, thoughts = EXCLUDED.thoughts, updated_at = CURRENT_TIMESTAMP
-                RETURNING id, entry_date, score, thoughts
-            ''', (user_id, entry_date, score, thoughts))
+            # Экранируем значения для SimpleQuery
+            safe_thoughts = thoughts.replace("'", "''")
+            
+            # Сначала пытаемся обновить существующую запись
+            cur.execute(f'''
+                UPDATE t_p45717398_energy_dashboard_pro.energy_entries 
+                SET score = {score}, thoughts = '{safe_thoughts}', updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = {user_id} AND entry_date = '{entry_date}'
+            ''')
+            
+            # Если обновление не затронуло строк, вставляем новую
+            if cur.rowcount == 0:
+                cur.execute(f'''
+                    INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
+                    VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
+                ''')
+            
+            # Получаем результат
+            cur.execute(f'''
+                SELECT id, entry_date, score, thoughts
+                FROM t_p45717398_energy_dashboard_pro.energy_entries
+                WHERE user_id = {user_id} AND entry_date = '{entry_date}'
+            ''')
             
             conn.commit()
             new_entry = cur.fetchone()
@@ -195,10 +211,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             else:
                 entry_date = entry_date_str
             
-            cur.execute('''
+            cur.execute(f'''
                 DELETE FROM t_p45717398_energy_dashboard_pro.energy_entries 
-                WHERE entry_date = %s AND user_id = %s
-            ''', (entry_date, user_id))
+                WHERE entry_date = '{entry_date}' AND user_id = {user_id}
+            ''')
             conn.commit()
             
             return {
