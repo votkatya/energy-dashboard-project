@@ -1,0 +1,228 @@
+import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Icon from '@/components/ui/icon';
+import { Card } from '@/components/ui/card';
+
+interface NotificationSettings {
+  dailyReminder: boolean;
+  dailyReminderTime: string;
+  burnoutWarnings: boolean;
+  achievements: boolean;
+  weeklyReport: boolean;
+}
+
+const defaultSettings: NotificationSettings = {
+  dailyReminder: false,
+  dailyReminderTime: '21:00',
+  burnoutWarnings: true,
+  achievements: true,
+  weeklyReport: false,
+};
+
+const NotificationsDialog = () => {
+  const [open, setOpen] = useState(false);
+  const [settings, setSettings] = useState<NotificationSettings>(defaultSettings);
+  const [hasPermission, setHasPermission] = useState<'granted' | 'denied' | 'default'>('default');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('notification-settings');
+    if (saved) {
+      setSettings(JSON.parse(saved));
+    }
+
+    if ('Notification' in window) {
+      setHasPermission(Notification.permission);
+    }
+  }, []);
+
+  const saveSettings = (newSettings: NotificationSettings) => {
+    setSettings(newSettings);
+    localStorage.setItem('notification-settings', JSON.stringify(newSettings));
+  };
+
+  const requestPermission = async () => {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      setHasPermission(permission);
+      
+      if (permission === 'granted') {
+        new Notification('KatFlow', {
+          body: 'Уведомления успешно включены! 🎉',
+          icon: '/favicon.ico',
+        });
+      }
+    }
+  };
+
+  const updateSetting = (key: keyof NotificationSettings, value: boolean | string) => {
+    const newSettings = { ...settings, [key]: value };
+    saveSettings(newSettings);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          size="icon"
+          variant="outline"
+          className="relative glass-effect hover:glass-card transition-all"
+        >
+          <Icon name="Bell" size={20} />
+          {settings.dailyReminder && (
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
+          )}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Icon name="Bell" size={20} />
+            Настройки уведомлений
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {hasPermission !== 'granted' && (
+            <Card className="p-4 bg-primary/10 border-primary/20">
+              <div className="flex items-start gap-3">
+                <Icon name="Info" size={20} className="text-primary mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium mb-2">Разрешите уведомления</p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Для работы напоминаний нужно разрешить браузеру отправлять уведомления
+                  </p>
+                  <Button
+                    size="sm"
+                    onClick={requestPermission}
+                    className="bg-primary hover:bg-primary-dark"
+                  >
+                    Разрешить уведомления
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/20">
+              <div className="flex-1">
+                <Label htmlFor="daily-reminder" className="cursor-pointer">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Icon name="Clock" size={16} className="text-primary" />
+                    <span className="font-medium">Ежедневное напоминание</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Напомним оценить день
+                  </p>
+                </Label>
+              </div>
+              <Switch
+                id="daily-reminder"
+                checked={settings.dailyReminder}
+                onCheckedChange={(checked) => updateSetting('dailyReminder', checked)}
+                disabled={hasPermission !== 'granted'}
+              />
+            </div>
+
+            {settings.dailyReminder && (
+              <div className="ml-4 flex items-center gap-3">
+                <Label htmlFor="reminder-time" className="text-sm">Время:</Label>
+                <Select
+                  value={settings.dailyReminderTime}
+                  onValueChange={(value) => updateSetting('dailyReminderTime', value)}
+                >
+                  <SelectTrigger id="reminder-time" className="w-32">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="18:00">18:00</SelectItem>
+                    <SelectItem value="19:00">19:00</SelectItem>
+                    <SelectItem value="20:00">20:00</SelectItem>
+                    <SelectItem value="21:00">21:00</SelectItem>
+                    <SelectItem value="22:00">22:00</SelectItem>
+                    <SelectItem value="23:00">23:00</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/20">
+              <div className="flex-1">
+                <Label htmlFor="burnout-warnings" className="cursor-pointer">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Icon name="AlertTriangle" size={16} className="text-destructive" />
+                    <span className="font-medium">Предупреждения о выгорании</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Уведомим при риске выгорания
+                  </p>
+                </Label>
+              </div>
+              <Switch
+                id="burnout-warnings"
+                checked={settings.burnoutWarnings}
+                onCheckedChange={(checked) => updateSetting('burnoutWarnings', checked)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/20">
+              <div className="flex-1">
+                <Label htmlFor="achievements" className="cursor-pointer">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Icon name="Trophy" size={16} className="text-primary" />
+                    <span className="font-medium">Достижения</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Поздравления с успехами
+                  </p>
+                </Label>
+              </div>
+              <Switch
+                id="achievements"
+                checked={settings.achievements}
+                onCheckedChange={(checked) => updateSetting('achievements', checked)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/20">
+              <div className="flex-1">
+                <Label htmlFor="weekly-report" className="cursor-pointer">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Icon name="BarChart3" size={16} className="text-accent" />
+                    <span className="font-medium">Еженедельный отчёт</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Статистика каждый понедельник
+                  </p>
+                </Label>
+              </div>
+              <Switch
+                id="weekly-report"
+                checked={settings.weeklyReport}
+                onCheckedChange={(checked) => updateSetting('weeklyReport', checked)}
+                disabled={hasPermission !== 'granted'}
+              />
+            </div>
+          </div>
+
+          {hasPermission === 'granted' && settings.dailyReminder && (
+            <Card className="p-3 bg-accent/10 border-accent/20">
+              <div className="flex items-start gap-2">
+                <Icon name="Sparkles" size={16} className="text-accent mt-0.5" />
+                <p className="text-xs text-muted-foreground">
+                  Вы будете получать напоминание каждый день в {settings.dailyReminderTime}
+                </p>
+              </div>
+            </Card>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default NotificationsDialog;

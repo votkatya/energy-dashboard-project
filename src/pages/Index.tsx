@@ -8,6 +8,7 @@ import EntriesFeed from '@/components/EntriesFeed';
 import EnergyStats from '@/components/EnergyStats';
 import EnergyTrends from '@/components/EnergyTrends';
 import AddEntryDialog from '@/components/AddEntryDialog';
+import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import { useEnergyData } from '@/hooks/useEnergyData';
@@ -100,6 +101,7 @@ const Index = () => {
                 </div>
               </div>
               <div className="flex gap-2">
+                <NotificationsDialog />
                 <Button 
                   onClick={logout}
                   size="icon"
