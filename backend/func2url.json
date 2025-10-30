@@ -1,4 +1,6 @@
 {
+  "check-notifications": "https://functions.poehali.dev/bf8e52ca-e49c-4f0f-b52a-cf12ad52b99c",
+  "save-notification-settings": "https://functions.poehali.dev/e7e6bcee-e445-4b84-b638-b3debc2bf0eb",
   "telegram-notify": "https://functions.poehali.dev/6f9572c0-86b8-4ab3-a82a-c06dde313c74",
   "goals": "https://functions.poehali.dev/72ced3ee-9024-4117-9b2b-17c5350c2c83",
   "migrate-from-sheets": "https://functions.poehali.dev/c524ed1f-9496-4ae1-b938-18d8730149cc",

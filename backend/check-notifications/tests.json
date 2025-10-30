@@ -1,0 +1,10 @@
+{
+  "tests": [
+    {
+      "name": "Check notifications cron",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}

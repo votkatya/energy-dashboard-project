@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "name": "Save notification settings",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "userId": 1,
+        "settings": {
+          "dailyReminder": true,
+          "dailyReminderTime": "21:00",
+          "burnoutWarnings": true,
+          "achievements": true,
+          "weeklyReport": false
+        },
+        "telegramChatId": 123456789
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

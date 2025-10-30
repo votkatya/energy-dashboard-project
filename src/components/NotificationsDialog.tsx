@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { Card } from '@/components/ui/card';
 import { getPlatform, canUseBrowserNotifications, getTelegramUser } from '@/utils/platformDetector';
+import funcUrls from '../../backend/func2url.json';
 
 interface NotificationSettings {
   dailyReminder: boolean;
@@ -50,9 +51,30 @@ const NotificationsDialog = () => {
     }
   }, []);
 
-  const saveSettings = (newSettings: NotificationSettings) => {
+  const saveSettings = async (newSettings: NotificationSettings) => {
     setSettings(newSettings);
     localStorage.setItem('notification-settings', JSON.stringify(newSettings));
+    
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    
+    if (token && userId) {
+      try {
+        await fetch(funcUrls['save-notification-settings'], {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: parseInt(userId),
+            settings: newSettings,
+            telegramChatId: newSettings.telegramChatId
+          })
+        });
+      } catch (error) {
+        console.error('Failed to save notification settings:', error);
+      }
+    }
   };
 
   const requestPermission = async () => {
