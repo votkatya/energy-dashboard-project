@@ -58,11 +58,11 @@ const Auth = () => {
                 transition={{ duration: 0.5, type: "spring" }}
                 className="mx-auto mb-4"
               >
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-400 via-cyan-400 to-red-400 flex items-center justify-center shadow-xl">
                   <Icon name="Activity" size={40} className="text-background" />
                 </div>
               </motion.div>
-              <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
+              <CardTitle className="text-4xl font-heading bg-gradient-to-r from-green-400 via-cyan-400 to-cyan-500 bg-clip-text text-transparent mb-2">
                 KatFlow
               </CardTitle>
               <CardDescription className="text-lg font-medium"></CardDescription>
@@ -127,7 +127,7 @@ const Auth = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+                  className="w-full bg-gradient-to-r from-green-400 via-cyan-400 to-cyan-500 hover:opacity-90 transition-opacity text-black"
                   size="lg"
                   disabled={isLoading}
                 >
