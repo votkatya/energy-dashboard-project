@@ -72,7 +72,9 @@ export const useEnergyData = () => {
         throw new Error('Failed to fetch energy data');
       }
       const rawEntries: EnergyEntry[] = await response.json();
+      console.log('📥 RAW данные с бэкенда (первые 3):', rawEntries.slice(0, 3));
       const entries = rawEntries.map(addDerivedFields);
+      console.log('✅ После обработки (первые 3):', entries.slice(0, 3));
       const stats = calculateStats(entries);
       
       return { entries, stats };
