@@ -154,37 +154,36 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             # Экранируем значения для SimpleQuery
             safe_thoughts = thoughts.replace("'", "''")
             
-            print(f"Trying to save: user_id={user_id}, date={entry_date}, score={score}")
-            
-            # Сначала пытаемся обновить существующую запись
+            # Проверяем, существует ли запись
             cur.execute(f'''
-                UPDATE t_p45717398_energy_dashboard_pro.energy_entries 
-                SET score = {score}, thoughts = '{safe_thoughts}', updated_at = CURRENT_TIMESTAMP
+                SELECT id FROM t_p45717398_energy_dashboard_pro.energy_entries
                 WHERE user_id = {user_id} AND entry_date = '{entry_date}'
             ''')
+            existing = cur.fetchone()
             
-            print(f"UPDATE affected {cur.rowcount} rows")
-            
-            # Если обновление не затронуло строк, вставляем новую
-            if cur.rowcount == 0:
-                print(f"Inserting new entry...")
+            if existing:
+                # Обновляем существующую запись
+                cur.execute(f'''
+                    UPDATE t_p45717398_energy_dashboard_pro.energy_entries 
+                    SET score = {score}, thoughts = '{safe_thoughts}', updated_at = CURRENT_TIMESTAMP
+                    WHERE user_id = {user_id} AND entry_date = '{entry_date}'
+                ''')
+            else:
+                # Вставляем новую запись
                 cur.execute(f'''
                     INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
                     VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
                 ''')
-                print(f"INSERT affected {cur.rowcount} rows")
             
             conn.commit()
-            print(f"Committed successfully")
             
-            # Получаем результат после коммита
+            # Получаем результат
             cur.execute(f'''
                 SELECT id, entry_date, score, thoughts
                 FROM t_p45717398_energy_dashboard_pro.energy_entries
                 WHERE user_id = {user_id} AND entry_date = '{entry_date}'
             ''')
             new_entry = cur.fetchone()
-            print(f"Fetched entry: {new_entry}")
             
             return {
                 'statusCode': 201,
