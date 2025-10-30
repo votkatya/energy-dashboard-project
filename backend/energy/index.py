@@ -154,6 +154,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             # Экранируем значения для SimpleQuery
             safe_thoughts = thoughts.replace("'", "''")
             
+            print(f"Trying to save: user_id={user_id}, date={entry_date}, score={score}")
+            
             # Сначала пытаемся обновить существующую запись
             cur.execute(f'''
                 UPDATE t_p45717398_energy_dashboard_pro.energy_entries 
@@ -161,14 +163,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 WHERE user_id = {user_id} AND entry_date = '{entry_date}'
             ''')
             
+            print(f"UPDATE affected {cur.rowcount} rows")
+            
             # Если обновление не затронуло строк, вставляем новую
             if cur.rowcount == 0:
+                print(f"Inserting new entry...")
                 cur.execute(f'''
                     INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
                     VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
                 ''')
+                print(f"INSERT affected {cur.rowcount} rows")
             
             conn.commit()
+            print(f"Committed successfully")
             
             # Получаем результат после коммита
             cur.execute(f'''
@@ -177,6 +184,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 WHERE user_id = {user_id} AND entry_date = '{entry_date}'
             ''')
             new_entry = cur.fetchone()
+            print(f"Fetched entry: {new_entry}")
             
             return {
                 'statusCode': 201,
