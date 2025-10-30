@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import EnergyCalendar from '@/components/EnergyCalendar';
@@ -26,6 +28,12 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [homeView, setHomeView] = useState<'calendar' | 'feed'>('calendar');
   const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const { user, logout } = useAuth();
   const { data, isLoading, error, refetch } = useEnergyData();
 
@@ -381,13 +389,144 @@ const Index = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                      <Icon name="User" size={24} className="text-primary-foreground" />
-                    </div>
+                  <div className="space-y-4">
                     <div>
-                      <p className="font-medium">{user?.email || 'Пользователь'}</p>
-                      <p className="text-sm text-muted-foreground">ID: {user?.id}</p>
+                      <Label htmlFor="name" className="text-sm font-medium">Имя</Label>
+                      {!isEditingName ? (
+                        <div className="flex items-center gap-2 mt-2">
+                          <Input
+                            value={userName || 'Имя не задано'}
+                            disabled
+                            className="flex-1"
+                          />
+                          <Button
+                            onClick={() => setIsEditingName(true)}
+                            variant="outline"
+                            size="icon"
+                          >
+                            <Icon name="Pencil" size={16} />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2 mt-2">
+                          <Input
+                            id="name"
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
+                            placeholder="Введите имя"
+                          />
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => {
+                                setIsEditingName(false);
+                              }}
+                              size="sm"
+                              className="flex-1"
+                            >
+                              Сохранить
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setUserName('');
+                                setIsEditingName(false);
+                              }}
+                              variant="outline"
+                              size="sm"
+                              className="flex-1"
+                            >
+                              Отмена
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-4 border-t">
+                      <Label className="text-sm font-medium">Пароль</Label>
+                      {!isEditingPassword ? (
+                        <div className="flex items-center gap-2 mt-2">
+                          <Input
+                            value="••••••••"
+                            disabled
+                            type="password"
+                            className="flex-1"
+                          />
+                          <Button
+                            onClick={() => setIsEditingPassword(true)}
+                            variant="outline"
+                            size="icon"
+                          >
+                            <Icon name="Pencil" size={16} />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3 mt-2">
+                          <div>
+                            <Label htmlFor="oldPassword" className="text-xs text-muted-foreground">Текущий пароль</Label>
+                            <Input
+                              id="oldPassword"
+                              type="password"
+                              value={oldPassword}
+                              onChange={(e) => setOldPassword(e.target.value)}
+                              placeholder="Введите текущий пароль"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="newPassword" className="text-xs text-muted-foreground">Новый пароль</Label>
+                            <Input
+                              id="newPassword"
+                              type="password"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              placeholder="Введите новый пароль"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="confirmPassword" className="text-xs text-muted-foreground">Подтвердите пароль</Label>
+                            <Input
+                              id="confirmPassword"
+                              type="password"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              placeholder="Повторите новый пароль"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => {
+                                if (newPassword !== confirmPassword) {
+                                  alert('Пароли не совпадают');
+                                  return;
+                                }
+                                setIsEditingPassword(false);
+                                setOldPassword('');
+                                setNewPassword('');
+                                setConfirmPassword('');
+                              }}
+                              size="sm"
+                              className="flex-1"
+                            >
+                              Сохранить
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setIsEditingPassword(false);
+                                setOldPassword('');
+                                setNewPassword('');
+                                setConfirmPassword('');
+                              }}
+                              variant="outline"
+                              size="sm"
+                              className="flex-1"
+                            >
+                              Отмена
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </CardContent>
