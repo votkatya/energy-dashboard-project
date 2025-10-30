@@ -110,18 +110,18 @@ const NotificationsDialog = () => {
           {platform === 'telegram' && hasPermission !== 'granted' && (
             <Card className="p-4 bg-primary/10 border-primary/20">
               <div className="flex items-start gap-3">
-                <Icon name="Send" size={20} className="text-primary mt-0.5" />
+                <Icon name="Info" size={20} className="text-primary mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-sm font-medium mb-2">Telegram уведомления</p>
+                  <p className="text-sm font-medium mb-2">Активируйте уведомления</p>
                   <p className="text-xs text-muted-foreground mb-3">
-                    Нажмите для активации уведомлений через бота
+                    Уведомления будут приходить в Telegram от бота @katflow_bot
                   </p>
                   <Button
                     size="sm"
                     onClick={requestPermission}
                     className="bg-primary hover:bg-primary-dark"
                   >
-                    Разрешить уведомления
+                    Включить уведомления
                   </Button>
                 </div>
               </div>
