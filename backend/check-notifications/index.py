@@ -106,14 +106,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 if weekly_stats:
                     message = f"📊 Еженедельный отчёт для {full_name or 'тебя'}!\n\n"
                     message += f"📅 Записей за неделю: {weekly_stats['count']}\n"
-                    message += f"⚡ Средняя энергия: {weekly_stats['avg_energy']:.1f}%\n"
-                    message += f"😊 Средняя удовлетворённость: {weekly_stats['avg_satisfaction']:.1f}%\n"
-                    message += f"💪 Средняя продуктивность: {weekly_stats['avg_productivity']:.1f}%\n\n"
+                    message += f"⚡ Средний балл: {weekly_stats['avg_score']:.1f}/5\n\n"
                     
                     if weekly_stats['trend'] > 0:
-                        message += f"📈 Отличная динамика! Ты на подъёме (+{weekly_stats['trend']:.1f}%)"
+                        message += f"📈 Отличная динамика! Ты на подъёме (+{weekly_stats['trend']:.1f})"
                     elif weekly_stats['trend'] < 0:
-                        message += f"📉 Небольшой спад ({weekly_stats['trend']:.1f}%). Отдыхай больше!"
+                        message += f"📉 Небольшой спад ({weekly_stats['trend']:.1f}). Отдыхай больше!"
                     else:
                         message += "➡️ Стабильная неделя. Так держать!"
                     
@@ -133,8 +131,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
                 if burnout_risk:
                     message = f"⚠️ {full_name or 'Друг'}, важное предупреждение!\n\n"
-                    message += f"Я заметил, что последние {burnout_risk['days']} дня твоя энергия держится ниже 40% "
-                    message += f"(в среднем {burnout_risk['avg_energy']:.1f}%).\n\n"
+                    message += f"Я заметил, что последние {burnout_risk['days']} дня твоя оценка энергии низкая "
+                    message += f"(в среднем {burnout_risk['avg_score']:.1f}/5).\n\n"
                     message += "Это может быть признаком выгорания. 🔥\n\n"
                     message += "Рекомендации:\n"
                     message += "• Возьми выходной или отпуск\n"
@@ -201,11 +199,9 @@ def get_weekly_stats(conn, user_id: int, tz: ZoneInfo) -> Dict[str, Any]:
     cur.execute("""
         SELECT 
             COUNT(*) as count,
-            AVG(energy_level) as avg_energy,
-            AVG(satisfaction_level) as avg_satisfaction,
-            AVG(productivity_level) as avg_productivity
+            AVG(score) as avg_score
         FROM t_p45717398_energy_dashboard_pro.energy_entries
-        WHERE user_id = %s AND date >= %s AND date < %s
+        WHERE user_id = %s AND entry_date >= %s AND entry_date < %s
     """, (user_id, week_ago.date(), now_user.date()))
     
     result = cur.fetchone()
@@ -214,25 +210,23 @@ def get_weekly_stats(conn, user_id: int, tz: ZoneInfo) -> Dict[str, Any]:
         cur.close()
         return None
     
-    count, avg_energy, avg_satisfaction, avg_productivity = result
+    count, avg_score = result
     
     cur.execute("""
-        SELECT AVG(energy_level) as prev_avg_energy
+        SELECT AVG(score) as prev_avg_score
         FROM t_p45717398_energy_dashboard_pro.energy_entries
-        WHERE user_id = %s AND date >= %s AND date < %s
+        WHERE user_id = %s AND entry_date >= %s AND entry_date < %s
     """, (user_id, two_weeks_ago.date(), week_ago.date()))
     
     prev_result = cur.fetchone()
-    prev_avg = prev_result[0] if prev_result and prev_result[0] else avg_energy
+    prev_avg = prev_result[0] if prev_result and prev_result[0] else avg_score
     
     cur.close()
     
     return {
         'count': count,
-        'avg_energy': float(avg_energy),
-        'avg_satisfaction': float(avg_satisfaction),
-        'avg_productivity': float(avg_productivity),
-        'trend': float(avg_energy - prev_avg)
+        'avg_score': float(avg_score),
+        'trend': float(avg_score - prev_avg)
     }
 
 
@@ -240,10 +234,10 @@ def check_burnout_risk(conn, user_id: int) -> Dict[str, Any]:
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT energy_level, date
+        SELECT score, entry_date
         FROM t_p45717398_energy_dashboard_pro.energy_entries
         WHERE user_id = %s
-        ORDER BY date DESC
+        ORDER BY entry_date DESC
         LIMIT 5
     """, (user_id,))
     
@@ -254,17 +248,17 @@ def check_burnout_risk(conn, user_id: int) -> Dict[str, Any]:
         return None
     
     low_energy_days = 0
-    total_energy = 0
+    total_score = 0
     
-    for energy, date in entries:
-        if energy < 40:
+    for score, entry_date in entries:
+        if score <= 2:
             low_energy_days += 1
-            total_energy += energy
+            total_score += score
     
     if low_energy_days >= 3:
         return {
             'days': low_energy_days,
-            'avg_energy': total_energy / low_energy_days
+            'avg_score': total_score / low_energy_days
         }
     
     return None
