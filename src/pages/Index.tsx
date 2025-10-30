@@ -223,31 +223,49 @@ const Index = () => {
                   </motion.div>
                 )}
 
-                <div className="mb-6 flex flex-wrap gap-2 justify-center">
-                  <Button
-                    variant={timePeriod === '3days' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setTimePeriod('3days')}
-                    className={timePeriod === '3days' ? 'bg-primary' : ''}
-                  >3 дня</Button>
-                  <Button
-                    variant={timePeriod === 'week' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setTimePeriod('week')}
-                    className={timePeriod === 'week' ? 'bg-primary' : ''}
-                  >Неделя</Button>
-                  <Button
-                    variant={timePeriod === 'month' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setTimePeriod('month')}
-                    className={timePeriod === 'month' ? 'bg-primary' : ''}
-                  >Месяц</Button>
-                  <Button
-                    variant={timePeriod === 'year' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setTimePeriod('year')}
-                    className={timePeriod === 'year' ? 'bg-primary' : ''}
-                  >Год</Button>
+                <div className="mb-6 flex justify-center">
+                  <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
+                    <button
+                      onClick={() => setTimePeriod('3days')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                        timePeriod === '3days' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      Сегодня
+                    </button>
+                    <button
+                      onClick={() => setTimePeriod('week')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                        timePeriod === 'week' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      Неделя
+                    </button>
+                    <button
+                      onClick={() => setTimePeriod('month')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                        timePeriod === 'month' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      Месяц
+                    </button>
+                    <button
+                      onClick={() => setTimePeriod('year')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                        timePeriod === 'year' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      Год
+                    </button>
+                  </div>
                 </div>
                 
                 <MonthlyGoalCard
