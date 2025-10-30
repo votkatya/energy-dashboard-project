@@ -115,35 +115,56 @@ const NotificationsDialog = () => {
 
         <div className="space-y-6">
           {platform === 'telegram' && (
-            <Card className="p-4 bg-accent/10 border-accent/20">
-              <div className="flex items-center justify-between">
-                <div className="flex items-start gap-3 flex-1">
-                  <Icon name="Send" size={20} className="text-accent mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium mb-1">Telegram уведомления</p>
-                    <p className="text-xs text-muted-foreground">
-                      Уведомления от бота @katflow_bot
-                    </p>
+            <>
+              <Card className="p-4 bg-accent/10 border-accent/20">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start gap-3 flex-1">
+                    <Icon name="Send" size={20} className="text-accent mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium mb-1">Telegram уведомления</p>
+                      <p className="text-xs text-muted-foreground">
+                        Уведомления от бота @katflow_bot
+                      </p>
+                      <p className="text-xs mt-2 font-mono bg-background/50 p-1 rounded">
+                        Debug: {telegramUser ? `ID: ${telegramUser.id}` : 'Нет данных'} | Status: {hasPermission}
+                      </p>
+                    </div>
                   </div>
+                  <Switch
+                    checked={hasPermission === 'granted'}
+                    onCheckedChange={(checked) => {
+                      if (checked && platform === 'telegram' && telegramUser) {
+                        const newSettings = { ...settings, telegramChatId: telegramUser.id };
+                        setSettings(newSettings);
+                        localStorage.setItem('notification-settings', JSON.stringify(newSettings));
+                        setHasPermission('granted');
+                      } else {
+                        setHasPermission('default');
+                        const newSettings = { ...settings, telegramChatId: undefined };
+                        setSettings(newSettings);
+                        localStorage.setItem('notification-settings', JSON.stringify(newSettings));
+                      }
+                    }}
+                  />
                 </div>
-                <Switch
-                  checked={hasPermission === 'granted'}
-                  onCheckedChange={(checked) => {
-                    if (checked && platform === 'telegram' && telegramUser) {
-                      const newSettings = { ...settings, telegramChatId: telegramUser.id };
-                      setSettings(newSettings);
-                      localStorage.setItem('notification-settings', JSON.stringify(newSettings));
-                      setHasPermission('granted');
-                    } else {
-                      setHasPermission('default');
-                      const newSettings = { ...settings, telegramChatId: undefined };
-                      setSettings(newSettings);
-                      localStorage.setItem('notification-settings', JSON.stringify(newSettings));
-                    }
-                  }}
-                />
+              </Card>
+              
+              <div 
+                className="p-4 bg-primary text-primary-foreground rounded-lg cursor-pointer active:opacity-80"
+                onClick={() => {
+                  if (telegramUser) {
+                    const newSettings = { ...settings, telegramChatId: telegramUser.id };
+                    setSettings(newSettings);
+                    localStorage.setItem('notification-settings', JSON.stringify(newSettings));
+                    setHasPermission('granted');
+                  }
+                }}
+              >
+                <p className="text-sm font-medium text-center">
+                  👆 Нажмите здесь для активации
+                </p>
               </div>
-            </Card>
+            </>
           )}
           
           {platform === 'browser' && hasPermission !== 'granted' && (
