@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Check user notification settings and send daily reminders via Telegram
+    Business: Check notification settings and send daily reminders, weekly reports, and burnout warnings via Telegram
     Args: event with httpMethod (can be called via cron or HTTP)
     Returns: HTTP response with count of sent notifications
     '''
@@ -40,10 +40,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT id, telegram_chat_id, notification_settings, full_name 
+        SELECT id, telegram_chat_id, notification_settings, full_name,
+               last_notification_sent, last_weekly_report_sent, last_burnout_warning_sent
         FROM t_p45717398_energy_dashboard_pro.users 
         WHERE telegram_chat_id IS NOT NULL 
-        AND notification_settings->>'dailyReminder' = 'true'
+        AND (
+            notification_settings->>'dailyReminder' = 'true'
+            OR notification_settings->>'weeklyReport' = 'true'
+            OR notification_settings->>'burnoutWarnings' = 'true'
+        )
     """)
     
     users = cur.fetchall()
@@ -55,11 +60,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     print(f"Checking notifications. Current UTC time: {current_time_utc.strftime('%H:%M')}, Users found: {len(users)}")
     
-    sent_count = 0
+    daily_sent = 0
+    weekly_sent = 0
+    burnout_sent = 0
     cur = conn.cursor()
     
-    for user_id, chat_id, settings, full_name in users:
-        reminder_time = settings.get('dailyReminderTime', '21:00')
+    for user_id, chat_id, settings, full_name, last_daily, last_weekly, last_burnout in users:
         user_timezone = settings.get('timezone', 'Europe/Moscow')
         
         try:
@@ -69,58 +75,88 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         current_time_user = current_time_utc.astimezone(tz)
         current_time_str = current_time_user.strftime('%H:%M')
-        
-        print(f"User {user_id} ({full_name}): timezone={user_timezone}, current_time={current_time_str}, reminder_time={reminder_time}, chat_id={chat_id}")
-        
-        cur.execute("""
-            SELECT last_notification_sent 
-            FROM t_p45717398_energy_dashboard_pro.users 
-            WHERE id = %s
-        """, (user_id,))
-        result = cur.fetchone()
-        last_sent = result[0] if result and result[0] else None
-        
         today_date = current_time_user.date()
-        should_send = False
+        current_weekday = current_time_user.weekday()
         
-        if current_time_str == reminder_time:
-            if not last_sent or last_sent.astimezone(tz).date() < today_date:
-                should_send = True
+        print(f"User {user_id} ({full_name}): timezone={user_timezone}, current_time={current_time_str}, chat_id={chat_id}")
         
-        if should_send:
-            message = f"Привет, {full_name or 'друг'}! 👋\n\n"
-            message += "Время оценить свой день в FlowKat! 🌟\n\n"
-            message += "Как прошёл твой день? Заполни дневник энергии, чтобы отследить свой прогресс."
+        if settings.get('dailyReminder'):
+            reminder_time = settings.get('dailyReminderTime', '21:00')
             
-            try:
-                response = requests.post(
-                    f'https://api.telegram.org/bot{bot_token}/sendMessage',
-                    json={
-                        'chat_id': chat_id,
-                        'text': message,
-                        'parse_mode': 'HTML'
-                    },
-                    timeout=10
-                )
+            if current_time_str == reminder_time:
+                if not last_daily or last_daily.astimezone(tz).date() < today_date:
+                    message = f"Привет, {full_name or 'друг'}! 👋\n\n"
+                    message += "Время оценить свой день в FlowKat! 🌟\n\n"
+                    message += "Как прошёл твой день? Заполни дневник энергии, чтобы отследить свой прогресс."
+                    
+                    if send_telegram_message(bot_token, chat_id, message):
+                        daily_sent += 1
+                        cur.execute("""
+                            UPDATE t_p45717398_energy_dashboard_pro.users 
+                            SET last_notification_sent = %s 
+                            WHERE id = %s
+                        """, (current_time_utc, user_id))
+                        conn.commit()
+                        print(f"✅ Daily reminder sent to user {user_id} ({full_name})")
+        
+        if settings.get('weeklyReport') and current_weekday == 0 and current_time_str == '09:00':
+            if not last_weekly or last_weekly.astimezone(tz).date() < today_date:
+                weekly_stats = get_weekly_stats(conn, user_id, tz)
                 
-                if response.status_code == 200:
-                    sent_count += 1
-                    cur.execute("""
-                        UPDATE t_p45717398_energy_dashboard_pro.users 
-                        SET last_notification_sent = %s 
-                        WHERE id = %s
-                    """, (current_time_utc, user_id))
-                    conn.commit()
-                    print(f"✅ Notification sent to user {user_id} ({full_name})")
-                else:
-                    print(f"❌ Telegram API error for user {user_id}: {response.status_code} - {response.text}")
-            except Exception as e:
-                print(f"❌ Failed to send notification to user {user_id}: {str(e)}")
+                if weekly_stats:
+                    message = f"📊 Еженедельный отчёт для {full_name or 'тебя'}!\n\n"
+                    message += f"📅 Записей за неделю: {weekly_stats['count']}\n"
+                    message += f"⚡ Средняя энергия: {weekly_stats['avg_energy']:.1f}%\n"
+                    message += f"😊 Средняя удовлетворённость: {weekly_stats['avg_satisfaction']:.1f}%\n"
+                    message += f"💪 Средняя продуктивность: {weekly_stats['avg_productivity']:.1f}%\n\n"
+                    
+                    if weekly_stats['trend'] > 0:
+                        message += f"📈 Отличная динамика! Ты на подъёме (+{weekly_stats['trend']:.1f}%)"
+                    elif weekly_stats['trend'] < 0:
+                        message += f"📉 Небольшой спад ({weekly_stats['trend']:.1f}%). Отдыхай больше!"
+                    else:
+                        message += "➡️ Стабильная неделя. Так держать!"
+                    
+                    if send_telegram_message(bot_token, chat_id, message):
+                        weekly_sent += 1
+                        cur.execute("""
+                            UPDATE t_p45717398_energy_dashboard_pro.users 
+                            SET last_weekly_report_sent = %s 
+                            WHERE id = %s
+                        """, (current_time_utc, user_id))
+                        conn.commit()
+                        print(f"✅ Weekly report sent to user {user_id} ({full_name})")
+        
+        if settings.get('burnoutWarnings') and current_time_str == '20:00':
+            if not last_burnout or (current_time_utc - last_burnout).days >= 1:
+                burnout_risk = check_burnout_risk(conn, user_id)
+                
+                if burnout_risk:
+                    message = f"⚠️ {full_name or 'Друг'}, важное предупреждение!\n\n"
+                    message += f"Я заметил, что последние {burnout_risk['days']} дня твоя энергия держится ниже 40% "
+                    message += f"(в среднем {burnout_risk['avg_energy']:.1f}%).\n\n"
+                    message += "Это может быть признаком выгорания. 🔥\n\n"
+                    message += "Рекомендации:\n"
+                    message += "• Возьми выходной или отпуск\n"
+                    message += "• Проведи время на природе\n"
+                    message += "• Обратись к специалисту\n"
+                    message += "• Пересмотри свою нагрузку"
+                    
+                    if send_telegram_message(bot_token, chat_id, message):
+                        burnout_sent += 1
+                        cur.execute("""
+                            UPDATE t_p45717398_energy_dashboard_pro.users 
+                            SET last_burnout_warning_sent = %s 
+                            WHERE id = %s
+                        """, (current_time_utc, user_id))
+                        conn.commit()
+                        print(f"✅ Burnout warning sent to user {user_id} ({full_name})")
     
     cur.close()
     conn.close()
     
-    print(f"Check completed. Users checked: {len(users)}, Notifications sent: {sent_count}")
+    total_sent = daily_sent + weekly_sent + burnout_sent
+    print(f"Check completed. Users checked: {len(users)}, Total sent: {total_sent} (daily: {daily_sent}, weekly: {weekly_sent}, burnout: {burnout_sent})")
     
     return {
         'statusCode': 200,
@@ -128,7 +164,107 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         'isBase64Encoded': False,
         'body': json.dumps({
             'checked': len(users),
-            'sent': sent_count,
-            'time': current_time_str
+            'daily_sent': daily_sent,
+            'weekly_sent': weekly_sent,
+            'burnout_sent': burnout_sent,
+            'total_sent': total_sent
         })
     }
+
+
+def send_telegram_message(bot_token: str, chat_id: int, message: str) -> bool:
+    try:
+        response = requests.post(
+            f'https://api.telegram.org/bot{bot_token}/sendMessage',
+            json={
+                'chat_id': chat_id,
+                'text': message,
+                'parse_mode': 'HTML'
+            },
+            timeout=10
+        )
+        return response.status_code == 200
+    except Exception as e:
+        print(f"❌ Failed to send message: {str(e)}")
+        return False
+
+
+def get_weekly_stats(conn, user_id: int, tz: ZoneInfo) -> Dict[str, Any]:
+    cur = conn.cursor()
+    
+    from datetime import timezone
+    now_utc = datetime.now(timezone.utc)
+    now_user = now_utc.astimezone(tz)
+    week_ago = now_user - timedelta(days=7)
+    two_weeks_ago = now_user - timedelta(days=14)
+    
+    cur.execute("""
+        SELECT 
+            COUNT(*) as count,
+            AVG(energy_level) as avg_energy,
+            AVG(satisfaction_level) as avg_satisfaction,
+            AVG(productivity_level) as avg_productivity
+        FROM t_p45717398_energy_dashboard_pro.energy_entries
+        WHERE user_id = %s AND date >= %s AND date < %s
+    """, (user_id, week_ago.date(), now_user.date()))
+    
+    result = cur.fetchone()
+    
+    if not result or result[0] == 0:
+        cur.close()
+        return None
+    
+    count, avg_energy, avg_satisfaction, avg_productivity = result
+    
+    cur.execute("""
+        SELECT AVG(energy_level) as prev_avg_energy
+        FROM t_p45717398_energy_dashboard_pro.energy_entries
+        WHERE user_id = %s AND date >= %s AND date < %s
+    """, (user_id, two_weeks_ago.date(), week_ago.date()))
+    
+    prev_result = cur.fetchone()
+    prev_avg = prev_result[0] if prev_result and prev_result[0] else avg_energy
+    
+    cur.close()
+    
+    return {
+        'count': count,
+        'avg_energy': float(avg_energy),
+        'avg_satisfaction': float(avg_satisfaction),
+        'avg_productivity': float(avg_productivity),
+        'trend': float(avg_energy - prev_avg)
+    }
+
+
+def check_burnout_risk(conn, user_id: int) -> Dict[str, Any]:
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT energy_level, date
+        FROM t_p45717398_energy_dashboard_pro.energy_entries
+        WHERE user_id = %s
+        ORDER BY date DESC
+        LIMIT 5
+    """, (user_id,))
+    
+    entries = cur.fetchall()
+    cur.close()
+    
+    if len(entries) < 3:
+        return None
+    
+    low_energy_days = 0
+    total_energy = 0
+    
+    for energy, date in entries:
+        if energy < 40:
+            low_energy_days += 1
+            total_energy += energy
+    
+    if low_energy_days >= 3:
+        return {
+            'days': low_energy_days,
+            'avg_energy': total_energy / low_energy_days
+        }
+    
+    return None
