@@ -103,7 +103,13 @@ const NotificationsDialog = () => {
 
   const updateSetting = (key: keyof NotificationSettings, value: boolean | string) => {
     const newSettings = { ...settings, [key]: value };
-    saveSettings(newSettings);
+    setSettings(newSettings);
+    localStorage.setItem('notification-settings', JSON.stringify(newSettings));
+  };
+
+  const handleSave = async () => {
+    await saveSettings(settings);
+    setOpen(false);
   };
 
   return (
@@ -374,6 +380,13 @@ const NotificationsDialog = () => {
               </div>
             </Card>
           )}
+
+          <div className="flex justify-end pt-4 border-t">
+            <Button onClick={handleSave} className="w-full sm:w-auto">
+              <Icon name="Check" size={16} className="mr-2" />
+              Сохранить
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
