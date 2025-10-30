@@ -41,8 +41,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-radial from-background via-background to-primary/5">
-      <HeroBackground />
+    <div className="min-h-screen relative overflow-hidden bg-background">
+      <div className="absolute inset-0 bg-primary/5" />
       
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <motion.div
@@ -51,7 +51,7 @@ const Auth = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <Card className="glass-card">
+          <Card className="border-2 shadow-2xl bg-card">
             <CardHeader className="text-center">
               <motion.div
                 initial={{ scale: 0.5 }}
@@ -59,11 +59,11 @@ const Auth = () => {
                 transition={{ duration: 0.5, type: "spring" }}
                 className="mx-auto mb-4"
               >
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl glow-primary">
+                <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-xl">
                   <Icon name="Zap" size={40} className="text-primary-foreground" />
                 </div>
               </motion.div>
-              <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
+              <CardTitle className="text-4xl font-heading text-primary mb-2">
                 FlowKat
               </CardTitle>
               <CardDescription className="text-lg font-medium"></CardDescription>
@@ -84,7 +84,6 @@ const Auth = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required={!isLogin}
-                      className="glass-effect"
                     />
                   </div>
                 )}
@@ -98,7 +97,6 @@ const Auth = () => {
                     value={telegram}
                     onChange={(e) => setTelegram(e.target.value)}
                     required
-                    className="glass-effect"
                   />
                 </div>
 
@@ -113,7 +111,7 @@ const Auth = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="glass-effect pr-10"
+                      className="pr-10"
                     />
                     <button
                       type="button"
@@ -137,7 +135,7 @@ const Auth = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+                  className="w-full"
                   size="lg"
                   disabled={isLoading}
                 >
