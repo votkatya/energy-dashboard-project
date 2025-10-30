@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,20 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [visibleCount, setVisibleCount] = useState(10);
   const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const getColorClass = (score: number) => {
     if (score >= 5) return 'bg-energy-excellent text-energy-excellent-foreground';
@@ -262,6 +276,16 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
           </>
         )}
       </div>
+
+      {showScrollTop && (
+        <Button
+          onClick={scrollToTop}
+          size="icon"
+          className="fixed bottom-6 right-6 w-12 h-12 rounded-full shadow-lg bg-primary hover:bg-primary-dark z-50 transition-all hover:scale-110"
+        >
+          <Icon name="ArrowUp" size={24} />
+        </Button>
+      )}
     </div>
   );
 };
