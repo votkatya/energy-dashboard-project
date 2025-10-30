@@ -71,14 +71,6 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
 
   const chartData = filterEntriesByPeriod();
 
-  const stats = {
-    min: chartData.length > 0 ? Math.min(...chartData.map(d => d.score)) : 0,
-    max: chartData.length > 0 ? Math.max(...chartData.map(d => d.score)) : 0,
-    avg: chartData.length > 0 
-      ? (chartData.reduce((sum, d) => sum + d.score, 0) / chartData.length).toFixed(1)
-      : '0'
-  };
-
   return (
     <Card className="shadow-lg">
       <CardHeader className="pb-3 sm:pb-6">
@@ -207,21 +199,6 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         )}
       </CardHeader>
       <CardContent className="px-2 sm:px-6">
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
-          <div className="text-center p-2 sm:p-3 rounded-lg bg-secondary/50">
-            <div className="text-xs text-muted-foreground mb-1">Минимум</div>
-            <div className="text-lg sm:text-2xl font-bold">{stats.min}</div>
-          </div>
-          <div className="text-center p-2 sm:p-3 rounded-lg bg-primary/10">
-            <div className="text-xs text-muted-foreground mb-1">Среднее</div>
-            <div className="text-lg sm:text-2xl font-bold text-primary">{stats.avg}</div>
-          </div>
-          <div className="text-center p-2 sm:p-3 rounded-lg bg-secondary/50">
-            <div className="text-xs text-muted-foreground mb-1">Максимум</div>
-            <div className="text-lg sm:text-2xl font-bold">{stats.max}</div>
-          </div>
-        </div>
-
         {chartData.length === 0 ? (
           <div className="h-64 flex items-center justify-center text-muted-foreground">
             <div className="text-center">
