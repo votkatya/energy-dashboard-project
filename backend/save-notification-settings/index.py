@@ -35,6 +35,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     settings = body_data.get('settings', {})
     telegram_chat_id = body_data.get('telegramChatId')
     
+    print(f"📥 Получены данные: userId={user_id}, settings={settings}, telegramChatId={telegram_chat_id}")
+    
     if not user_id:
         return {
             'statusCode': 400,
