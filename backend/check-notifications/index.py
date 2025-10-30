@@ -49,13 +49,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cur.close()
     conn.close()
     
-    current_time = datetime.now().strftime('%H:%M')
+    from datetime import timezone
+    
+    current_time_utc = datetime.now(timezone.utc)
+    current_time_msk = (current_time_utc + timedelta(hours=3)).strftime('%H:%M')
+    
+    print(f"Checking notifications. Current MSK time: {current_time_msk}, Users found: {len(users)}")
+    
     sent_count = 0
     
     for user_id, chat_id, settings, full_name in users:
         reminder_time = settings.get('dailyReminderTime', '21:00')
         
-        if current_time == reminder_time:
+        print(f"User {user_id} ({full_name}): reminder_time={reminder_time}, chat_id={chat_id}")
+        
+        if current_time_msk == reminder_time:
             message = f"Привет, {full_name or 'друг'}! 👋\n\n"
             message += "Время оценить свой день в FlowKat! 🌟\n\n"
             message += "Как прошёл твой день? Заполни дневник энергии, чтобы отследить свой прогресс."
@@ -73,8 +81,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
                 if response.status_code == 200:
                     sent_count += 1
+                    print(f"✅ Notification sent to user {user_id} ({full_name})")
+                else:
+                    print(f"❌ Telegram API error for user {user_id}: {response.status_code} - {response.text}")
             except Exception as e:
-                print(f"Failed to send notification to user {user_id}: {str(e)}")
+                print(f"❌ Failed to send notification to user {user_id}: {str(e)}")
+    
+    print(f"Check completed. Users checked: {len(users)}, Notifications sent: {sent_count}")
     
     return {
         'statusCode': 200,
@@ -83,6 +96,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         'body': json.dumps({
             'checked': len(users),
             'sent': sent_count,
-            'time': current_time
+            'time': current_time_msk
         })
     }
