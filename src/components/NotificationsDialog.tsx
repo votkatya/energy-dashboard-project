@@ -34,16 +34,20 @@ const NotificationsDialog = () => {
 
   useEffect(() => {
     const saved = localStorage.getItem('notification-settings');
+    let loadedSettings = defaultSettings;
+    
     if (saved) {
-      setSettings(JSON.parse(saved));
+      loadedSettings = JSON.parse(saved);
+      setSettings(loadedSettings);
     }
 
     if (canUseBrowserNotifications()) {
       setHasPermission(Notification.permission);
     } else if (platform === 'telegram' && telegramUser) {
       setHasPermission('granted');
-      const newSettings = { ...settings, telegramChatId: telegramUser.id };
-      saveSettings(newSettings);
+      const newSettings = { ...loadedSettings, telegramChatId: telegramUser.id };
+      setSettings(newSettings);
+      localStorage.setItem('notification-settings', JSON.stringify(newSettings));
     }
   }, []);
 
