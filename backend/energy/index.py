@@ -81,6 +81,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         }
     
     user_id = payload['user_id']
+    print(f"User ID from token: {user_id}")
     
     conn = None
     try:
