@@ -83,10 +83,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
     <Card className="shadow-lg">
       <CardHeader className="pb-3 sm:pb-6">
         <div className="flex flex-col gap-3">
-          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-            <Icon name="TrendingUp" size={20} className="text-primary sm:w-6 sm:h-6" />
-            График оценок
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">График энергии</CardTitle>
           
           <div className="hidden sm:flex flex-wrap gap-2">
             <Button
