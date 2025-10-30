@@ -428,6 +428,7 @@ const NotificationsDialog = () => {
           <div className="flex justify-end pt-4 border-t">
             <Button 
               onClick={() => {
+                alert('Кнопка работает!');
                 console.log('🟢 Кнопка нажата!');
                 handleSave();
               }} 
