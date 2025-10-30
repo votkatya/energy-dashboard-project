@@ -122,15 +122,19 @@ const NotificationsDialog = () => {
       const savedSettings = localStorage.getItem('notification-settings');
       const currentSettings = savedSettings ? JSON.parse(savedSettings) : settings;
       
-      await saveSettings(currentSettings);
-      setSaveSuccess(true);
+      const result = await saveSettings(currentSettings);
       
-      setTimeout(() => {
-        setOpen(false);
-        setSaveSuccess(false);
-      }, 1500);
+      if (result) {
+        setSaveSuccess(true);
+        setTimeout(() => {
+          setOpen(false);
+          setSaveSuccess(false);
+        }, 1500);
+      } else {
+        alert('Не удалось сохранить настройки. Пожалуйста, войдите в аккаунт.');
+      }
     } catch (error) {
-      console.error('Ошибка сохранения настроек');
+      alert('Ошибка: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
     } finally {
       setIsSaving(false);
     }
