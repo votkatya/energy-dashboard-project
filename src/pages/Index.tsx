@@ -96,7 +96,7 @@ const Index = () => {
                   <Icon name="Zap" size={24} className="text-background" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground">KatFlow</h1>
+                  <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground">FlowKat</h1>
                   <p className="text-sm text-muted-foreground">Выгорание? Не сегодня!</p>
                 </div>
               </div>

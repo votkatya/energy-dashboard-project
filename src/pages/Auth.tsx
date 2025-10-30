@@ -64,7 +64,7 @@ const Auth = () => {
                 </div>
               </motion.div>
               <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
-                KatFlow
+                FlowKat
               </CardTitle>
               <CardDescription className="text-lg font-medium"></CardDescription>
               <CardDescription className="text-sm mt-1">

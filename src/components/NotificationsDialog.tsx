@@ -91,7 +91,7 @@ const NotificationsDialog = () => {
       setHasPermission(permission);
       
       if (permission === 'granted') {
-        new Notification('KatFlow', {
+        new Notification('FlowKat', {
           body: 'Уведомления успешно включены! 🎉',
           icon: '/favicon.ico',
         });
@@ -136,7 +136,7 @@ const NotificationsDialog = () => {
                     <div className="flex-1">
                       <p className="text-sm font-medium mb-1">Telegram уведомления</p>
                       <p className="text-xs text-muted-foreground">
-                        Уведомления от бота @katflow_bot
+                        Уведомления от бота @flowkat_bot
                       </p>
 
                     </div>

@@ -73,7 +73,7 @@ function ElegantShape({
 }
 
 function HeroGeometric({
-    badge = "KatFlow",
+    badge = "FlowKat",
     title1 = "Твоя энергия",
     title2 = "под контролем",
 }: {
