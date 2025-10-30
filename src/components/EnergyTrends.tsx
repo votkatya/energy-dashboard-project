@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
 import { calculateStats } from '@/utils/statsCalculator';
@@ -8,6 +8,12 @@ import {
   predictNextWeek, 
   recommendRestDay 
 } from '@/utils/predictiveAnalytics';
+import BurnoutRiskCard from './trends/BurnoutRiskCard';
+import WeekPredictionCard from './trends/WeekPredictionCard';
+import RestDayCard from './trends/RestDayCard';
+import InsightsCards from './trends/InsightsCards';
+import TrendOverviewCard from './trends/TrendOverviewCard';
+import ObservationsCard from './trends/ObservationsCard';
 
 interface EnergyTrendsProps {
   data?: any;
@@ -43,7 +49,11 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
         worstDayOfWeek: 'понедельники',
         bestWeek: { start: '', end: '', avg: 0 },
         trend: 0,
-        totalEntries: 0
+        totalEntries: 0,
+        avgRecoveryTime: 0,
+        currentStreak: 0,
+        streakType: 'none' as 'good' | 'bad' | 'none',
+        bestTimeOfDay: 'выходные'
       };
     }
 
@@ -200,320 +210,22 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
   return (
     <div className="space-y-6">
       {predictions.burnoutRisk && (
-        <Card className={`shadow-lg ${
-          predictions.burnoutRisk.level === 'critical' 
-            ? 'bg-gradient-to-br from-destructive/20 via-destructive/10 to-transparent border-destructive/30' 
-            : predictions.burnoutRisk.level === 'high'
-            ? 'bg-gradient-to-br from-orange-500/20 via-orange-500/10 to-transparent border-orange-500/30'
-            : predictions.burnoutRisk.level === 'medium'
-            ? 'bg-gradient-to-br from-yellow-500/20 via-yellow-500/10 to-transparent border-yellow-500/30'
-            : 'bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border-primary/30'
-        }`}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={predictions.burnoutRisk.icon as any} size={24} className={predictions.burnoutRisk.color} />
-              Риск выгорания
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="flex-1">
-                  <p className={`text-lg font-medium ${predictions.burnoutRisk.color}`}>
-                    {predictions.burnoutRisk.message}
-                  </p>
-                  {predictions.burnoutRisk.level !== 'low' && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      💡 Совет: Запланируй отдых, сократи нагрузку, уделяй время восстановлению
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <BurnoutRiskCard burnoutRisk={predictions.burnoutRisk} />
       )}
 
       {predictions.weekPrediction && (
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Icon name="TrendingUp" size={24} className="text-primary" />
-              Прогноз на следующую неделю
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="text-4xl font-heading font-bold text-primary">
-                      {predictions.weekPrediction.probability}%
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-muted-foreground uppercase">вероятность</span>
-                      <span className="text-xs text-muted-foreground">
-                        {predictions.weekPrediction.confidence === 'high' ? '🎯 Высокая точность' :
-                         predictions.weekPrediction.confidence === 'medium' ? '📊 Средняя точность' :
-                         '🔮 Низкая точность'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {predictions.weekPrediction.message}
-                  </p>
-                </div>
-                <div className="text-5xl">
-                  {predictions.weekPrediction.trend === 'up' ? '📈' :
-                   predictions.weekPrediction.trend === 'down' ? '📉' : '➡️'}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <WeekPredictionCard weekPrediction={predictions.weekPrediction} />
       )}
 
       {predictions.restDay && (
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Icon name="Coffee" size={24} className="text-accent" />
-              Рекомендация по отдыху
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <span className="text-3xl">🛌</span>
-                <div className="flex-1">
-                  <p className="font-medium text-lg mb-1">
-                    Планируй отдых в {predictions.restDay.dayOfWeek}
-                  </p>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {predictions.restDay.reason}
-                  </p>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent text-sm">
-                    <Icon name="Activity" size={14} />
-                    Средняя энергия: {predictions.restDay.avgEnergy}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <RestDayCard restDay={predictions.restDay} />
       )}
 
-      <Card className="shadow-lg border-l-4 border-l-energy-excellent">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Icon name="TrendingUp" size={24} className="text-energy-excellent" />
-            Общий тренд
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="p-6 rounded-xl bg-gradient-to-r from-energy-excellent/20 to-transparent">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">Средний балл за месяц</span>
-                <span className="text-2xl">📈</span>
-              </div>
-              <div className="text-4xl font-heading font-bold text-energy-excellent">
-                {analytics.currentMonthAvg || '—'}
-              </div>
-              {analytics.previousMonthAvg > 0 && (
-                <p className="text-sm text-muted-foreground mt-2">
-                  {analytics.currentMonthAvg > analytics.previousMonthAvg ? '+' : ''}
-                  {(analytics.currentMonthAvg - analytics.previousMonthAvg).toFixed(1)} по сравнению с прошлым месяцем
-                </p>
-              )}
-            </div>
+      <TrendOverviewCard analytics={analytics} />
 
-            <div className="grid grid-cols-3 gap-3 md:gap-4">
-              <div className="p-2 md:p-4 rounded-xl bg-gradient-to-br from-energy-excellent/10 to-transparent border border-energy-excellent/30">
-                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-1">
-                  <span className="text-lg md:text-xl">😊</span>
-                  <div className="text-xl md:text-2xl font-heading font-bold text-energy-excellent">
-                    {analytics.goodPercent}%
-                  </div>
-                </div>
-                <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">Хорошие</p>
-              </div>
-              <div className="p-2 md:p-4 rounded-xl bg-gradient-to-br from-energy-neutral/10 to-transparent border border-energy-neutral/30">
-                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-1">
-                  <span className="text-lg md:text-xl">😐</span>
-                  <div className="text-xl md:text-2xl font-heading font-bold text-energy-neutral">
-                    {analytics.neutralPercent}%
-                  </div>
-                </div>
-                <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">Средние</p>
-              </div>
-              <div className="p-2 md:p-4 rounded-xl bg-gradient-to-br from-energy-low/10 to-transparent border border-energy-low/30">
-                <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-1">
-                  <span className="text-lg md:text-xl">😔</span>
-                  <div className="text-xl md:text-2xl font-heading font-bold text-energy-low">
-                    {analytics.badPercent}%
-                  </div>
-                </div>
-                <p className="text-xs md:text-sm text-muted-foreground text-center md:text-left">Плохие</p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <InsightsCards analytics={analytics} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="shadow-lg border-l-4 border-l-primary">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Icon name="Timer" size={20} className="text-primary" />
-              Восстановление
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center">
-              <div className="text-4xl font-heading font-bold text-primary mb-2">
-                {analytics.avgRecoveryTime > 0 ? `${analytics.avgRecoveryTime} дн.` : '—'}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {analytics.avgRecoveryTime > 0 
-                  ? 'Среднее время восстановления после плохих дней'
-                  : 'Недостаточно данных'}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className={`shadow-lg border-l-4 ${analytics.streakType === 'good' ? 'border-l-energy-excellent' : analytics.streakType === 'bad' ? 'border-l-energy-low' : 'border-l-muted'}`}>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Icon name="Flame" size={20} className={analytics.streakType === 'good' ? 'text-energy-excellent' : analytics.streakType === 'bad' ? 'text-energy-low' : 'text-muted-foreground'} />
-              Текущая серия
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center">
-              <div className={`text-4xl font-heading font-bold mb-2 ${analytics.streakType === 'good' ? 'text-energy-excellent' : analytics.streakType === 'bad' ? 'text-energy-low' : 'text-muted-foreground'}`}>
-                {analytics.currentStreak > 0 ? analytics.currentStreak : '0'}
-                <span className="text-2xl ml-1">{analytics.streakType === 'good' ? '🔥' : analytics.streakType === 'bad' ? '💤' : '—'}</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {analytics.streakType === 'good' ? 'Подряд хороших дней' : analytics.streakType === 'bad' ? 'Подряд плохих дней' : 'Нет активной серии'}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-lg border-l-4 border-l-accent">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Icon name="Star" size={20} className="text-accent" />
-              Лучшее время
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center">
-              <div className="text-4xl font-heading font-bold text-accent mb-2">
-                {analytics.bestTimeOfDay.charAt(0).toUpperCase() + analytics.bestTimeOfDay.slice(1)}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Планируй важные дела на этот день
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">Наблюдения</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="p-4 rounded-xl bg-gradient-to-r from-primary/10 to-transparent border-l-4 border-l-primary">
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">✨</span>
-                <div>
-                  <p className="font-medium mb-1">Лучший день недели</p>
-                  <p className="text-sm text-muted-foreground">
-                    {analytics.bestDayOfWeek.charAt(0).toUpperCase() + analytics.bestDayOfWeek.slice(1)} показывает самый высокий уровень энергии
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {analytics.trend !== 0 && (
-              <div className="p-4 rounded-xl bg-gradient-to-r from-accent/10 to-transparent border-l-4 border-l-accent">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">🎯</span>
-                  <div>
-                    <p className="font-medium mb-1">
-                      {analytics.trend > 0 ? 'Тренд улучшения' : 'Тренд изменения'}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      За последнее время количество хороших дней {analytics.trend > 0 ? 'выросло' : 'изменилось'} на {Math.abs(analytics.trend)}%
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="p-4 rounded-xl bg-gradient-to-r from-energy-good/10 to-transparent border-l-4 border-l-energy-good">
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">🔥</span>
-                <div>
-                  <p className="font-medium mb-1">Всего записей</p>
-                  <p className="text-sm text-muted-foreground">
-                    Сделано {analytics.totalEntries} {analytics.totalEntries === 1 ? 'запись' : analytics.totalEntries < 5 ? 'записи' : 'записей'} - продолжай в том же духе!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="shadow-lg bg-gradient-to-br from-primary/5 to-accent/5">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-2xl">💡</span>
-            Рекомендации
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-3">
-            {analytics.goodPercent >= 70 && (
-              <li className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-primary font-bold text-sm">💪</span>
-                </div>
-                <p className="text-sm">Отличные результаты! Продолжай поддерживать текущий уровень энергии</p>
-              </li>
-            )}
-            {analytics.goodPercent < 50 && (
-              <li className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-primary font-bold text-sm">🎯</span>
-                </div>
-                <p className="text-sm">Попробуй выявить паттерны: что влияет на твою энергию в хорошие дни?</p>
-              </li>
-            )}
-            <li className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary font-bold text-sm">📝</span>
-              </div>
-              <p className="text-sm">
-                Обрати внимание на {analytics.worstDayOfWeek} - в этот день энергия часто ниже
-              </p>
-            </li>
-            <li className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary font-bold text-sm">✨</span>
-              </div>
-              <p className="text-sm">Старайся записывать детали о днях - это помогает выявить закономерности</p>
-            </li>
-          </ul>
-        </CardContent>
-      </Card>
+      <ObservationsCard analytics={analytics} />
     </div>
   );
 };
