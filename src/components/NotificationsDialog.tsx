@@ -57,12 +57,20 @@ const NotificationsDialog = () => {
   };
 
   const requestPermission = async () => {
+    console.log('🔔 Клик на кнопку!', { platform, telegramUser, hasPermission });
+    
     if (platform === 'telegram' && telegramUser) {
       console.log('🔔 Telegram: сохраняем chat_id', telegramUser.id);
       const newSettings = { ...settings, telegramChatId: telegramUser.id };
       setSettings(newSettings);
       localStorage.setItem('notification-settings', JSON.stringify(newSettings));
       setHasPermission('granted');
+      alert('Уведомления активированы! Chat ID: ' + telegramUser.id);
+      return;
+    }
+    
+    if (platform === 'telegram' && !telegramUser) {
+      alert('Ошибка: не удалось получить данные пользователя Telegram');
       return;
     }
     
