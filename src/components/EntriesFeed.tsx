@@ -25,6 +25,8 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'highest' | 'lowest'>('newest');
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
   const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
 
   const getColorClass = (score: number) => {
     if (score >= 5) return 'bg-energy-excellent text-energy-excellent-foreground';
@@ -107,6 +109,21 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
     }
   };
 
+  const toggleExpanded = (entryId: number) => {
+    setExpandedEntries(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(entryId)) {
+        newSet.delete(entryId);
+      } else {
+        newSet.add(entryId);
+      }
+      return newSet;
+    });
+  };
+
+  const visibleEntries = filteredAndSortedEntries.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredAndSortedEntries.length;
+
   return (
     <div className="space-y-4">
       <Card className="glass-card">
@@ -183,33 +200,66 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
             </CardContent>
           </Card>
         ) : (
-          filteredAndSortedEntries.map((entry) => (
-            <Card key={entry.id} className="glass-card hover:shadow-lg transition-shadow">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className={`w-16 h-16 rounded-2xl ${getColorClass(entry.score)} flex items-center justify-center flex-shrink-0 shadow-lg text-2xl`}>
-                    {getEmojiForScore(entry.score)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <h3 className="font-semibold text-lg">
-                        {entry.score}
-                      </h3>
-                      <div className="text-sm text-muted-foreground flex items-center gap-1">
-                        <Icon name="Calendar" size={14} />
-                        {formatDisplayDate(entry.date)}
+          <>
+            {visibleEntries.map((entry) => {
+              const isExpanded = expandedEntries.has(entry.id);
+              const needsExpansion = entry.thoughts && entry.thoughts.length > 120;
+
+              return (
+                <Card key={entry.id} className="glass-card hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <div className={`w-16 h-16 rounded-2xl ${getColorClass(entry.score)} flex items-center justify-center flex-shrink-0 shadow-lg text-2xl`}>
+                        {getEmojiForScore(entry.score)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <h3 className="font-semibold text-lg">
+                            {entry.score}
+                          </h3>
+                          <div className="text-sm text-muted-foreground flex items-center gap-1">
+                            <Icon name="Calendar" size={14} />
+                            {formatDisplayDate(entry.date)}
+                          </div>
+                        </div>
+                        {entry.thoughts && (
+                          <div>
+                            <p className={`text-muted-foreground text-sm leading-relaxed ${!isExpanded && needsExpansion ? 'line-clamp-2' : ''}`}>
+                              {entry.thoughts}
+                            </p>
+                            {needsExpansion && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => toggleExpanded(entry.id)}
+                                className="mt-2 h-auto p-0 text-primary hover:bg-transparent"
+                              >
+                                {isExpanded ? 'Свернуть' : 'Развернуть'}
+                              </Button>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    {entry.thoughts && (
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {entry.thoughts}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
+                  </CardContent>
+                </Card>
+              );
+            })}
+            
+            {hasMore && (
+              <div className="flex justify-center pt-4">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setVisibleCount(prev => prev + 10)}
+                  className="w-full sm:w-auto"
+                >
+                  <Icon name="ChevronDown" size={20} className="mr-2" />
+                  Показать ещё ({filteredAndSortedEntries.length - visibleCount})
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
