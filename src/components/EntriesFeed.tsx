@@ -255,7 +255,7 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
                   className="w-full sm:w-auto"
                 >
                   <Icon name="ChevronDown" size={20} className="mr-2" />
-                  Показать ещё ({filteredAndSortedEntries.length - visibleCount})
+                  Показать ещё 10
                 </Button>
               </div>
             )}
