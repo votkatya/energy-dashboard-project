@@ -39,15 +39,14 @@ const NotificationsDialog = () => {
     if (saved) {
       loadedSettings = JSON.parse(saved);
       setSettings(loadedSettings);
+      
+      if (platform === 'telegram' && loadedSettings.telegramChatId) {
+        setHasPermission('granted');
+      }
     }
 
     if (canUseBrowserNotifications()) {
       setHasPermission(Notification.permission);
-    } else if (platform === 'telegram' && telegramUser) {
-      setHasPermission('granted');
-      const newSettings = { ...loadedSettings, telegramChatId: telegramUser.id };
-      setSettings(newSettings);
-      localStorage.setItem('notification-settings', JSON.stringify(newSettings));
     }
   }, []);
 
