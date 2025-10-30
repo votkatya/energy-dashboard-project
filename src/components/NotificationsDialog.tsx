@@ -123,7 +123,10 @@ const NotificationsDialog = () => {
     setSaveSuccess(false);
     
     try {
-      await saveSettings(settings);
+      const savedSettings = localStorage.getItem('notification-settings');
+      const currentSettings = savedSettings ? JSON.parse(savedSettings) : settings;
+      
+      await saveSettings(currentSettings);
       setSaveSuccess(true);
       
       setTimeout(() => {
