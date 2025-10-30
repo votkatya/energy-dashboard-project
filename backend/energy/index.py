@@ -167,14 +167,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
                 ''')
             
-            # Получаем результат
+            conn.commit()
+            
+            # Получаем результат после коммита
             cur.execute(f'''
                 SELECT id, entry_date, score, thoughts
                 FROM t_p45717398_energy_dashboard_pro.energy_entries
                 WHERE user_id = {user_id} AND entry_date = '{entry_date}'
             ''')
-            
-            conn.commit()
             new_entry = cur.fetchone()
             
             return {
