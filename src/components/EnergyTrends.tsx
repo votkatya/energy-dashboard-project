@@ -115,6 +115,52 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       ? ((second3MonthsGood / Math.max(last3Months.length / 2, 1)) - (first3MonthsGood / Math.max(last3Months.length / 2, 1))) * 100
       : 0;
 
+    const sortedEntries = [...entries].sort((a: any, b: any) => {
+      return parseDate(a.date).getTime() - parseDate(b.date).getTime();
+    });
+
+    const recoveryTimes: number[] = [];
+    for (let i = 0; i < sortedEntries.length - 1; i++) {
+      if (sortedEntries[i].score < 3) {
+        for (let j = i + 1; j < sortedEntries.length; j++) {
+          if (sortedEntries[j].score >= 4) {
+            recoveryTimes.push(j - i);
+            break;
+          }
+        }
+      }
+    }
+    const avgRecoveryTime = recoveryTimes.length > 0
+      ? Math.round(recoveryTimes.reduce((a, b) => a + b, 0) / recoveryTimes.length)
+      : 0;
+
+    let currentStreak = 0;
+    let streakType: 'good' | 'bad' | 'none' = 'none';
+    if (sortedEntries.length > 0) {
+      const lastScore = sortedEntries[sortedEntries.length - 1].score;
+      streakType = lastScore >= 4 ? 'good' : lastScore < 3 ? 'bad' : 'none';
+      
+      if (streakType !== 'none') {
+        for (let i = sortedEntries.length - 1; i >= 0; i--) {
+          const score = sortedEntries[i].score;
+          if (streakType === 'good' && score >= 4) {
+            currentStreak++;
+          } else if (streakType === 'bad' && score < 3) {
+            currentStreak++;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    const bestTimeOfDay = Object.entries(dayOfWeekScores)
+      .map(([day, data]) => ({
+        day: parseInt(day),
+        avg: data.sum / data.count
+      }))
+      .sort((a, b) => b.avg - a.avg)[0];
+
     return {
       currentMonthAvg: Math.round(currentMonthAvg * 10) / 10,
       previousMonthAvg: Math.round(previousMonthAvg * 10) / 10,
@@ -125,7 +171,11 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       worstDayOfWeek: dayNames[worstDay],
       bestWeek: { start: '', end: '', avg: 0 },
       trend: Math.round(trend),
-      totalEntries: total
+      totalEntries: total,
+      avgRecoveryTime,
+      currentStreak,
+      streakType,
+      bestTimeOfDay: bestTimeOfDay ? dayNames[bestTimeOfDay.day] : 'выходные'
     };
   }, [data]);
 
@@ -310,6 +360,68 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
           </div>
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="shadow-lg border-l-4 border-l-primary">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Icon name="Timer" size={20} className="text-primary" />
+              Восстановление
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <div className="text-4xl font-heading font-bold text-primary mb-2">
+                {analytics.avgRecoveryTime > 0 ? `${analytics.avgRecoveryTime} дн.` : '—'}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {analytics.avgRecoveryTime > 0 
+                  ? 'Среднее время восстановления после плохих дней'
+                  : 'Недостаточно данных'}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={`shadow-lg border-l-4 ${analytics.streakType === 'good' ? 'border-l-energy-excellent' : analytics.streakType === 'bad' ? 'border-l-energy-low' : 'border-l-muted'}`}>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Icon name="Flame" size={20} className={analytics.streakType === 'good' ? 'text-energy-excellent' : analytics.streakType === 'bad' ? 'text-energy-low' : 'text-muted-foreground'} />
+              Текущая серия
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <div className={`text-4xl font-heading font-bold mb-2 ${analytics.streakType === 'good' ? 'text-energy-excellent' : analytics.streakType === 'bad' ? 'text-energy-low' : 'text-muted-foreground'}`}>
+                {analytics.currentStreak > 0 ? analytics.currentStreak : '0'}
+                <span className="text-2xl ml-1">{analytics.streakType === 'good' ? '🔥' : analytics.streakType === 'bad' ? '💤' : '—'}</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {analytics.streakType === 'good' ? 'Подряд хороших дней' : analytics.streakType === 'bad' ? 'Подряд плохих дней' : 'Нет активной серии'}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-lg border-l-4 border-l-accent">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Icon name="Star" size={20} className="text-accent" />
+              Лучшее время
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <div className="text-4xl font-heading font-bold text-accent mb-2">
+                {analytics.bestTimeOfDay.charAt(0).toUpperCase() + analytics.bestTimeOfDay.slice(1)}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Планируй важные дела на этот день
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <Card className="shadow-lg">
         <CardHeader>
