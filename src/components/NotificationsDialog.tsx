@@ -56,20 +56,11 @@ const NotificationsDialog = () => {
   };
 
   const requestPermission = async () => {
-    console.log('🔔 Клик на кнопку!', { platform, telegramUser, hasPermission });
-    
     if (platform === 'telegram' && telegramUser) {
-      console.log('🔔 Telegram: сохраняем chat_id', telegramUser.id);
       const newSettings = { ...settings, telegramChatId: telegramUser.id };
       setSettings(newSettings);
       localStorage.setItem('notification-settings', JSON.stringify(newSettings));
       setHasPermission('granted');
-      alert('Уведомления активированы! Chat ID: ' + telegramUser.id);
-      return;
-    }
-    
-    if (platform === 'telegram' && !telegramUser) {
-      alert('Ошибка: не удалось получить данные пользователя Telegram');
       return;
     }
     
@@ -114,15 +105,6 @@ const NotificationsDialog = () => {
         </DialogHeader>
 
         <div className="space-y-6">
-          <Card className="p-3 bg-yellow-500/10 border-yellow-500/20">
-            <p className="text-xs font-mono">
-              Platform: {platform}<br/>
-              TG User: {telegramUser ? `${telegramUser.id}` : 'null'}<br/>
-              Permission: {hasPermission}<br/>
-              Window.Telegram: {typeof (window as any).Telegram}
-            </p>
-          </Card>
-          
           {platform === 'telegram' && (
             <>
               <Card className="p-4 bg-accent/10 border-accent/20">
@@ -134,9 +116,7 @@ const NotificationsDialog = () => {
                       <p className="text-xs text-muted-foreground">
                         Уведомления от бота @katflow_bot
                       </p>
-                      <p className="text-xs mt-2 font-mono bg-background/50 p-1 rounded">
-                        Debug: {telegramUser ? `ID: ${telegramUser.id}` : 'Нет данных'} | Status: {hasPermission}
-                      </p>
+
                     </div>
                   </div>
                   <Switch
