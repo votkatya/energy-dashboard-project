@@ -8,6 +8,7 @@ import json
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from psycopg2 import errors
 from datetime import datetime
 from typing import Dict, Any, Optional
 import hashlib
@@ -161,7 +162,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
                 ''')
                 conn.commit()
-            except psycopg2.errors.UniqueViolation:
+            except errors.UniqueViolation:
                 # Если запись уже существует, откатываем и обновляем
                 conn.rollback()
                 cur.execute(f'''
