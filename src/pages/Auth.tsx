@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
-import Logo from '@/components/ui/logo';
 import { useAuth } from '@/contexts/AuthContext';
 import { HeroBackground } from '@/components/ui/shape-landing-hero';
 
@@ -59,8 +58,8 @@ const Auth = () => {
                 transition={{ duration: 0.5, type: "spring" }}
                 className="mx-auto mb-4"
               >
-                <div className="w-24 h-24 rounded-2xl flex items-center justify-center text-primary glow-primary">
-                  <Logo size={90} />
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl glow-primary">
+                  <Icon name="Activity" size={40} className="text-primary-foreground" />
                 </div>
               </motion.div>
               <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
