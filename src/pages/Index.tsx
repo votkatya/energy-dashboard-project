@@ -323,23 +323,31 @@ const Index = () => {
 
             {!isLoading && !error && (
               <>
-                <div className="flex gap-2 mb-6 justify-center">
-                  <Button
-                    variant={homeView === 'calendar' ? 'default' : 'outline'}
-                    onClick={() => setHomeView('calendar')}
-                    className="flex items-center gap-2"
-                  >
-                    <Icon name="Calendar" size={18} />
-                    Календарь
-                  </Button>
-                  <Button
-                    variant={homeView === 'feed' ? 'default' : 'outline'}
-                    onClick={() => setHomeView('feed')}
-                    className="flex items-center gap-2"
-                  >
-                    <Icon name="List" size={18} />
-                    Лента
-                  </Button>
+                <div className="flex justify-center mb-6">
+                  <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
+                    <button
+                      onClick={() => setHomeView('calendar')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                        homeView === 'calendar' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <Icon name="Calendar" size={18} />
+                      Календарь
+                    </button>
+                    <button
+                      onClick={() => setHomeView('feed')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                        homeView === 'feed' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <Icon name="List" size={18} />
+                      Лента
+                    </button>
+                  </div>
                 </div>
 
                 {homeView === 'calendar' ? (
