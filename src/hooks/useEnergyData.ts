@@ -73,8 +73,20 @@ export const useEnergyData = () => {
       }
       const rawEntries: EnergyEntry[] = await response.json();
       console.log('📥 RAW данные с бэкенда (первые 3):', rawEntries.slice(0, 3));
-      const entries = rawEntries.map(addDerivedFields);
-      console.log('✅ После обработки (первые 3):', entries.slice(0, 3));
+      console.log('📅 Порядок дат:', {
+        first: rawEntries[0]?.date,
+        last: rawEntries[rawEntries.length - 1]?.date,
+        total: rawEntries.length
+      });
+      
+      const sortedEntries = [...rawEntries].sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateA - dateB;
+      });
+      
+      const entries = sortedEntries.map(addDerivedFields);
+      console.log('✅ После сортировки (последние 3):', entries.slice(-3));
       const stats = calculateStats(entries);
       
       return { entries, stats };
