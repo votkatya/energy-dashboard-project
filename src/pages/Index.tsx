@@ -16,6 +16,8 @@ import { parseDate } from '@/utils/dateUtils';
 import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
 import { HeroGeometric } from '@/components/ui/shape-landing-hero';
 import { motion } from 'framer-motion';
+import { analyzeBurnoutRisk } from '@/utils/predictiveAnalytics';
+import { useMemo } from 'react';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -74,6 +76,11 @@ const Index = () => {
   
   const monthlyStats = getMonthlyStats();
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
+
+  const burnoutRisk = useMemo(() => {
+    if (!data?.entries || data.entries.length === 0) return null;
+    return analyzeBurnoutRisk(data.entries);
+  }, [data]);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -178,6 +185,42 @@ const Index = () => {
 
             {!isLoading && !error && (
               <>
+                {burnoutRisk && (burnoutRisk.level === 'medium' || burnoutRisk.level === 'high' || burnoutRisk.level === 'critical') && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6"
+                  >
+                    <Card 
+                      className={`cursor-pointer transition-all hover:scale-[1.02] ${
+                        burnoutRisk.level === 'critical' 
+                          ? 'bg-gradient-to-r from-destructive/20 to-destructive/5 border-destructive/40' 
+                          : burnoutRisk.level === 'high'
+                          ? 'bg-gradient-to-r from-orange-500/20 to-orange-500/5 border-orange-500/40'
+                          : 'bg-gradient-to-r from-yellow-500/20 to-yellow-500/5 border-yellow-500/40'
+                      }`}
+                      onClick={() => setActiveTab('trends')}
+                    >
+                      <CardContent className="py-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <Icon 
+                              name="AlertTriangle" 
+                              size={24} 
+                              className={burnoutRisk.level === 'critical' ? 'text-destructive' : burnoutRisk.level === 'high' ? 'text-orange-500' : 'text-yellow-500'} 
+                            />
+                            <div>
+                              <p className="font-semibold">Внимание: {burnoutRisk.level === 'critical' ? 'критический' : burnoutRisk.level === 'high' ? 'высокий' : 'средний'} риск выгорания</p>
+                              <p className="text-sm text-muted-foreground">Нажми, чтобы узнать подробности</p>
+                            </div>
+                          </div>
+                          <Icon name="ArrowRight" size={20} className="text-muted-foreground" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )}
+
                 <div className="mb-6 flex flex-wrap gap-2 justify-center">
                   <Button
                     variant={timePeriod === '3days' ? 'default' : 'outline'}
