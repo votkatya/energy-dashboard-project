@@ -141,7 +141,7 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 glass-card p-1 h-auto sm:h-14">
+          <TabsList className="grid w-full grid-cols-3 mb-8 glass-card p-1 h-auto sm:h-14">
             <TabsTrigger 
               value="home" 
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
@@ -162,13 +162,6 @@ const Index = () => {
             >
               <Icon name="Activity" size={18} className="sm:mr-0" />
               <span className="hidden sm:inline">Тренды</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="settings"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
-            >
-              <Icon name="Settings" size={18} className="sm:mr-0" />
-              <span className="hidden sm:inline">Настройки</span>
             </TabsTrigger>
           </TabsList>
 
