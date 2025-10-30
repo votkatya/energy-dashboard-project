@@ -56,25 +56,33 @@ const NotificationsDialog = () => {
   }, []);
 
   const saveSettings = async (newSettings: NotificationSettings) => {
+    console.log('🔵 saveSettings вызван с:', newSettings);
     setSettings(newSettings);
     localStorage.setItem('notification-settings', JSON.stringify(newSettings));
     
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     
+    console.log('🔵 token:', token ? 'есть' : 'нет', 'userId:', userId);
+    
     if (token && userId) {
       try {
+        const payload = {
+          userId: parseInt(userId),
+          settings: newSettings,
+          telegramChatId: newSettings.telegramChatId
+        };
+        console.log('📤 Отправляю на бэкенд:', payload);
+        
         const response = await fetch(funcUrls['save-notification-settings'], {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            userId: parseInt(userId),
-            settings: newSettings,
-            telegramChatId: newSettings.telegramChatId
-          })
+          body: JSON.stringify(payload)
         });
+        
+        console.log('📥 Ответ статус:', response.status);
         
         if (!response.ok) {
           throw new Error('Failed to save settings');
