@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { Card } from '@/components/ui/card';
+import { getPlatform, canUseBrowserNotifications, getTelegramUser } from '@/utils/platformDetector';
 
 interface NotificationSettings {
   dailyReminder: boolean;
@@ -13,6 +14,7 @@ interface NotificationSettings {
   burnoutWarnings: boolean;
   achievements: boolean;
   weeklyReport: boolean;
+  telegramChatId?: number;
 }
 
 const defaultSettings: NotificationSettings = {
@@ -27,6 +29,8 @@ const NotificationsDialog = () => {
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<NotificationSettings>(defaultSettings);
   const [hasPermission, setHasPermission] = useState<'granted' | 'denied' | 'default'>('default');
+  const platform = getPlatform();
+  const telegramUser = getTelegramUser();
 
   useEffect(() => {
     const saved = localStorage.getItem('notification-settings');
@@ -34,8 +38,12 @@ const NotificationsDialog = () => {
       setSettings(JSON.parse(saved));
     }
 
-    if ('Notification' in window) {
+    if (canUseBrowserNotifications()) {
       setHasPermission(Notification.permission);
+    } else if (platform === 'telegram' && telegramUser) {
+      setHasPermission('granted');
+      const newSettings = { ...settings, telegramChatId: telegramUser.id };
+      saveSettings(newSettings);
     }
   }, []);
 
@@ -45,7 +53,12 @@ const NotificationsDialog = () => {
   };
 
   const requestPermission = async () => {
-    if ('Notification' in window) {
+    if (platform === 'telegram') {
+      setHasPermission('granted');
+      return;
+    }
+    
+    if (canUseBrowserNotifications()) {
       const permission = await Notification.requestPermission();
       setHasPermission(permission);
       
@@ -86,7 +99,21 @@ const NotificationsDialog = () => {
         </DialogHeader>
 
         <div className="space-y-6">
-          {hasPermission !== 'granted' && (
+          {platform === 'telegram' && (
+            <Card className="p-4 bg-accent/10 border-accent/20">
+              <div className="flex items-start gap-3">
+                <Icon name="Send" size={20} className="text-accent mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium mb-1">Telegram уведомления</p>
+                  <p className="text-xs text-muted-foreground">
+                    Уведомления будут приходить в Telegram от бота
+                  </p>
+                </div>
+              </div>
+            </Card>
+          )}
+          
+          {platform === 'browser' && hasPermission !== 'granted' && (
             <Card className="p-4 bg-primary/10 border-primary/20">
               <div className="flex items-start gap-3">
                 <Icon name="Info" size={20} className="text-primary mt-0.5" />
@@ -214,7 +241,10 @@ const NotificationsDialog = () => {
               <div className="flex items-start gap-2">
                 <Icon name="Sparkles" size={16} className="text-accent mt-0.5" />
                 <p className="text-xs text-muted-foreground">
-                  Вы будете получать напоминание каждый день в {settings.dailyReminderTime}
+                  {platform === 'telegram' 
+                    ? `Бот будет присылать напоминания в ${settings.dailyReminderTime}`
+                    : `Вы будете получать напоминание каждый день в ${settings.dailyReminderTime}`
+                  }
                 </p>
               </div>
             </Card>
