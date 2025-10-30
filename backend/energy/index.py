@@ -154,28 +154,22 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             # Экранируем значения для SimpleQuery
             safe_thoughts = thoughts.replace("'", "''")
             
-            # Проверяем, существует ли запись
-            cur.execute(f'''
-                SELECT id FROM t_p45717398_energy_dashboard_pro.energy_entries
-                WHERE user_id = {user_id} AND entry_date = '{entry_date}'
-            ''')
-            existing = cur.fetchone()
-            
-            if existing:
-                # Обновляем существующую запись
+            # Сначала пробуем вставить новую запись
+            try:
+                cur.execute(f'''
+                    INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
+                    VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
+                ''')
+                conn.commit()
+            except psycopg2.errors.UniqueViolation:
+                # Если запись уже существует, откатываем и обновляем
+                conn.rollback()
                 cur.execute(f'''
                     UPDATE t_p45717398_energy_dashboard_pro.energy_entries 
                     SET score = {score}, thoughts = '{safe_thoughts}', updated_at = CURRENT_TIMESTAMP
                     WHERE user_id = {user_id} AND entry_date = '{entry_date}'
                 ''')
-            else:
-                # Вставляем новую запись
-                cur.execute(f'''
-                    INSERT INTO t_p45717398_energy_dashboard_pro.energy_entries (user_id, entry_date, score, thoughts)
-                    VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
-                ''')
-            
-            conn.commit()
+                conn.commit()
             
             # Получаем результат
             cur.execute(f'''
