@@ -81,13 +81,14 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
 
   return (
     <Card className="shadow-lg border-l-4 border-l-primary">
-      <CardHeader>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <CardHeader className="pb-3 sm:pb-6">
+        <div className="flex flex-col gap-3">
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <Icon name="TrendingUp" size={20} className="text-primary sm:w-6 sm:h-6" />
             График оценок
           </CardTitle>
-          <div className="flex flex-wrap gap-2">
+          
+          <div className="hidden sm:flex flex-wrap gap-2">
             <Button
               size="sm"
               variant={period === 'week' ? 'default' : 'outline'}
@@ -146,6 +147,60 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
               </PopoverContent>
             </Popover>
           </div>
+
+          <div className="flex sm:hidden w-full gap-2">
+            <Button
+              size="sm"
+              variant={period === 'week' ? 'default' : 'outline'}
+              onClick={() => setPeriod('week')}
+              className="flex-1"
+            >
+              Неделя
+            </Button>
+            <Button
+              size="sm"
+              variant={period === 'month' ? 'default' : 'outline'}
+              onClick={() => setPeriod('month')}
+              className="flex-1"
+            >
+              Месяц
+            </Button>
+            <Popover open={showCalendar} onOpenChange={setShowCalendar}>
+              <PopoverTrigger asChild>
+                <Button
+                  size="sm"
+                  variant={period === 'custom' ? 'default' : 'outline'}
+                  onClick={() => {
+                    setShowCalendar(true);
+                  }}
+                  className="flex-1"
+                >
+                  <Icon name="Calendar" size={16} />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="range"
+                  selected={{
+                    from: customDateRange.from,
+                    to: customDateRange.to
+                  }}
+                  onSelect={(range) => {
+                    setCustomDateRange({
+                      from: range?.from,
+                      to: range?.to
+                    });
+                    if (range?.from && range?.to) {
+                      setPeriod('custom');
+                      setShowCalendar(false);
+                    }
+                  }}
+                  locale={ru}
+                  numberOfMonths={1}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
         
         {period === 'custom' && customDateRange.from && customDateRange.to && (
@@ -154,7 +209,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
           </p>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 sm:px-6">
         <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
           <div className="text-center p-2 sm:p-3 rounded-lg bg-secondary/50">
             <div className="text-xs text-muted-foreground mb-1">Минимум</div>
