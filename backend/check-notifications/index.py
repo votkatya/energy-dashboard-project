@@ -4,6 +4,7 @@ import psycopg2
 import requests
 from datetime import datetime, timedelta
 from typing import Dict, Any, List
+from zoneinfo import ZoneInfo
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
@@ -51,18 +52,25 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     from datetime import timezone
     
     current_time_utc = datetime.now(timezone.utc)
-    current_time_msk = current_time_utc + timedelta(hours=3)
-    current_time_str = current_time_msk.strftime('%H:%M')
     
-    print(f"Checking notifications. Current MSK time: {current_time_str}, Users found: {len(users)}")
+    print(f"Checking notifications. Current UTC time: {current_time_utc.strftime('%H:%M')}, Users found: {len(users)}")
     
     sent_count = 0
     cur = conn.cursor()
     
     for user_id, chat_id, settings, full_name in users:
         reminder_time = settings.get('dailyReminderTime', '21:00')
+        user_timezone = settings.get('timezone', 'Europe/Moscow')
         
-        print(f"User {user_id} ({full_name}): reminder_time={reminder_time}, chat_id={chat_id}")
+        try:
+            tz = ZoneInfo(user_timezone)
+        except Exception:
+            tz = ZoneInfo('Europe/Moscow')
+        
+        current_time_user = current_time_utc.astimezone(tz)
+        current_time_str = current_time_user.strftime('%H:%M')
+        
+        print(f"User {user_id} ({full_name}): timezone={user_timezone}, current_time={current_time_str}, reminder_time={reminder_time}, chat_id={chat_id}")
         
         cur.execute("""
             SELECT last_notification_sent 
@@ -72,11 +80,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         result = cur.fetchone()
         last_sent = result[0] if result and result[0] else None
         
-        today_date = current_time_msk.date()
+        today_date = current_time_user.date()
         should_send = False
         
         if current_time_str == reminder_time:
-            if not last_sent or last_sent.date() < today_date:
+            if not last_sent or last_sent.astimezone(tz).date() < today_date:
                 should_send = True
         
         if should_send:

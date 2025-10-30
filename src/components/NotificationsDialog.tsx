@@ -12,6 +12,7 @@ import funcUrls from '../../backend/func2url.json';
 interface NotificationSettings {
   dailyReminder: boolean;
   dailyReminderTime: string;
+  timezone: string;
   burnoutWarnings: boolean;
   achievements: boolean;
   weeklyReport: boolean;
@@ -21,6 +22,7 @@ interface NotificationSettings {
 const defaultSettings: NotificationSettings = {
   dailyReminder: false,
   dailyReminderTime: '21:00',
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   burnoutWarnings: true,
   achievements: true,
   weeklyReport: false,
@@ -205,16 +207,17 @@ const NotificationsDialog = () => {
             </div>
 
             {settings.dailyReminder && (
-              <div className="ml-4 flex items-center gap-3">
-                <Label htmlFor="reminder-time" className="text-sm">Время:</Label>
-                <Select
-                  value={settings.dailyReminderTime}
-                  onValueChange={(value) => updateSetting('dailyReminderTime', value)}
-                >
-                  <SelectTrigger id="reminder-time" className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
+              <div className="ml-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="reminder-time" className="text-sm">Время:</Label>
+                  <Select
+                    value={settings.dailyReminderTime}
+                    onValueChange={(value) => updateSetting('dailyReminderTime', value)}
+                  >
+                    <SelectTrigger id="reminder-time" className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
                     <SelectItem value="00:00">00:00</SelectItem>
                     <SelectItem value="00:30">00:30</SelectItem>
                     <SelectItem value="01:00">01:00</SelectItem>
@@ -265,6 +268,37 @@ const NotificationsDialog = () => {
                     <SelectItem value="23:30">23:30</SelectItem>
                   </SelectContent>
                 </Select>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="timezone" className="text-sm">Часовой пояс:</Label>
+                  <Select
+                    value={settings.timezone}
+                    onValueChange={(value) => updateSetting('timezone', value)}
+                  >
+                    <SelectTrigger id="timezone" className="flex-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Europe/Kaliningrad">Калининград (UTC+2)</SelectItem>
+                      <SelectItem value="Europe/Moscow">Москва (UTC+3)</SelectItem>
+                      <SelectItem value="Europe/Samara">Самара (UTC+4)</SelectItem>
+                      <SelectItem value="Asia/Yekaterinburg">Екатеринбург (UTC+5)</SelectItem>
+                      <SelectItem value="Asia/Omsk">Омск (UTC+6)</SelectItem>
+                      <SelectItem value="Asia/Krasnoyarsk">Красноярск (UTC+7)</SelectItem>
+                      <SelectItem value="Asia/Irkutsk">Иркутск (UTC+8)</SelectItem>
+                      <SelectItem value="Asia/Yakutsk">Якутск (UTC+9)</SelectItem>
+                      <SelectItem value="Asia/Vladivostok">Владивосток (UTC+10)</SelectItem>
+                      <SelectItem value="Asia/Magadan">Магадан (UTC+11)</SelectItem>
+                      <SelectItem value="Asia/Kamchatka">Камчатка (UTC+12)</SelectItem>
+                      <SelectItem value="Europe/Minsk">Минск (UTC+3)</SelectItem>
+                      <SelectItem value="Asia/Almaty">Алматы (UTC+6)</SelectItem>
+                      <SelectItem value="Asia/Tashkent">Ташкент (UTC+5)</SelectItem>
+                      <SelectItem value="Asia/Tbilisi">Тбилиси (UTC+4)</SelectItem>
+                      <SelectItem value="Asia/Yerevan">Ереван (UTC+4)</SelectItem>
+                      <SelectItem value="Asia/Baku">Баку (UTC+4)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             )}
 
