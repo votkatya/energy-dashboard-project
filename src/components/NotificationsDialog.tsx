@@ -56,44 +56,32 @@ const NotificationsDialog = () => {
   }, []);
 
   const saveSettings = async (newSettings: NotificationSettings) => {
-    console.log('🔵 saveSettings вызван с:', newSettings);
     setSettings(newSettings);
     localStorage.setItem('notification-settings', JSON.stringify(newSettings));
     
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     
-    console.log('🔵 token:', token ? 'есть' : 'нет', 'userId:', userId);
-    
     if (token && userId) {
-      try {
-        const payload = {
-          userId: parseInt(userId),
-          settings: newSettings,
-          telegramChatId: newSettings.telegramChatId
-        };
-        console.log('📤 Отправляю на бэкенд:', payload);
-        
-        const response = await fetch(funcUrls['save-notification-settings'], {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload)
-        });
-        
-        console.log('📥 Ответ статус:', response.status);
-        
-        if (!response.ok) {
-          throw new Error('Failed to save settings');
-        }
-        
-        console.log('✅ Настройки сохранены в БД:', newSettings);
-        return true;
-      } catch (error) {
-        console.error('❌ Ошибка сохранения:', error);
-        throw error;
+      const payload = {
+        userId: parseInt(userId),
+        settings: newSettings,
+        telegramChatId: newSettings.telegramChatId
+      };
+      
+      const response = await fetch(funcUrls['save-notification-settings'], {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save settings');
       }
+      
+      return true;
     }
     return false;
   };
@@ -127,15 +115,12 @@ const NotificationsDialog = () => {
   };
 
   const handleSave = async () => {
-    console.log('🟡 handleSave вызван!');
     setIsSaving(true);
     setSaveSuccess(false);
     
     try {
       const savedSettings = localStorage.getItem('notification-settings');
-      console.log('🟡 savedSettings из localStorage:', savedSettings);
       const currentSettings = savedSettings ? JSON.parse(savedSettings) : settings;
-      console.log('🟡 currentSettings:', currentSettings);
       
       await saveSettings(currentSettings);
       setSaveSuccess(true);
@@ -174,11 +159,6 @@ const NotificationsDialog = () => {
         </DialogHeader>
 
         <div className="space-y-6">
-          <Card className="p-3 bg-yellow-500/10 border-yellow-500/30">
-            <p className="text-xs font-mono break-all">
-              {JSON.stringify(settings, null, 2)}
-            </p>
-          </Card>
           {platform === 'telegram' && (
             <>
               <Card className="p-4 bg-accent/10 border-accent/20">
@@ -427,11 +407,7 @@ const NotificationsDialog = () => {
 
           <div className="flex justify-end pt-4 border-t">
             <Button 
-              onClick={() => {
-                alert('Кнопка работает!');
-                console.log('🟢 Кнопка нажата!');
-                handleSave();
-              }} 
+              onClick={handleSave} 
               className="w-full sm:w-auto"
               disabled={isSaving || saveSuccess}
             >
