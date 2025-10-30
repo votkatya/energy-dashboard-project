@@ -1,0 +1,11 @@
+{
+  "tests": [
+    {
+      "name": "Get user data",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    }
+  ]
+}
