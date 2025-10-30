@@ -162,8 +162,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     VALUES ({user_id}, '{entry_date}', {score}, '{safe_thoughts}')
                 ''')
                 conn.commit()
-            except errors.UniqueViolation:
-                # Если запись уже существует, откатываем и обновляем
+            except Exception as e:
+                # Если запись уже существует (любая ошибка уникальности), откатываем и обновляем
                 conn.rollback()
                 cur.execute(f'''
                     UPDATE t_p45717398_energy_dashboard_pro.energy_entries 
