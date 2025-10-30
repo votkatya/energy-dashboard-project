@@ -83,8 +83,8 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
     <Card className="shadow-lg border-l-4 border-l-primary">
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <CardTitle className="flex items-center gap-2">
-            <Icon name="TrendingUp" size={24} className="text-primary" />
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Icon name="TrendingUp" size={20} className="text-primary sm:w-6 sm:h-6" />
             График оценок
           </CardTitle>
           <div className="flex flex-wrap gap-2">
@@ -155,18 +155,18 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         )}
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="text-center p-3 rounded-lg bg-secondary/50">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+          <div className="text-center p-2 sm:p-3 rounded-lg bg-secondary/50">
             <div className="text-xs text-muted-foreground mb-1">Минимум</div>
-            <div className="text-2xl font-bold">{stats.min}</div>
+            <div className="text-lg sm:text-2xl font-bold">{stats.min}</div>
           </div>
-          <div className="text-center p-3 rounded-lg bg-primary/10">
+          <div className="text-center p-2 sm:p-3 rounded-lg bg-primary/10">
             <div className="text-xs text-muted-foreground mb-1">Среднее</div>
-            <div className="text-2xl font-bold text-primary">{stats.avg}</div>
+            <div className="text-lg sm:text-2xl font-bold text-primary">{stats.avg}</div>
           </div>
-          <div className="text-center p-3 rounded-lg bg-secondary/50">
+          <div className="text-center p-2 sm:p-3 rounded-lg bg-secondary/50">
             <div className="text-xs text-muted-foreground mb-1">Максимум</div>
-            <div className="text-2xl font-bold">{stats.max}</div>
+            <div className="text-lg sm:text-2xl font-bold">{stats.max}</div>
           </div>
         </div>
 
@@ -178,7 +178,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
             </div>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={window.innerWidth < 640 ? 200 : 300}>
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
