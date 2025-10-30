@@ -47,23 +47,39 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     users = cur.fetchall()
     cur.close()
-    conn.close()
     
     from datetime import timezone
     
     current_time_utc = datetime.now(timezone.utc)
-    current_time_msk = (current_time_utc + timedelta(hours=3)).strftime('%H:%M')
+    current_time_msk = current_time_utc + timedelta(hours=3)
+    current_time_str = current_time_msk.strftime('%H:%M')
     
-    print(f"Checking notifications. Current MSK time: {current_time_msk}, Users found: {len(users)}")
+    print(f"Checking notifications. Current MSK time: {current_time_str}, Users found: {len(users)}")
     
     sent_count = 0
+    cur = conn.cursor()
     
     for user_id, chat_id, settings, full_name in users:
         reminder_time = settings.get('dailyReminderTime', '21:00')
         
         print(f"User {user_id} ({full_name}): reminder_time={reminder_time}, chat_id={chat_id}")
         
-        if current_time_msk == reminder_time:
+        cur.execute("""
+            SELECT last_notification_sent 
+            FROM t_p45717398_energy_dashboard_pro.users 
+            WHERE id = %s
+        """, (user_id,))
+        result = cur.fetchone()
+        last_sent = result[0] if result and result[0] else None
+        
+        today_date = current_time_msk.date()
+        should_send = False
+        
+        if current_time_str == reminder_time:
+            if not last_sent or last_sent.date() < today_date:
+                should_send = True
+        
+        if should_send:
             message = f"Привет, {full_name or 'друг'}! 👋\n\n"
             message += "Время оценить свой день в FlowKat! 🌟\n\n"
             message += "Как прошёл твой день? Заполни дневник энергии, чтобы отследить свой прогресс."
@@ -81,11 +97,20 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
                 if response.status_code == 200:
                     sent_count += 1
+                    cur.execute("""
+                        UPDATE t_p45717398_energy_dashboard_pro.users 
+                        SET last_notification_sent = %s 
+                        WHERE id = %s
+                    """, (current_time_msk, user_id))
+                    conn.commit()
                     print(f"✅ Notification sent to user {user_id} ({full_name})")
                 else:
                     print(f"❌ Telegram API error for user {user_id}: {response.status_code} - {response.text}")
             except Exception as e:
                 print(f"❌ Failed to send notification to user {user_id}: {str(e)}")
+    
+    cur.close()
+    conn.close()
     
     print(f"Check completed. Users checked: {len(users)}, Notifications sent: {sent_count}")
     
@@ -96,6 +121,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         'body': json.dumps({
             'checked': len(users),
             'sent': sent_count,
-            'time': current_time_msk
+            'time': current_time_str
         })
     }
