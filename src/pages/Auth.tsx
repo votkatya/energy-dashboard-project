@@ -58,8 +58,8 @@ const Auth = () => {
                 transition={{ duration: 0.5, type: "spring" }}
                 className="mx-auto mb-4"
               >
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary via-accent to-destructive flex items-center justify-center shadow-xl">
-                  <Icon name="Activity" size={40} className="text-background" />
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl glow-primary">
+                  <Icon name="Activity" size={40} className="text-primary-foreground" />
                 </div>
               </motion.div>
               <CardTitle className="text-4xl font-heading bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2">
