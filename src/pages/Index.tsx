@@ -213,7 +213,7 @@ const Index = () => {
                 />
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
-                  <AnimatedCard delay={0.1} className="glass-card border-l-4 border-l-primary hover:glow-primary">
+                  <AnimatedCard delay={0.1} className="glass-card">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😊</span>
@@ -227,7 +227,7 @@ const Index = () => {
                     </CardContent>
                   </AnimatedCard>
 
-                  <AnimatedCard delay={0.2} className="glass-card border-l-4 border-l-accent hover:glow-accent">
+                  <AnimatedCard delay={0.2} className="glass-card">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😐</span>
@@ -241,7 +241,7 @@ const Index = () => {
                     </CardContent>
                   </AnimatedCard>
 
-                  <AnimatedCard delay={0.3} className="glass-card border-l-4 border-l-destructive">
+                  <AnimatedCard delay={0.3} className="glass-card">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
                         <span className="text-xl md:text-2xl">😔</span>
