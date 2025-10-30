@@ -80,7 +80,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
   };
 
   return (
-    <Card className="shadow-lg border-l-4 border-l-primary">
+    <Card className="shadow-lg">
       <CardHeader className="pb-3 sm:pb-6">
         <div className="flex flex-col gap-3">
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
@@ -234,7 +234,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={window.innerWidth < 640 ? 200 : 300}>
-            <AreaChart data={chartData}>
+            <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
