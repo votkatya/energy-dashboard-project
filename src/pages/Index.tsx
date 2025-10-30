@@ -93,11 +93,11 @@ const Index = () => {
           <div className="flex flex-col gap-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg glow-primary">
-                  <Icon name="Zap" size={24} className="text-background" />
+                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
+                  <Icon name="Zap" size={24} className="text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground">FlowKat</h1>
+                  <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground">FlowKat</h1>
                   <p className="text-sm text-muted-foreground">Выгорание? Не сегодня!</p>
                 </div>
               </div>
@@ -123,7 +123,7 @@ const Index = () => {
                 <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
-                  className="hidden sm:flex bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary transition-all shadow-lg hover:shadow-xl hover:glow-primary"
+                  className="hidden sm:flex"
                 >
                   <Icon name="Plus" size={20} className="mr-2" />
                   Добавить запись
@@ -133,7 +133,7 @@ const Index = () => {
             <Button 
               onClick={() => setShowAddDialog(true)}
               size="lg"
-              className="sm:hidden w-full bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary transition-all shadow-lg hover:shadow-xl hover:glow-primary"
+              className="sm:hidden w-full"
             >
               Как ты сегодня?
             </Button>
