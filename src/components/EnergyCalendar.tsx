@@ -138,29 +138,28 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   return (
     <Card className="shadow-lg">
       <CardHeader>
-        <CardTitle className="flex flex-col gap-4">
+        <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Icon name="Calendar" size={24} />
-            Календарь энергии
+            {monthNames[currentMonth]} {currentYear}
           </div>
-          <div className="flex items-center justify-center">
-            <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1 items-center">
-              <button
-                onClick={handlePrevMonth}
-                className="px-3 py-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-all"
-              >
-                <Icon name="ChevronLeft" size={18} />
-              </button>
-              <div className="px-6 py-2 text-sm font-medium min-w-[140px] text-center">
-                {monthNames[currentMonth]} {currentYear}
-              </div>
-              <button
-                onClick={handleNextMonth}
-                className="px-3 py-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-all"
-              >
-                <Icon name="ChevronRight" size={18} />
-              </button>
-            </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handlePrevMonth}
+              className="h-8 w-8"
+            >
+              <Icon name="ChevronLeft" size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleNextMonth}
+              className="h-8 w-8"
+            >
+              <Icon name="ChevronRight" size={16} />
+            </Button>
           </div>
         </CardTitle>
       </CardHeader>
