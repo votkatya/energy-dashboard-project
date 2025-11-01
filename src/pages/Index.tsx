@@ -241,9 +241,7 @@ const Index = () => {
                           ? 'bg-primary text-primary-foreground shadow-sm' 
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
-                    >
-                      Сегодня
-                    </button>
+                    >3 дня</button>
                     <button
                       onClick={() => setTimePeriod('week')}
                       className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
