@@ -212,22 +212,22 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           })}
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-6 flex-wrap">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-energy-low"></div>
-            <span className="text-sm">Плохие</span>
+        <div className="mt-6 flex items-center justify-center gap-3 md:gap-6">
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-low"></div>
+            <span className="text-xs md:text-sm">Плохие</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-energy-neutral"></div>
-            <span className="text-sm">Нейтральные</span>
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-neutral"></div>
+            <span className="text-xs md:text-sm">Нейтральные</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-energy-good"></div>
-            <span className="text-sm">Хорошие</span>
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-good"></div>
+            <span className="text-xs md:text-sm">Хорошие</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-energy-excellent"></div>
-            <span className="text-sm">Отличные</span>
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-excellent"></div>
+            <span className="text-xs md:text-sm">Отличные</span>
           </div>
         </div>
       </CardContent>
