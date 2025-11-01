@@ -104,6 +104,10 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 <Button
                   size="sm"
                   variant={period === 'custom' ? 'default' : 'outline'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowCalendar(!showCalendar);
+                  }}
                 >
                   <Icon name="Calendar" size={16} className="mr-1" />
                   Свой период
@@ -156,6 +160,10 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                   size="sm"
                   variant={period === 'custom' ? 'default' : 'outline'}
                   className="flex-1"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowCalendar(!showCalendar);
+                  }}
                 >
                   <Icon name="Calendar" size={16} />
                 </Button>
