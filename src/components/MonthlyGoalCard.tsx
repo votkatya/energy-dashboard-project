@@ -21,6 +21,11 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
   const { toast } = useToast();
 
   const currentGoal = goal?.goalScore || 4.0;
+  
+  const monthNames = [
+    'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
+    'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
+  ];
 
   const handleSaveGoal = () => {
     const value = parseFloat(goalValue);
@@ -76,7 +81,7 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Icon name="Target" size={20} className="text-primary" />
-                <span className="font-medium">Цель на месяц</span>
+                <span className="font-medium">Цель на {monthNames[currentMonth]}</span>
               </div>
               <div className="flex items-center gap-3">
                 {isEditing ? (
