@@ -78,7 +78,16 @@ const Index = () => {
   const getMonthlyStats = () => {
     if (!data?.entries) return { average: 0, total: 0 };
     
-    const monthlyEntries = filterEntriesByDays(data.entries, 30);
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    
+    const monthlyEntries = data.entries.filter((entry: any) => {
+      const entryDate = parseDate(entry.date);
+      if (!entryDate) return false;
+      return entryDate.getFullYear() === currentYear && entryDate.getMonth() === currentMonth;
+    });
+    
     const stats = calculateStats(monthlyEntries);
     
     return { average: stats.average, total: stats.total };
@@ -279,7 +288,7 @@ const Index = () => {
                   currentAverage={monthlyStats.average}
                   totalEntries={monthlyStats.total}
                   currentYear={new Date().getFullYear()}
-                  currentMonth={new Date().getMonth() + 1}
+                  currentMonth={new Date().getMonth()}
                 />
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
