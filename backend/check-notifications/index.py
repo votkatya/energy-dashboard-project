@@ -82,8 +82,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         if settings.get('dailyReminder'):
             reminder_time = settings.get('dailyReminderTime', '21:00')
+            reminder_hour = int(reminder_time.split(':')[0])
+            current_hour = current_time_user.hour
             
-            if current_time_str == reminder_time:
+            if current_hour == reminder_hour:
                 if not last_daily or last_daily.astimezone(tz).date() < today_date:
                     message = f"Привет, {full_name or 'друг'}! 👋\n\n"
                     message += "Время оценить свой день в FlowKat! 🌟\n\n"
@@ -99,7 +101,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         conn.commit()
                         print(f"✅ Daily reminder sent to user {user_id} ({full_name})")
         
-        if settings.get('weeklyReport') and current_weekday == 0 and current_time_str == '09:00':
+        if settings.get('weeklyReport') and current_weekday == 0 and current_hour == 9:
             if not last_weekly or last_weekly.astimezone(tz).date() < today_date:
                 weekly_stats = get_weekly_stats(conn, user_id, tz)
                 
@@ -125,7 +127,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         conn.commit()
                         print(f"✅ Weekly report sent to user {user_id} ({full_name})")
         
-        if settings.get('burnoutWarnings') and current_time_str == '20:00':
+        if settings.get('burnoutWarnings') and current_hour == 20:
             if not last_burnout or (current_time_utc - last_burnout).days >= 1:
                 burnout_risk = check_burnout_risk(conn, user_id)
                 
