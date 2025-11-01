@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
 import { format } from 'date-fns';
@@ -69,7 +69,25 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
       }));
   };
 
-  const chartData = filterEntriesByPeriod();
+  const calculateTrendLine = (data: { date: string; score: number }[]) => {
+    if (data.length < 2) return data;
+
+    const n = data.length;
+    const sumX = data.reduce((sum, _, i) => sum + i, 0);
+    const sumY = data.reduce((sum, d) => sum + d.score, 0);
+    const sumXY = data.reduce((sum, d, i) => sum + i * d.score, 0);
+    const sumX2 = data.reduce((sum, _, i) => sum + i * i, 0);
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    return data.map((d, i) => ({
+      ...d,
+      trend: slope * i + intercept
+    }));
+  };
+
+  const chartData = calculateTrendLine(filterEntriesByPeriod());
 
   return (
     <Card className="shadow-lg">
@@ -254,6 +272,16 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 stroke="hsl(var(--primary))" 
                 strokeWidth={3}
                 fill="url(#colorGradient)"
+                animationDuration={800}
+              />
+              <Line
+                type="monotone"
+                dataKey="trend"
+                stroke="hsl(var(--muted-foreground))"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={false}
+                activeDot={false}
                 animationDuration={800}
               />
             </AreaChart>
