@@ -20,8 +20,9 @@ interface EnergyCalendarProps {
 const API_URL = 'https://functions.poehali.dev/856f35ee-0e8f-46f6-a290-7fd2955e7469';
 
 const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
-  const [currentMonth, setCurrentMonth] = useState(9);
-  const [currentYear, setCurrentYear] = useState(2025);
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState<{ date: string; entry: any; dateKey: string } | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editScore, setEditScore] = useState<number | null>(null);
