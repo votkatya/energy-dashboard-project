@@ -65,10 +65,6 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
     setIsEditing(true);
   };
 
-  if (totalEntries === 0) {
-    return null;
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -121,7 +117,7 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
                   <>
                     <div className="text-right">
                       <div className="text-2xl font-heading font-bold text-primary">
-                        {currentAverage.toFixed(1)}
+                        {totalEntries > 0 ? currentAverage.toFixed(1) : '—'}
                       </div>
                       <div className="text-xs text-muted-foreground">из {currentGoal.toFixed(1)}</div>
                     </div>
@@ -146,7 +142,9 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
               />
             </div>
             <p className="text-sm text-muted-foreground text-center">
-              {currentAverage >= currentGoal
+              {totalEntries === 0
+                ? 'Заполни первый день, чтобы начать отслеживание'
+                : currentAverage >= currentGoal
                 ? '🎉 Цель достигнута!'
                 : `Еще ${(currentGoal - currentAverage).toFixed(1)} до цели`}
             </p>
