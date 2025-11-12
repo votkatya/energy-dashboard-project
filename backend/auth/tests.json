@@ -16,15 +16,16 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Login existing user",
+      "name": "Register new user",
       "method": "POST",
       "path": "/",
       "body": {
-        "action": "login",
+        "action": "register",
         "email": "test@example.com",
-        "password": "testpass123"
+        "password": "testpass123",
+        "name": "Test User"
       },
-      "expectedStatus": 200,
+      "expectedStatus": 201,
       "expectedBody": {
         "token": "string",
         "user": {

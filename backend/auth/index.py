@@ -96,6 +96,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 email = body_data.get('email', '').strip().lower()
                 password = body_data.get('password', '')
                 name = body_data.get('name', '')
+                telegram_chat_id = body_data.get('telegram_chat_id', '')
                 
                 if not email or not password:
                     return {
@@ -123,11 +124,30 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'isBase64Encoded': False
                     }
                 
+                telegram_name = None
+                if telegram_chat_id:
+                    try:
+                        import urllib.request
+                        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+                        if bot_token:
+                            url = f'https://api.telegram.org/bot{bot_token}/getChat?chat_id={telegram_chat_id}'
+                            with urllib.request.urlopen(url) as response:
+                                result = json.loads(response.read().decode('utf-8'))
+                                if result.get('ok'):
+                                    chat = result.get('result', {})
+                                    first_name = chat.get('first_name', '')
+                                    last_name = chat.get('last_name', '')
+                                    telegram_name = f"{first_name} {last_name}".strip()
+                    except Exception:
+                        pass
+                
+                final_name = name or telegram_name or ''
+                
                 password_hash = hash_password(password)
                 
                 cur.execute(
                     "INSERT INTO t_p45717398_energy_dashboard_pro.users (email, password_hash, full_name) VALUES (%s, %s, %s) RETURNING id, email, full_name",
-                    (email, password_hash, name)
+                    (email, password_hash, final_name)
                 )
                 user = cur.fetchone()
                 conn.commit()

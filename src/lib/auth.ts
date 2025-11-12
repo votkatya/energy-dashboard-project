@@ -26,7 +26,7 @@ class AuthService {
     }
   }
 
-  async register(email: string, password: string, name: string): Promise<AuthResponse> {
+  async register(email: string, password: string, name: string, telegramChatId?: string): Promise<AuthResponse> {
     const response = await fetch(AUTH_API, {
       method: 'POST',
       headers: {
@@ -37,6 +37,7 @@ class AuthService {
         email,
         password,
         name,
+        telegram_chat_id: telegramChatId,
       }),
     });
 

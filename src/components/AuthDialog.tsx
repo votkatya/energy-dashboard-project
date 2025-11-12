@@ -19,6 +19,11 @@ export default function AuthDialog({ open, onOpenChange, onAuthSuccess }: AuthDi
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const getTelegramChatId = (): string | undefined => {
+    const chatId = localStorage.getItem('telegram_chat_id');
+    return chatId || undefined;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -26,7 +31,8 @@ export default function AuthDialog({ open, onOpenChange, onAuthSuccess }: AuthDi
 
     try {
       if (mode === 'register') {
-        await authService.register(email, password, name);
+        const telegramChatId = getTelegramChatId();
+        await authService.register(email, password, name, telegramChatId);
       } else {
         await authService.login(email, password);
       }
@@ -57,14 +63,13 @@ export default function AuthDialog({ open, onOpenChange, onAuthSuccess }: AuthDi
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === 'register' && (
             <div className="space-y-2">
-              <Label htmlFor="name">Имя</Label>
+              <Label htmlFor="name">Имя (необязательно)</Label>
               <Input
                 id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ваше имя"
-                required={mode === 'register'}
+                placeholder="Автоматически из Telegram"
               />
             </div>
           )}
