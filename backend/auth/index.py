@@ -169,17 +169,18 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 }
             
             elif action == 'login':
-                email = body_data.get('email', '').strip().lower()
+                email_or_username = body_data.get('email', '').strip()
                 password = body_data.get('password', '')
                 
-                if not email or not password:
+                if not email_or_username or not password:
                     return {
                         'statusCode': 400,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                         'body': json.dumps({'error': 'Email и пароль обязательны'})
                     }
                 
-                cur.execute("SELECT id, email, full_name, password_hash FROM t_p45717398_energy_dashboard_pro.users WHERE email = %s", (email,))
+                email_lower = email_or_username.lower()
+                cur.execute("SELECT id, email, full_name, password_hash FROM t_p45717398_energy_dashboard_pro.users WHERE LOWER(email) = %s", (email_lower,))
                 user = cur.fetchone()
                 
                 if not user or not verify_password(password, user['password_hash']):
