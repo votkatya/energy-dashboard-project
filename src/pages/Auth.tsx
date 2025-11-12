@@ -77,7 +77,7 @@ function ElegantShape({
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [telegram, setTelegram] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
@@ -94,9 +94,9 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        await login(telegram, password);
+        await login(email, password);
       } else {
-        await register(telegram, password, name);
+        await register(email, password, name);
       }
       navigate('/');
     } catch (err) {
@@ -203,13 +203,13 @@ const Auth = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="telegram">Имя в Telegram</Label>
+                  <Label htmlFor="email">Почта</Label>
                   <Input
-                    id="telegram"
-                    type="text"
-                    placeholder="@username"
-                    value={telegram}
-                    onChange={(e) => setTelegram(e.target.value)}
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
