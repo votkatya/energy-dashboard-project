@@ -287,8 +287,6 @@ const Index = () => {
                 <MonthlyGoalCard
                   currentAverage={monthlyStats.average}
                   totalEntries={monthlyStats.total}
-                  currentYear={new Date().getFullYear()}
-                  currentMonth={new Date().getMonth()}
                 />
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
