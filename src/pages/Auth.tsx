@@ -203,11 +203,11 @@ const Auth = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Почта</Label>
+                  <Label htmlFor="email">Почта или username</Label>
                   <Input
                     id="email"
-                    type="email"
-                    placeholder="your@email.com"
+                    type="text"
+                    placeholder="your@email.com или username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
