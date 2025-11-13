@@ -174,9 +174,11 @@ const Auth = () => {
                 transition={{ duration: 0.5, type: "spring" }}
                 className="mx-auto mb-3"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg">
-                  <Icon name="Zap" size={24} className="text-primary-foreground" />
-                </div>
+                <img 
+                  src="https://cdn.poehali.dev/files/fb85270b-824f-4854-8274-3e0430aab75a.png" 
+                  alt="FlowKat Logo"
+                  className="w-12 h-12 rounded-xl"
+                />
               </motion.div>
               <CardTitle className="text-2xl font-heading text-primary mb-1">
                 FlowKat

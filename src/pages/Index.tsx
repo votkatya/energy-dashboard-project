@@ -110,9 +110,11 @@ const Index = () => {
           <div className="flex flex-col gap-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg">
-                  <Icon name="Zap" size={18} className="text-primary-foreground" />
-                </div>
+                <img 
+                  src="https://cdn.poehali.dev/files/fb85270b-824f-4854-8274-3e0430aab75a.png" 
+                  alt="FlowKat Logo"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl"
+                />
                 <div>
                   <h1 className="text-lg sm:text-xl font-heading font-bold text-foreground">FlowKat</h1>
                   <p className="text-xs text-muted-foreground hidden sm:block">Выгорание? Не сегодня!</p>
