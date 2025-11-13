@@ -18,7 +18,6 @@ const AppHeader = ({ onAddClick, onSettingsClick }: AppHeaderProps) => {
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-heading font-bold text-foreground">FlowKat</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">Выгорание? Не сегодня!</p>
             </div>
           </div>
           <div className="flex gap-2">
