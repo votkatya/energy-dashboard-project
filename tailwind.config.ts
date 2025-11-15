@@ -116,7 +116,7 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Manrope', 'sans-serif'],
-				heading: ['Syne', 'sans-serif']
+				heading: ['Montserrat', 'sans-serif']
 			}
 		}
 	},
