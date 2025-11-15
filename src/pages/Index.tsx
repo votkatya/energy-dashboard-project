@@ -111,12 +111,12 @@ const Index = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <img 
-                  src="https://cdn.poehali.dev/files/fb85270b-824f-4854-8274-3e0430aab75a.png" 
+                  src="https://cdn.poehali.dev/projects/c175b796-7fd4-412b-835b-94e492638d09/files/f71e1f12-ab6f-4229-9dfc-8d00890e9934.jpg" 
                   alt="FlowKat Logo"
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover"
                 />
                 <div>
-                  <h1 className="text-lg sm:text-xl font-heading font-bold text-foreground">FlowKat</h1>
+                  <h1 className="text-lg sm:text-xl font-heading font-extrabold text-primary" style={{ letterSpacing: '0.02em' }}>FlowKat</h1>
                 </div>
               </div>
               <div className="flex gap-2">

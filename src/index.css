@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -15,10 +15,10 @@
     --popover: 210 10% 25%;
     --popover-foreground: 210 10% 95%;
 
-    --primary: 81 54% 58%;
+    --primary: 68 100% 34%;
     --primary-foreground: 210 18% 12%;
-    --primary-light: 81 91% 67%;
-    --primary-dark: 81 63% 52%;
+    --primary-light: 68 100% 44%;
+    --primary-dark: 68 100% 24%;
 
     --secondary: 210 10% 28%;
     --secondary-foreground: 210 5% 98%;
@@ -41,8 +41,8 @@
     --energy-low: 353 93% 70%;
     --energy-medium-low: 353 93% 70%;
     --energy-neutral: 204 96% 69%;
-    --energy-good: 81 63% 52%;
-    --energy-excellent: 81 70% 40%;
+    --energy-good: 68 100% 34%;
+    --energy-excellent: 68 100% 24%;
 
     --sidebar-background: 0 0% 98%;
 

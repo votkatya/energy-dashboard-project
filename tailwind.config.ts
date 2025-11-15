@@ -115,8 +115,8 @@ export default {
 				'slide-up': 'slide-up 0.3s ease-out'
 			},
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				heading: ['Poppins', 'sans-serif']
+				sans: ['Manrope', 'sans-serif'],
+				heading: ['Syne', 'sans-serif']
 			}
 		}
 	},

@@ -17,7 +17,7 @@ const AppHeader = ({ onAddClick, onSettingsClick }: AppHeaderProps) => {
               <Icon name="Zap" size={18} className="text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-heading font-bold text-foreground">FlowKat</h1>
+              <h1 className="text-lg sm:text-xl font-heading font-extrabold text-primary" style={{ letterSpacing: '0.02em' }}>FlowKat</h1>
             </div>
           </div>
           <div className="flex gap-2">
