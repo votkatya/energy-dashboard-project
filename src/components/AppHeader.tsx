@@ -13,9 +13,11 @@ const AppHeader = ({ onAddClick, onSettingsClick }: AppHeaderProps) => {
       <div className="flex flex-col gap-4 mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg">
-              <Icon name="Zap" size={18} className="text-primary-foreground" />
-            </div>
+            <img 
+              src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
+              alt="FlowKat Logo"
+              className="w-8 h-8 sm:w-9 sm:h-9"
+            />
             <div>
               <h1 className="text-lg sm:text-xl font-heading font-extrabold text-primary" style={{ letterSpacing: '0.02em' }}>FlowKat</h1>
             </div>

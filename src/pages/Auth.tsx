@@ -175,9 +175,9 @@ const Auth = () => {
                 className="mx-auto mb-3"
               >
                 <img 
-                  src="https://cdn.poehali.dev/projects/c175b796-7fd4-412b-835b-94e492638d09/files/f71e1f12-ab6f-4229-9dfc-8d00890e9934.jpg" 
+                  src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
                   alt="FlowKat Logo"
-                  className="w-12 h-12 rounded-xl object-cover"
+                  className="w-12 h-12"
                 />
               </motion.div>
               <CardTitle className="text-2xl font-heading font-extrabold text-primary mb-1" style={{ letterSpacing: '0.02em' }}>
