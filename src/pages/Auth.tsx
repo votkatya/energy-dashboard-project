@@ -48,32 +48,32 @@ const Auth = () => {
           className="w-full max-w-md"
         >
           <div 
-            className="rounded-3xl shadow-2xl p-8"
+            className="rounded-3xl shadow-2xl px-12 py-10"
             style={{
               backgroundColor: 'rgba(23, 30, 38, 0.5)',
               border: '1px solid #4D5463',
               backdropFilter: 'blur(10px)'
             }}
           >
-            <div className="text-center pb-8">
+            <div className="text-center pb-10">
               <motion.div
                 initial={{ scale: 0.5 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, type: "spring" }}
-                className="mx-auto mb-6"
+                className="mx-auto mb-8"
               >
                 <img 
                   src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
                   alt="FlowKat Logo"
-                  className="w-16 h-16 mx-auto"
+                  className="w-20 h-20 mx-auto"
                 />
               </motion.div>
-              <h1 className="text-3xl font-heading font-bold mb-2" style={{ color: '#94AF00' }}>
+              <h1 className="text-4xl font-heading font-bold" style={{ color: '#94AF00' }}>
                 FlowKat
               </h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {!isLogin && (
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-white font-sans">Имя</Label>
@@ -93,8 +93,8 @@ const Auth = () => {
                 </div>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-white font-sans">Почта</Label>
+              <div className="space-y-3">
+                <Label htmlFor="email" className="text-white font-sans text-base">Почта</Label>
                 <Input
                   id="email"
                   type="text"
@@ -102,7 +102,7 @@ const Auth = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-12 rounded-full text-white placeholder:text-gray-400 font-sans"
+                  className="h-14 rounded-full text-white placeholder:text-gray-400 font-sans text-base"
                   style={{
                     backgroundColor: '#2C333B',
                     border: '1px solid #4D5463'
@@ -110,8 +110,8 @@ const Auth = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-white font-sans">Пароль</Label>
+              <div className="space-y-3">
+                <Label htmlFor="password" className="text-white font-sans text-base">Пароль</Label>
                 <Input
                   id="password"
                   type="password"
@@ -120,7 +120,7 @@ const Auth = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="h-12 rounded-full text-white placeholder:text-gray-400 font-sans"
+                  className="h-14 rounded-full text-white placeholder:text-gray-400 font-sans text-base"
                   style={{
                     backgroundColor: '#2C333B',
                     border: '1px solid #4D5463'
@@ -140,7 +140,7 @@ const Auth = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 rounded-full text-black font-bold text-base font-sans"
+                className="w-full h-14 rounded-full text-black font-bold text-lg font-sans mt-8"
                 size="lg"
                 disabled={isLoading}
                 style={{
@@ -151,14 +151,14 @@ const Auth = () => {
                 {isLoading ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
               </Button>
 
-              <div className="text-center pt-2">
+              <div className="text-center pt-4">
                 <button
                   type="button"
                   onClick={() => {
                     setIsLogin(!isLogin);
                     setError('');
                   }}
-                  className="text-white hover:text-gray-300 transition-colors text-sm font-sans"
+                  className="text-white hover:text-gray-300 transition-colors text-base font-sans"
                 >
                   {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
                 </button>
