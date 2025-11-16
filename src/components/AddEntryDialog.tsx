@@ -15,7 +15,7 @@ interface AddEntryDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const API_URL = 'https://functions.poehali.dev/856f35ee-0e8f-46f6-a290-7fd2955e7469';
+const API_URL = 'https://functions.poehali.dev/2d4b8a75-8e94-40d2-8412-5e0040b74b86';
 
 const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   const [score, setScore] = useState<number | null>(null);
