@@ -276,6 +276,20 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                 </div>
               </div>
               
+              {selectedDay.entry.tags && selectedDay.entry.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {selectedDay.entry.tags.map((tagId: string) => {
+                    const tag = tags.find(t => t.id === tagId);
+                    return tag ? (
+                      <div key={tagId} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-medium">
+                        <span>{tag.icon}</span>
+                        <span>{tag.label}</span>
+                      </div>
+                    ) : null;
+                  })}
+                </div>
+              )}
+
               {selectedDay.entry.thoughts && (
                 <div className="p-4 rounded-lg bg-secondary/20">
                   <p className="text-sm font-medium mb-2">Заметки:</p>

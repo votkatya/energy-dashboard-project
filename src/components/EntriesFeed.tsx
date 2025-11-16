@@ -12,6 +12,7 @@ interface Entry {
   date: string;
   score: number;
   thoughts?: string;
+  tags?: string[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -28,6 +29,17 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   const [visibleCount, setVisibleCount] = useState(10);
   const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const tags = [
+    { id: 'work', label: 'Работа', icon: '💼' },
+    { id: 'family', label: 'Семья', icon: '👨‍👩‍👧' },
+    { id: 'sport', label: 'Спорт', icon: '🎯' },
+    { id: 'sleep', label: 'Сон', icon: '😴' },
+    { id: 'hobby', label: 'Хобби', icon: '🎨' },
+    { id: 'social', label: 'Общение', icon: '👥' },
+    { id: 'study', label: 'Учёба', icon: '📚' },
+    { id: 'health', label: 'Здоровье', icon: '💊' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -236,6 +248,21 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
                             {formatDisplayDate(entry.date)}
                           </div>
                         </div>
+                        
+                        {entry.tags && entry.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mb-3">
+                            {entry.tags.map((tagId: string) => {
+                              const tag = tags.find(t => t.id === tagId);
+                              return tag ? (
+                                <div key={tagId} className="flex items-center gap-1 px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium">
+                                  <span className="text-sm">{tag.icon}</span>
+                                  <span>{tag.label}</span>
+                                </div>
+                              ) : null;
+                            })}
+                          </div>
+                        )}
+
                         {entry.thoughts && (
                           <div>
                             <p className={`text-muted-foreground text-sm leading-relaxed ${!isExpanded && needsExpansion ? 'line-clamp-2' : ''}`}>
