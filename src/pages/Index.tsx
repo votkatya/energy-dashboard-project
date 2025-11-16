@@ -15,6 +15,7 @@ import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import AIAnalysisCard from '@/components/AIAnalysisCard';
+import BottomNav from '@/components/BottomNav';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
 import { parseDate } from '@/utils/dateUtils';
@@ -132,23 +133,6 @@ const Index = () => {
               <div className="flex gap-2">
                 <NotificationsDialog />
                 <Button 
-                  onClick={() => setActiveTab('settings')}
-                  size="icon"
-                  variant="outline"
-                  className="sm:hidden"
-                >
-                  <Icon name="Settings" size={20} />
-                </Button>
-                <Button 
-                  onClick={() => setActiveTab('settings')}
-                  size="lg"
-                  variant="outline"
-                  className="hidden sm:flex glass-effect hover:glass-card transition-all"
-                >
-                  <Icon name="Settings" size={20} className="mr-2" />
-                  Настройки
-                </Button>
-                <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
                   className="hidden sm:flex"
@@ -168,28 +152,35 @@ const Index = () => {
           </div>
         </header>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 glass-card p-1 h-auto sm:h-14">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pb-20">
+          <TabsList className="hidden sm:grid w-full grid-cols-4 mb-8 glass-card p-1 h-14">
             <TabsTrigger 
               value="home" 
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
             >
-              <Icon name="Home" size={18} className="sm:mr-0" />
-              <span className="hidden sm:inline">Главная</span>
+              <Icon name="Home" size={18} className="mr-2" />
+              Главная
             </TabsTrigger>
             <TabsTrigger 
               value="stats"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
             >
-              <Icon name="BarChart3" size={18} className="sm:mr-0" />
-              <span className="hidden sm:inline">Статистика</span>
+              <Icon name="BarChart3" size={18} className="mr-2" />
+              Статистика
             </TabsTrigger>
             <TabsTrigger 
               value="trends"
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all flex-col sm:flex-row gap-1 sm:gap-2 py-2 px-1 text-xs sm:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
             >
-              <Icon name="Activity" size={18} className="sm:mr-0" />
-              <span className="hidden sm:inline">Тренды</span>
+              <Icon name="Activity" size={18} className="mr-2" />
+              Тренды
+            </TabsTrigger>
+            <TabsTrigger 
+              value="settings"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+            >
+              <Icon name="Settings" size={18} className="mr-2" />
+              Настройки
             </TabsTrigger>
           </TabsList>
 
@@ -596,6 +587,10 @@ const Index = () => {
       </div>
 
       <AddEntryDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
+      
+      <div className="sm:hidden">
+        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
     </div>
   );
 };
