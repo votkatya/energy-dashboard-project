@@ -166,7 +166,7 @@ const Auth = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <Card className="border-2 shadow-2xl bg-card">
+          <Card className="border-2 shadow-2xl bg-[#171E26]/50 backdrop-blur-md">
             <CardHeader className="text-center pb-6">
               <motion.div
                 initial={{ scale: 0.5 }}
