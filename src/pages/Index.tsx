@@ -297,7 +297,40 @@ const Index = () => {
                   <AIAnalysisCard />
                 </div>
 
-                <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+                <div className="flex justify-center mb-6">
+                  <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
+                    <button
+                      onClick={() => setHomeView('calendar')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                        homeView === 'calendar' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <Icon name="Calendar" size={18} />
+                      Календарь
+                    </button>
+                    <button
+                      onClick={() => setHomeView('feed')}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                        homeView === 'feed' 
+                          ? 'bg-primary text-primary-foreground shadow-sm' 
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <Icon name="List" size={18} />
+                      Лента
+                    </button>
+                  </div>
+                </div>
+
+                {homeView === 'calendar' ? (
+                  <EnergyCalendar data={data} isLoading={isLoading} />
+                ) : (
+                  <EntriesFeed entries={data?.entries || []} />
+                )}
+
+                <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 my-8">
                   <AnimatedCard delay={0.1} className="glass-card">
                     <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
                       <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
@@ -343,42 +376,7 @@ const Index = () => {
               </>
             )}
 
-            {!isLoading && !error && (
-              <>
-                <div className="flex justify-center mb-6">
-                  <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
-                    <button
-                      onClick={() => setHomeView('calendar')}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-                        homeView === 'calendar' 
-                          ? 'bg-primary text-primary-foreground shadow-sm' 
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      <Icon name="Calendar" size={18} />
-                      Календарь
-                    </button>
-                    <button
-                      onClick={() => setHomeView('feed')}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-                        homeView === 'feed' 
-                          ? 'bg-primary text-primary-foreground shadow-sm' 
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      <Icon name="List" size={18} />
-                      Лента
-                    </button>
-                  </div>
-                </div>
 
-                {homeView === 'calendar' ? (
-                  <EnergyCalendar data={data} isLoading={isLoading} />
-                ) : (
-                  <EntriesFeed entries={data?.entries || []} />
-                )}
-              </>
-            )}
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in space-y-6">
