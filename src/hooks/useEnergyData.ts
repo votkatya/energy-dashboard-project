@@ -7,6 +7,7 @@ interface EnergyEntry {
   date: string;
   score: number;
   thoughts: string;
+  tags?: string[];
   category?: string;
   week?: string;
   month?: string;
@@ -71,7 +72,8 @@ export const useEnergyData = () => {
       if (!response.ok) {
         throw new Error('Failed to fetch energy data');
       }
-      const rawEntries: EnergyEntry[] = await response.json();
+      const data = await response.json();
+      const rawEntries: EnergyEntry[] = data.entries || [];
       console.log('📥 RAW данные с бэкенда (первые 3):', rawEntries.slice(0, 3));
       console.log('📅 Порядок дат:', {
         first: rawEntries[0]?.date,
@@ -87,7 +89,7 @@ export const useEnergyData = () => {
       
       const entries = sortedEntries.map(addDerivedFields);
       console.log('✅ После сортировки (последние 3):', entries.slice(-3));
-      const stats = calculateStats(entries);
+      const stats = data.stats || calculateStats(entries);
       
       return { entries, stats };
     },
