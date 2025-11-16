@@ -209,7 +209,7 @@ const Auth = () => {
                   <Input
                     id="email"
                     type="text"
-                    placeholder="your@email.com или username"
+                    placeholder="example@mail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
