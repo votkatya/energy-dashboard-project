@@ -47,14 +47,14 @@ const AIAnalysisCard = () => {
 
   return (
     <Card className="glass-card border-primary/20 shadow-lg overflow-hidden">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Icon name="Sparkles" size={24} className="text-primary" />
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+      <CardContent className="pt-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Icon name="Sparkles" size={20} className="text-primary" />
+            <span className="font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               AI Анализ
             </span>
-          </CardTitle>
+          </div>
           <Button 
             onClick={fetchAnalysis} 
             disabled={isLoading}
@@ -74,15 +74,6 @@ const AIAnalysisCard = () => {
             )}
           </Button>
         </div>
-      </CardHeader>
-      <CardContent>
-        {!analysis && !error && !isLoading && (
-          <div className="text-center py-6 text-muted-foreground">
-            <Icon name="Brain" size={48} className="mx-auto mb-3 opacity-50" />
-            <p className="text-sm">Нажмите кнопку, чтобы получить персональные рекомендации на основе ваших записей</p>
-          </div>
-        )}
-
         {isLoading && (
           <div className="flex items-center justify-center py-8">
             <Icon name="Loader2" size={32} className="animate-spin text-primary" />
