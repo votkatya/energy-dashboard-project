@@ -1,4 +1,5 @@
 {
+  "perplexity-analyze": "https://functions.poehali.dev/6008afa7-60fc-4a40-86b2-8042fb78ec44",
   "test-notification": "https://functions.poehali.dev/1ebf4a4a-104a-451b-b3bd-a539971ccaf4",
   "test-db": "https://functions.poehali.dev/1f888501-d6b3-4c92-af04-1af6ad36675d",
   "get-chat-id": "https://functions.poehali.dev/1ba99261-07cc-4f60-a65f-2a68c39f39ed",

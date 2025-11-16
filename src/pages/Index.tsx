@@ -14,6 +14,7 @@ import AddEntryDialog from '@/components/AddEntryDialog';
 import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
+import AIAnalysisCard from '@/components/AIAnalysisCard';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
 import { parseDate } from '@/utils/dateUtils';
@@ -291,6 +292,10 @@ const Index = () => {
                   currentYear={new Date().getFullYear()}
                   currentMonth={new Date().getMonth()}
                 />
+
+                <div className="mb-8">
+                  <AIAnalysisCard />
+                </div>
 
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
                   <AnimatedCard delay={0.1} className="glass-card">
