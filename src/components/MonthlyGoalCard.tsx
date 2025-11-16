@@ -30,7 +30,7 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries }: MonthlyGoalCardProps)
         <CardContent className="pt-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-sm sm:text-base font-medium whitespace-nowrap">Ваш уровень энергии:</span>
+              <span className="text-sm sm:text-base font-medium whitespace-nowrap">Уровень энергии:</span>
               <span className={`text-lg sm:text-xl font-heading font-bold ${level.color} whitespace-nowrap`}>
                 {totalEntries > 0 ? `${currentAverage.toFixed(1)} - ${level.label}` : '— '}
               </span>
