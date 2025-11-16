@@ -27,8 +27,28 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editScore, setEditScore] = useState<number | null>(null);
   const [editNotes, setEditNotes] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const queryClient = useQueryClient();
+
+  const tags = [
+    { id: 'work', label: 'Работа', icon: '💼' },
+    { id: 'family', label: 'Семья', icon: '👨‍👩‍👧' },
+    { id: 'sport', label: 'Спорт', icon: '🎯' },
+    { id: 'sleep', label: 'Сон', icon: '😴' },
+    { id: 'hobby', label: 'Хобби', icon: '🎨' },
+    { id: 'social', label: 'Общение', icon: '👥' },
+    { id: 'study', label: 'Учёба', icon: '📚' },
+    { id: 'health', label: 'Здоровье', icon: '💊' },
+  ];
+
+  const toggleTag = (tagId: string) => {
+    if (selectedTags.includes(tagId)) {
+      setSelectedTags(selectedTags.filter(id => id !== tagId));
+    } else if (selectedTags.length < 3) {
+      setSelectedTags([...selectedTags, tagId]);
+    }
+  };
 
   const monthNames = [
     "Январь",
@@ -195,9 +215,11 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                   if (dayData?.entry) {
                     setEditScore(dayData.entry.score);
                     setEditNotes(dayData.entry.thoughts || '');
+                    setSelectedTags(dayData.entry.tags || []);
                   } else {
                     setEditScore(null);
                     setEditNotes('');
+                    setSelectedTags([]);
                   }
                 }}
                 className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
@@ -228,7 +250,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
         </div>
       </CardContent>
 
-      <Dialog open={!!selectedDay} onOpenChange={() => { setSelectedDay(null); setIsEditing(false); }}>
+      <Dialog open={!!selectedDay} onOpenChange={() => { setSelectedDay(null); setIsEditing(false); setSelectedTags([]); }}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -326,6 +348,37 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
               </div>
 
               <div>
+                <Label className="mb-3 block">Что больше повлияло на оценку?</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {tags.map((tag) => {
+                    const isSelected = selectedTags.includes(tag.id);
+                    const isDisabled = !isSelected && selectedTags.length >= 3;
+                    return (
+                      <button
+                        key={tag.id}
+                        type="button"
+                        onClick={() => toggleTag(tag.id)}
+                        disabled={isDisabled}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                          isSelected
+                            ? 'bg-primary text-primary-foreground'
+                            : isDisabled
+                            ? 'bg-muted/30 text-muted-foreground opacity-50 cursor-not-allowed'
+                            : 'bg-secondary/50 hover:bg-secondary text-foreground'
+                        }`}
+                      >
+                        <span>{tag.icon}</span>
+                        <span>{tag.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 text-center">
+                  Выберите до 3 тегов
+                </p>
+              </div>
+
+              <div>
                 <Label htmlFor="edit-notes" className="mb-2 block">Заметки о дне</Label>
                 <Textarea
                   id="edit-notes"
@@ -345,6 +398,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                     if (selectedDay?.entry) {
                       setEditScore(selectedDay.entry.score);
                       setEditNotes(selectedDay.entry.thoughts || '');
+                      setSelectedTags(selectedDay.entry.tags || []);
                     }
                   }}
                 >
@@ -368,6 +422,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                           date: selectedDay?.date,
                           score: editScore,
                           thoughts: editNotes,
+                          tags: selectedTags,
                         }),
                       });
                       if (!response.ok) throw new Error('Failed to save');
