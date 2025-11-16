@@ -137,7 +137,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
   }
 
   return (
-    <Card className="shadow-lg">
+    <Card className="glass-card">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
