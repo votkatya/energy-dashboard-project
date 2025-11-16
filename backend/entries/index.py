@@ -78,7 +78,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         if method == 'GET':
             cur.execute("""
-                SELECT id, date, score, thoughts, category, created_at
+                SELECT id, date, score, thoughts, category, tags, created_at
                 FROM energy_entries
                 WHERE user_id = %s
                 ORDER BY date DESC
@@ -100,6 +100,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'score': entry['score'],
                     'thoughts': entry['thoughts'] or '',
                     'category': entry['category'] or '',
+                    'tags': entry.get('tags', []),
                     'week': f"Неделя {dt.isocalendar()[1]}",
                     'month': dt.strftime('%B %Y')
                 })
@@ -142,6 +143,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             score = body_data.get('score')
             thoughts = body_data.get('thoughts', '')
             category = body_data.get('category', '')
+            tags = body_data.get('tags', [])
             
             if not date_str or score is None:
                 return {
@@ -170,16 +172,27 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'body': json.dumps({'error': 'Неверный формат даты'})
                 }
             
+            tags_json = json.dumps(tags)
+            
             cur.execute("""
-                INSERT INTO energy_entries (user_id, date, score, thoughts, category)
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO energy_entries (user_id, date, score, thoughts, category, tags)
+                VALUES (%s, %s, %s, %s, %s, %s::jsonb)
                 ON CONFLICT (user_id, date) 
                 DO UPDATE SET score = EXCLUDED.score, thoughts = EXCLUDED.thoughts, 
-                              category = EXCLUDED.category, updated_at = CURRENT_TIMESTAMP
-                RETURNING id, date, score, thoughts, category
-            """, (user_id, db_date, score, thoughts, category))
+                              category = EXCLUDED.category, tags = EXCLUDED.tags,
+                              updated_at = CURRENT_TIMESTAMP
+                RETURNING id, date, score, thoughts, category, tags
+            """, (user_id, db_date, score, thoughts, category, tags_json))
             
             entry = cur.fetchone()
+            
+            if tags:
+                for tag in tags:
+                    cur.execute("""
+                        INSERT INTO tag_analytics (entry_id, tag, score, entry_date, user_id)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (entry['id'], tag, score, db_date, user_id))
+            
             conn.commit()
             
             entry_date = entry['date']
@@ -199,7 +212,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'date': dt.strftime('%d.%m.%Y'),
                     'score': entry['score'],
                     'thoughts': entry['thoughts'] or '',
-                    'category': entry['category'] or ''
+                    'category': entry['category'] or '',
+                    'tags': entry.get('tags', [])
                 })
             }
         
