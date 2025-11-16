@@ -107,6 +107,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 Дай краткий анализ (2-3 предложения) и 3-5 конкретных рекомендаций для повышения энергии. Отвечай на русском языке, кратко и по делу."""
     
     try:
+        print(f"DEBUG: Making request to Perplexity API")
         response = requests.post(
             'https://api.perplexity.ai/chat/completions',
             headers={
@@ -125,6 +126,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             timeout=30
         )
         
+        print(f"DEBUG: Perplexity response status: {response.status_code}")
+        print(f"DEBUG: Perplexity response body: {response.text[:500]}")
+        
         if response.status_code != 200:
             return {
                 'statusCode': 500,
@@ -132,7 +136,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({'error': f'Perplexity API error: {response.status_code}'})
+                'body': json.dumps({'error': f'Perplexity API error: {response.status_code}', 'details': response.text[:200]})
             }
         
         result = response.json()
