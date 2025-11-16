@@ -20,6 +20,7 @@ const API_URL = 'https://functions.poehali.dev/856f35ee-0e8f-46f6-a290-7fd2955e7
 const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   const [score, setScore] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [dateMode, setDateMode] = useState<'today' | 'yesterday' | 'custom'>('today');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -32,6 +33,25 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
     { value: 4, label: 'Хорошо', color: 'bg-energy-good hover:bg-energy-good/80' },
     { value: 5, label: 'Отлично', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
   ];
+
+  const tags = [
+    { id: 'work', label: 'Работа', icon: '💼' },
+    { id: 'family', label: 'Семья', icon: '👨‍👩‍👧' },
+    { id: 'sport', label: 'Спорт', icon: '🎯' },
+    { id: 'sleep', label: 'Сон', icon: '😴' },
+    { id: 'hobby', label: 'Хобби', icon: '🎨' },
+    { id: 'social', label: 'Общение', icon: '👥' },
+    { id: 'study', label: 'Учёба', icon: '📚' },
+    { id: 'health', label: 'Здоровье', icon: '💊' },
+  ];
+
+  const toggleTag = (tagId: string) => {
+    if (selectedTags.includes(tagId)) {
+      setSelectedTags(selectedTags.filter(id => id !== tagId));
+    } else if (selectedTags.length < 3) {
+      setSelectedTags([...selectedTags, tagId]);
+    }
+  };
 
   const getDateForSave = () => {
     const formatLocalDate = (date: Date) => {
@@ -68,6 +88,7 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
           date: dateToSave,
           score: score,
           thoughts: notes,
+          tags: selectedTags,
         }),
       });
 
@@ -80,6 +101,7 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
       onOpenChange(false);
       setScore(null);
       setNotes('');
+      setSelectedTags([]);
     } catch (error) {
       console.error('Error saving entry:', error);
       alert('Не удалось сохранить запись. Попробуйте ещё раз.');
@@ -168,6 +190,37 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
                 {scores.find(s => s.value === score)?.label}
               </p>
             )}
+          </div>
+
+          <div>
+            <Label className="mb-3 block">Что больше повлияло на оценку?</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {tags.map((tag) => {
+                const isSelected = selectedTags.includes(tag.id);
+                const isDisabled = !isSelected && selectedTags.length >= 3;
+                return (
+                  <button
+                    key={tag.id}
+                    type="button"
+                    onClick={() => toggleTag(tag.id)}
+                    disabled={isDisabled}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                      isSelected
+                        ? 'bg-primary text-primary-foreground'
+                        : isDisabled
+                        ? 'bg-muted/30 text-muted-foreground opacity-50 cursor-not-allowed'
+                        : 'bg-secondary/50 hover:bg-secondary text-foreground'
+                    }`}
+                  >
+                    <span>{tag.icon}</span>
+                    <span>{tag.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2 text-center">
+              Выберите до 3 тегов
+            </p>
           </div>
 
           <div>
