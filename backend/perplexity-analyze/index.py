@@ -64,13 +64,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     conn = psycopg2.connect(database_url)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     
-    cursor.execute('''
+    user_id_escaped = str(user_id).replace("'", "''")
+    
+    cursor.execute(f'''
         SELECT entry_date, score, thoughts 
         FROM t_p45717398_energy_dashboard_pro.energy_entries 
-        WHERE user_id = %s 
+        WHERE user_id = '{user_id_escaped}' 
         ORDER BY entry_date DESC 
         LIMIT 30
-    ''', (user_id,))
+    ''')
     
     entries = cursor.fetchall()
     cursor.close()
