@@ -115,7 +115,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Content-Type': 'application/json'
             },
             json={
-                'model': 'llama-3.1-sonar-small-128k-chat',
+                'model': 'sonar',
                 'messages': [
                     {'role': 'system', 'content': 'Ты эксперт по продуктивности и энергии. Отвечай кратко и конкретно на русском языке.'},
                     {'role': 'user', 'content': prompt}
