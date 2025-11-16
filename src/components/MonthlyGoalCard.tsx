@@ -1,69 +1,24 @@
-import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import Icon from '@/components/ui/icon';
 import { motion } from 'framer-motion';
-import { useMonthlyGoal } from '@/hooks/useMonthlyGoal';
-import { useToast } from '@/hooks/use-toast';
 
 interface MonthlyGoalCardProps {
   currentAverage: number;
   totalEntries: number;
-  currentYear: number;
-  currentMonth: number;
 }
 
-const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMonth }: MonthlyGoalCardProps) => {
-  const { goal, setGoal, isSettingGoal } = useMonthlyGoal(currentYear, currentMonth);
-  const [isEditing, setIsEditing] = useState(false);
-  const [goalValue, setGoalValue] = useState('4.0');
-  const { toast } = useToast();
-
-  const currentGoal = goal?.goalScore || 4.0;
-  
-  const monthNames = [
-    'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
-    'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
-  ];
-
-  const handleSaveGoal = () => {
-    const value = parseFloat(goalValue);
-    
-    if (isNaN(value) || value < 0 || value > 5) {
-      toast({
-        title: 'Ошибка',
-        description: 'Цель должна быть числом от 0 до 5',
-        variant: 'destructive',
-      });
-      return;
+const MonthlyGoalCard = ({ currentAverage, totalEntries }: MonthlyGoalCardProps) => {
+  const getEnergyLevel = (score: number): { label: string; color: string } => {
+    if (score < 3.5) {
+      return { label: 'Низкий', color: 'text-orange-400' };
+    } else if (score >= 3.5 && score < 4.5) {
+      return { label: 'Хорошо', color: 'text-lime-400' };
+    } else {
+      return { label: 'Высокий', color: 'text-green-400' };
     }
-
-    setGoal(
-      { year: currentYear, month: currentMonth, goalScore: value },
-      {
-        onSuccess: () => {
-          toast({
-            title: 'Цель обновлена',
-            description: `Новая цель на месяц: ${value}`,
-          });
-          setIsEditing(false);
-        },
-        onError: () => {
-          toast({
-            title: 'Ошибка',
-            description: 'Не удалось сохранить цель',
-            variant: 'destructive',
-          });
-        },
-      }
-    );
   };
 
-  const handleEdit = () => {
-    setGoalValue(currentGoal.toString());
-    setIsEditing(true);
-  };
+  const level = getEnergyLevel(currentAverage);
+  const progressPercent = Math.min((currentAverage / 5) * 100, 100);
 
   return (
     <motion.div
@@ -73,81 +28,21 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries, currentYear, currentMon
     >
       <Card className="glass-card mb-8 md:mb-10">
         <CardContent className="pt-6">
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Icon name="Target" size={20} className="text-primary" />
-                <span className="font-medium">Цель на {monthNames[currentMonth]}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {isEditing ? (
-                  <>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      max="5"
-                      value={goalValue}
-                      onChange={(e) => setGoalValue(e.target.value)}
-                      className="w-20 h-9"
-                      autoFocus
-                    />
-                    <Button
-                      size="sm"
-                      onClick={handleSaveGoal}
-                      disabled={isSettingGoal}
-                      className="h-9"
-                    >
-                      {isSettingGoal ? (
-                        <Icon name="Loader2" size={16} className="animate-spin" />
-                      ) : (
-                        <Icon name="Check" size={16} />
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setIsEditing(false)}
-                      className="h-9"
-                    >
-                      <Icon name="X" size={16} />
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="text-right">
-                      <div className="text-2xl font-heading font-bold text-primary">
-                        {totalEntries > 0 ? currentAverage.toFixed(1) : '—'}
-                      </div>
-                      <div className="text-xs text-muted-foreground">из {currentGoal.toFixed(1)}</div>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={handleEdit}
-                      className="h-9 w-9 p-0"
-                    >
-                      <Icon name="Pencil" size={16} />
-                    </Button>
-                  </>
-                )}
-              </div>
+              <span className="text-lg font-medium">Ваш уровень энергии:</span>
+              <span className={`text-2xl font-heading font-bold ${level.color}`}>
+                {totalEntries > 0 ? `${currentAverage.toFixed(1)} - ${level.label}` : '— '}
+              </span>
             </div>
-            <div className="relative h-3 bg-muted/50 rounded-full overflow-hidden backdrop-blur-sm">
+            <div className="relative h-4 bg-muted/30 rounded-full overflow-hidden backdrop-blur-sm">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${Math.min((currentAverage / currentGoal) * 100, 100)}%` }}
+                animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
-                className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-primary via-primary-light to-primary glow-primary"
+                className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-lime-500 via-lime-400 to-green-400 glow-primary"
               />
             </div>
-            <p className="text-sm text-muted-foreground text-center">
-              {totalEntries === 0
-                ? 'Заполни первый день, чтобы начать отслеживание'
-                : currentAverage >= currentGoal
-                ? '🎉 Цель достигнута!'
-                : `Еще ${(currentGoal - currentAverage).toFixed(1)} до цели`}
-            </p>
           </div>
         </CardContent>
       </Card>

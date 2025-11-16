@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import EnergyCalendar from '@/components/EnergyCalendar';
 import EntriesFeed from '@/components/EntriesFeed';
-import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import { motion } from 'framer-motion';
 import type { EnergyEntry } from '@/types/energy';
@@ -105,52 +104,12 @@ const HomeTab = ({
             </motion.div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <MonthlyGoalCard 
-              currentAverage={monthlyStats.average}
-              totalEntries={monthlyStats.total}
-            />
-            
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Icon name="TrendingUp" size={24} />
-                  Последние записи
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {recentEntries.length > 0 ? (
-                  <div className="space-y-3">
-                    {recentEntries.map((entry, index) => (
-                      <AnimatedCard
-                        key={entry.date}
-                        delay={index * 0.1}
-                        className={`p-4 rounded-xl ${getColorClass(entry.energy)}`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium text-sm">{entry.date}</p>
-                            {entry.note && (
-                              <p className="text-xs text-muted-foreground mt-1">{entry.note}</p>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Icon name="Zap" size={16} />
-                            <span className="font-bold">{entry.energy}</span>
-                          </div>
-                        </div>
-                      </AnimatedCard>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Icon name="Calendar" size={48} className="mx-auto mb-3 opacity-50" />
-                    <p>Пока нет записей</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+          <MonthlyGoalCard 
+            currentAverage={monthlyStats.average}
+            totalEntries={monthlyStats.total}
+          />
+
+
 
           <Card className="glass-card">
             <CardHeader>
