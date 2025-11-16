@@ -205,7 +205,7 @@ const Auth = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Почта или username</Label>
+                  <Label htmlFor="email">Почта </Label>
                   <Input
                     id="email"
                     type="text"
