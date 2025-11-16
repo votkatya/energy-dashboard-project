@@ -123,7 +123,7 @@ const Index = () => {
                 <img 
                   src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
                   alt="FlowKat Logo"
-                  className="w-8 h-8 sm:w-9 sm:h-9"
+                  className="w-6 h-6 sm:w-7 sm:h-7"
                 />
                 <div>
                   <h1 className="text-lg sm:text-xl font-heading font-extrabold text-primary" style={{ letterSpacing: '0.02em' }}>FlowKat</h1>
