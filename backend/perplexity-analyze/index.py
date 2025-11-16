@@ -51,6 +51,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     database_url = os.environ.get('DATABASE_URL')
     perplexity_key = os.environ.get('PERPLEXITY_API_KEY')
     
+    print(f"DEBUG: perplexity_key exists: {bool(perplexity_key)}")
+    print(f"DEBUG: perplexity_key length: {len(perplexity_key) if perplexity_key else 0}")
+    print(f"DEBUG: All env keys: {list(os.environ.keys())}")
+    
     if not perplexity_key:
         return {
             'statusCode': 500,
