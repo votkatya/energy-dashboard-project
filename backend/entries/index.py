@@ -78,10 +78,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         if method == 'GET':
             cur.execute("""
-                SELECT id, date, score, thoughts, category, tags, created_at
+                SELECT id, entry_date as date, score, thoughts, tags, created_at, updated_at
                 FROM energy_entries
                 WHERE user_id = %s
-                ORDER BY date DESC
+                ORDER BY entry_date DESC
             """, (user_id,))
             
             entries = cur.fetchall()
@@ -104,13 +104,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
                 entries_list.append({
                     'id': entry['id'],
-                    'date': dt.strftime('%d.%m.%Y'),
+                    'date': dt.strftime('%Y-%m-%d'),
                     'score': entry['score'],
                     'thoughts': entry['thoughts'] or '',
-                    'category': entry['category'] or '',
                     'tags': tags_list,
-                    'week': f"Неделя {dt.isocalendar()[1]}",
-                    'month': dt.strftime('%B %Y')
+                    'createdAt': entry['created_at'].isoformat() if entry.get('created_at') else None,
+                    'updatedAt': entry['updated_at'].isoformat() if entry.get('updated_at') else None
                 })
             
             if len(entries_list) > 0:
@@ -183,14 +182,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             tags_json = json.dumps(tags)
             
             cur.execute("""
-                INSERT INTO energy_entries (user_id, date, score, thoughts, category, tags)
-                VALUES (%s, %s, %s, %s, %s, %s::jsonb)
-                ON CONFLICT (user_id, date) 
+                INSERT INTO energy_entries (user_id, entry_date, score, thoughts, tags)
+                VALUES (%s, %s, %s, %s, %s::jsonb)
+                ON CONFLICT (user_id, entry_date) 
                 DO UPDATE SET score = EXCLUDED.score, thoughts = EXCLUDED.thoughts, 
-                              category = EXCLUDED.category, tags = EXCLUDED.tags,
+                              tags = EXCLUDED.tags,
                               updated_at = CURRENT_TIMESTAMP
-                RETURNING id, date, score, thoughts, category, tags
-            """, (user_id, db_date, score, thoughts, category, tags_json))
+                RETURNING id, entry_date, score, thoughts, tags
+            """, (user_id, db_date, score, thoughts, tags_json))
             
             entry = cur.fetchone()
             
@@ -203,11 +202,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             conn.commit()
             
-            entry_date = entry['date']
+            entry_date = entry['entry_date']
             if isinstance(entry_date, str):
                 dt = datetime.strptime(entry_date, '%Y-%m-%d')
             else:
                 dt = entry_date
+            
+            tags_data = entry.get('tags')
+            if isinstance(tags_data, str):
+                tags_list = json.loads(tags_data) if tags_data else []
+            elif tags_data is None:
+                tags_list = []
+            else:
+                tags_list = tags_data
             
             cur.close()
             conn.close()
@@ -217,11 +224,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({
                     'id': entry['id'],
-                    'date': dt.strftime('%d.%m.%Y'),
+                    'date': dt.strftime('%Y-%m-%d'),
                     'score': entry['score'],
                     'thoughts': entry['thoughts'] or '',
-                    'category': entry['category'] or '',
-                    'tags': entry.get('tags', [])
+                    'tags': tags_list
                 })
             }
         
