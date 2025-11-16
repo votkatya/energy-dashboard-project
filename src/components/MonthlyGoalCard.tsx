@@ -29,18 +29,18 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries }: MonthlyGoalCardProps)
       <Card className="glass-card mb-8 md:mb-10">
         <CardContent className="pt-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-base sm:text-lg font-medium whitespace-nowrap">Ваш уровень энергии:</span>
-              <span className={`text-xl sm:text-2xl font-heading font-bold ${level.color} whitespace-nowrap`}>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-sm sm:text-base font-medium whitespace-nowrap">Ваш уровень энергии:</span>
+              <span className={`text-lg sm:text-xl font-heading font-bold ${level.color} whitespace-nowrap`}>
                 {totalEntries > 0 ? `${currentAverage.toFixed(1)} - ${level.label}` : '— '}
               </span>
             </div>
-            <div className="relative h-3 bg-muted/30 rounded-full overflow-hidden backdrop-blur-sm">
+            <div className="relative h-2 bg-muted/30 rounded-full overflow-hidden backdrop-blur-sm">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
-                className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-lime-500 via-lime-400 to-green-400 glow-primary"
+                className="absolute top-0 left-0 h-full rounded-full bg-lime-400"
               />
             </div>
           </div>
