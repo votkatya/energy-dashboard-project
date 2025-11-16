@@ -243,49 +243,6 @@ const Index = () => {
                   </motion.div>
                 )}
 
-                <div className="mb-6 flex justify-center">
-                  <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
-                    <button
-                      onClick={() => setTimePeriod('3days')}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                        timePeriod === '3days' 
-                          ? 'bg-primary text-primary-foreground shadow-sm' 
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >3 дня</button>
-                    <button
-                      onClick={() => setTimePeriod('week')}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                        timePeriod === 'week' 
-                          ? 'bg-primary text-primary-foreground shadow-sm' 
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      Неделя
-                    </button>
-                    <button
-                      onClick={() => setTimePeriod('month')}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                        timePeriod === 'month' 
-                          ? 'bg-primary text-primary-foreground shadow-sm' 
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      Месяц
-                    </button>
-                    <button
-                      onClick={() => setTimePeriod('year')}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                        timePeriod === 'year' 
-                          ? 'bg-primary text-primary-foreground shadow-sm' 
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      Год
-                    </button>
-                  </div>
-                </div>
-                
                 <MonthlyGoalCard
                   currentAverage={monthlyStats.average}
                   totalEntries={monthlyStats.total}
@@ -336,6 +293,49 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in space-y-6">
+            <div className="mb-6 flex justify-center">
+              <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
+                <button
+                  onClick={() => setTimePeriod('3days')}
+                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                    timePeriod === '3days' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >3 дня</button>
+                <button
+                  onClick={() => setTimePeriod('week')}
+                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                    timePeriod === 'week' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Неделя
+                </button>
+                <button
+                  onClick={() => setTimePeriod('month')}
+                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                    timePeriod === 'month' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Месяц
+                </button>
+                <button
+                  onClick={() => setTimePeriod('year')}
+                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                    timePeriod === 'year' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Год
+                </button>
+              </div>
+            </div>
+
             <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
               <AnimatedCard delay={0.1} className="glass-card">
                 <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
