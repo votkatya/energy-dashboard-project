@@ -11,9 +11,9 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries }: MonthlyGoalCardProps)
     if (score < 3.5) {
       return { label: 'Низкий', color: 'text-orange-400' };
     } else if (score >= 3.5 && score < 4.5) {
-      return { label: 'Хорошо', color: 'text-lime-400' };
+      return { label: 'Хорошо', color: 'text-primary' };
     } else {
-      return { label: 'Высокий', color: 'text-green-400' };
+      return { label: 'Высокий', color: 'text-primary' };
     }
   };
 
@@ -40,7 +40,7 @@ const MonthlyGoalCard = ({ currentAverage, totalEntries }: MonthlyGoalCardProps)
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
-                className="absolute top-0 left-0 h-full rounded-full bg-lime-400"
+                className="absolute top-0 left-0 h-full rounded-full bg-primary"
               />
             </div>
           </div>
