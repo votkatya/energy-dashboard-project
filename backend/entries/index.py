@@ -94,13 +94,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 else:
                     dt = entry_date
                 
+                tags_data = entry.get('tags')
+                if isinstance(tags_data, str):
+                    tags_list = json.loads(tags_data) if tags_data else []
+                elif tags_data is None:
+                    tags_list = []
+                else:
+                    tags_list = tags_data
+                
                 entries_list.append({
                     'id': entry['id'],
                     'date': dt.strftime('%d.%m.%Y'),
                     'score': entry['score'],
                     'thoughts': entry['thoughts'] or '',
                     'category': entry['category'] or '',
-                    'tags': entry.get('tags', []),
+                    'tags': tags_list,
                     'week': f"Неделя {dt.isocalendar()[1]}",
                     'month': dt.strftime('%B %Y')
                 })
