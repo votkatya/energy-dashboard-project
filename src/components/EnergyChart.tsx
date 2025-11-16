@@ -230,14 +230,15 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
             <AreaChart data={chartData} margin={{ left: -30, right: 10, top: 10, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.05}/>
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
+                  <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                  <stop offset="100%" stopColor="hsl(var(--background))" stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid 
                 strokeDasharray="3 3" 
                 stroke="hsl(var(--border))" 
-                opacity={0.2}
+                opacity={0}
                 vertical={false}
               />
               <XAxis 
@@ -245,13 +246,13 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
                 tickLine={false}
-                axisLine={{ stroke: 'hsl(var(--border))' }}
+                axisLine={false}
               />
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
                 tickLine={false}
-                axisLine={{ stroke: 'hsl(var(--border))' }}
+                axisLine={false}
                 domain={[0, 5]}
                 ticks={[0, 1, 2, 3, 4, 5]}
               />
@@ -267,17 +268,18 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
               />
               <Area 
-                type="monotone" 
+                type="natural" 
                 dataKey="score" 
                 stroke="hsl(var(--primary))" 
                 strokeWidth={3}
                 fill="url(#colorGradient)"
                 animationDuration={800}
+                dot={false}
               />
               <Line
-                type="monotone"
+                type="natural"
                 dataKey="trend"
-                stroke="hsl(var(--muted-foreground))"
+                stroke="hsl(var(--accent))"
                 strokeWidth={2}
                 strokeDasharray="5 5"
                 dot={false}
