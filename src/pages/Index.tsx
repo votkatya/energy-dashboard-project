@@ -329,50 +329,6 @@ const Index = () => {
                 ) : (
                   <EntriesFeed entries={data?.entries || []} />
                 )}
-
-                <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 my-8">
-                  <AnimatedCard delay={0.1} className="glass-card">
-                    <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
-                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
-                        <span className="text-xl md:text-2xl">😊</span>
-                        <span className="hidden md:inline">Хорошие дни</span>
-                        <span className="md:hidden text-xs">Хорошие</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center md:text-left pb-4 md:pb-6 px-3 md:px-6">
-                      <div className="text-3xl md:text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
-                      <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
-                    </CardContent>
-                  </AnimatedCard>
-
-                  <AnimatedCard delay={0.2} className="glass-card">
-                    <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
-                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
-                        <span className="text-xl md:text-2xl">😐</span>
-                        <span className="hidden md:inline">Нейтральные</span>
-                        <span className="md:hidden text-xs">Средние</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center md:text-left pb-4 md:pb-6 px-3 md:px-6">
-                      <div className="text-3xl md:text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
-                      <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
-                    </CardContent>
-                  </AnimatedCard>
-
-                  <AnimatedCard delay={0.3} className="glass-card">
-                    <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
-                      <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
-                        <span className="text-xl md:text-2xl">😔</span>
-                        <span className="hidden md:inline">Плохие дни</span>
-                        <span className="md:hidden text-xs">Плохие</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center md:text-left pb-4 md:pb-6 px-3 md:px-6">
-                      <div className="text-3xl md:text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
-                      <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
-                    </CardContent>
-                  </AnimatedCard>
-                </div>
               </>
             )}
 
@@ -380,6 +336,50 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in space-y-6">
+            <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+              <AnimatedCard delay={0.1} className="glass-card">
+                <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
+                  <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
+                    <span className="text-xl md:text-2xl">😊</span>
+                    <span className="hidden md:inline">Хорошие дни</span>
+                    <span className="md:hidden text-xs">Хорошие</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center md:text-left pb-4 md:pb-6 px-3 md:px-6">
+                  <div className="text-3xl md:text-4xl font-heading font-bold text-energy-excellent">{stats.good}</div>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
+                </CardContent>
+              </AnimatedCard>
+
+              <AnimatedCard delay={0.2} className="glass-card">
+                <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
+                  <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
+                    <span className="text-xl md:text-2xl">😐</span>
+                    <span className="hidden md:inline">Нейтральные</span>
+                    <span className="md:hidden text-xs">Средние</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center md:text-left pb-4 md:pb-6 px-3 md:px-6">
+                  <div className="text-3xl md:text-4xl font-heading font-bold text-energy-neutral">{stats.neutral}</div>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
+                </CardContent>
+              </AnimatedCard>
+
+              <AnimatedCard delay={0.3} className="glass-card">
+                <CardHeader className="pb-3 md:pb-3 pt-4 md:pt-6 px-3 md:px-6">
+                  <CardTitle className="text-sm md:text-lg flex flex-col md:flex-row items-center gap-1 md:gap-2">
+                    <span className="text-xl md:text-2xl">😔</span>
+                    <span className="hidden md:inline">Плохие дни</span>
+                    <span className="md:hidden text-xs">Плохие</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center md:text-left pb-4 md:pb-6 px-3 md:px-6">
+                  <div className="text-3xl md:text-4xl font-heading font-bold text-energy-low">{stats.bad}</div>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden md:block">Всего записей</p>
+                </CardContent>
+              </AnimatedCard>
+            </div>
+
             {data?.entries && data.entries.length > 0 && (
               <EnergyChart entries={data.entries} />
             )}
