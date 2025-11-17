@@ -118,37 +118,18 @@ const Index = () => {
       
       <div className="container mx-auto px-4 py-6 max-w-7xl relative z-10">
         <header className="mb-8 animate-fade-in">
-          <div className="flex flex-col gap-4 mb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <img 
-                  src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
-                  alt="FlowKat Logo"
-                  className="w-6 h-6 sm:w-7 sm:h-7"
-                />
-                <div>
-                  <h1 className="text-lg sm:text-xl font-heading font-extrabold text-primary" style={{ letterSpacing: '0.02em' }}>FlowKat</h1>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <NotificationsDialog />
-                <Button 
-                  onClick={() => setShowAddDialog(true)}
-                  size="lg"
-                  className="hidden sm:flex"
-                >
-                  <Icon name="Plus" size={20} className="mr-2" />
-                  Добавить запись
-                </Button>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <img 
+                src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
+                alt="FlowKat Logo"
+                className="w-6 h-6 sm:w-7 sm:h-7"
+              />
+              <div>
+                <h1 className="text-lg sm:text-xl font-heading font-extrabold text-primary" style={{ letterSpacing: '0.02em' }}>FlowKat</h1>
               </div>
             </div>
-            <Button 
-              onClick={() => setShowAddDialog(true)}
-              size="lg"
-              className="sm:hidden w-full"
-            >
-              Как ты сегодня?
-            </Button>
+            <NotificationsDialog />
           </div>
         </header>
 
