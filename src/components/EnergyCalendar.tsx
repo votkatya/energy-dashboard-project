@@ -160,8 +160,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
     <Card className="glass-card">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Icon name="Calendar" size={24} />
+          <div>
             {monthNames[currentMonth]} {currentYear}
           </div>
           <div className="flex items-center gap-2">
