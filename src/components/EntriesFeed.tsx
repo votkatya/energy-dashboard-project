@@ -129,7 +129,7 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   const formatDisplayDate = (dateStr: string) => {
     try {
       const date = parseEntryDate(dateStr);
-      return format(date, 'd MMMM yyyy', { locale: ru });
+      return format(date, 'd MMMM, EEEE', { locale: ru });
     } catch {
       return dateStr;
     }
@@ -235,12 +235,11 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
                 <Card key={entry.id} className="glass-card hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
-                      <div className={`w-16 h-16 rounded-full ${getColorClass(entry.score)} flex items-center justify-center flex-shrink-0 shadow-lg text-3xl`}>
+                      <div className={`w-12 h-12 rounded-full ${getColorClass(entry.score)} flex items-center justify-center flex-shrink-0 shadow-lg text-2xl`}>
                         {getEmojiForScore(entry.score)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm text-muted-foreground flex items-center gap-1 mb-2">
-                          <Icon name="Calendar" size={14} />
+                        <div className="text-sm text-muted-foreground mb-2">
                           {formatDisplayDate(entry.date)}
                         </div>
                         
