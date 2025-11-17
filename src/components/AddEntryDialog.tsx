@@ -172,12 +172,12 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
 
           <div>
             <Label className="mb-3 block">Как прошёл твой день?</Label>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-3">
               {scores.map((item) => (
                 <button
                   key={item.value}
                   onClick={() => setScore(item.value)}
-                  className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-3xl transition-all ${
+                  className={`aspect-square rounded-full ${item.color} text-white font-heading font-bold text-3xl transition-all flex items-center justify-center ${
                     score === item.value ? 'ring-4 ring-primary scale-110' : 'opacity-70'
                   }`}
                 >

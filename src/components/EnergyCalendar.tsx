@@ -262,7 +262,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           {!isEditing && selectedDay?.entry ? (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className={`w-16 h-16 rounded-xl ${getColorClass(selectedDay.entry.score)} flex items-center justify-center text-white font-heading font-bold text-3xl shadow-md`}>
+                <div className={`w-16 h-16 rounded-full ${getColorClass(selectedDay.entry.score)} flex items-center justify-center text-white font-heading font-bold text-3xl shadow-md`}>
                   {selectedDay.entry.score === 1 ? '😢' : selectedDay.entry.score === 2 ? '😕' : selectedDay.entry.score === 3 ? '😐' : selectedDay.entry.score === 4 ? '😊' : '🤩'}
                 </div>
                 <div>
@@ -340,7 +340,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
             <div className="space-y-4">
               <div>
                 <Label className="mb-3 block">Как прошёл день?</Label>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-3">
                   {[
                     { value: 1, emoji: '😢', color: 'bg-energy-low hover:bg-energy-low/80' },
                     { value: 2, emoji: '😕', color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
@@ -351,7 +351,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                     <button
                       key={item.value}
                       onClick={() => setEditScore(item.value)}
-                      className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-3xl transition-all ${
+                      className={`aspect-square rounded-full ${item.color} text-white font-heading font-bold text-3xl transition-all flex items-center justify-center ${
                         editScore === item.value ? 'ring-4 ring-primary scale-110' : 'opacity-70'
                       }`}
                     >
