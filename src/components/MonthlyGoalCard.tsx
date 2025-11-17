@@ -9,15 +9,13 @@ interface MonthlyGoalCardProps {
 const MonthlyGoalCard = ({ currentAverage, totalEntries }: MonthlyGoalCardProps) => {
   const getEnergyLevel = (score: number): { label: string; color: string } => {
     if (score < 2) {
-      return { label: 'Ужасно', color: 'text-energy-low' };
-    } else if (score >= 2 && score < 3) {
-      return { label: 'Плохо', color: 'text-energy-medium-low' };
-    } else if (score >= 3 && score < 4) {
-      return { label: 'Нейтрально', color: 'text-energy-neutral' };
-    } else if (score >= 4 && score < 4.5) {
-      return { label: 'Хорошо', color: 'text-energy-good' };
+      return { label: 'Критичный', color: 'text-energy-low' };
+    } else if (score >= 2 && score < 3.5) {
+      return { label: 'Низкий', color: 'text-energy-medium-low' };
+    } else if (score >= 3.5 && score < 4.6) {
+      return { label: 'Хороший', color: 'text-energy-good' };
     } else {
-      return { label: 'Отлично', color: 'text-energy-excellent' };
+      return { label: 'Высокий', color: 'text-energy-excellent' };
     }
   };
 
