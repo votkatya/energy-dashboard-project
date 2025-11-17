@@ -63,11 +63,11 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   };
 
   const getEmojiForScore = (score: number) => {
-    if (score >= 5) return '🚀';
-    if (score >= 4) return '😊';
-    if (score >= 3) return '😐';
-    if (score >= 2) return '😕';
-    return '😞';
+    if (score === 5) return '🤩';
+    if (score === 4) return '😊';
+    if (score === 3) return '😐';
+    if (score === 2) return '😕';
+    return '😢';
   };
 
   const parseEntryDate = (dateStr: string): Date => {
@@ -129,7 +129,7 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
   const formatDisplayDate = (dateStr: string) => {
     try {
       const date = parseEntryDate(dateStr);
-      return format(date, 'd MMMM yyyy, EEEE', { locale: ru });
+      return format(date, 'd MMMM yyyy', { locale: ru });
     } catch {
       return dateStr;
     }
@@ -235,18 +235,13 @@ const EntriesFeed = ({ entries }: EntriesFeedProps) => {
                 <Card key={entry.id} className="glass-card hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
-                      <div className={`w-16 h-16 rounded-2xl ${getColorClass(entry.score)} flex items-center justify-center flex-shrink-0 shadow-lg text-2xl`}>
+                      <div className={`w-16 h-16 rounded-full ${getColorClass(entry.score)} flex items-center justify-center flex-shrink-0 shadow-lg text-3xl`}>
                         {getEmojiForScore(entry.score)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2 mb-2">
-                          <h3 className="font-semibold text-lg">
-                            {entry.score}
-                          </h3>
-                          <div className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Icon name="Calendar" size={14} />
-                            {formatDisplayDate(entry.date)}
-                          </div>
+                        <div className="text-sm text-muted-foreground flex items-center gap-1 mb-2">
+                          <Icon name="Calendar" size={14} />
+                          {formatDisplayDate(entry.date)}
                         </div>
                         
                         {entry.tags && entry.tags.length > 0 && (
