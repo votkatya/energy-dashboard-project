@@ -76,7 +76,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         LEFT JOIN t_p45717398_energy_dashboard_pro.entry_tags et ON e.id = et.entry_id
         LEFT JOIN t_p45717398_energy_dashboard_pro.tags t ON et.tag_id = t.id
         WHERE e.user_id = '{user_id_escaped}' 
-        AND e.entry_date >= CURRENT_DATE - INTERVAL ''7 days''
+        AND e.entry_date >= CURRENT_DATE - 7
         GROUP BY e.id, e.entry_date, e.score, e.thoughts
         ORDER BY e.entry_date DESC
     ''')
