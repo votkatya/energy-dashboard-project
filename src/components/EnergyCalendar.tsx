@@ -352,7 +352,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                   Удалить
                 </Button>
                 <Button
-                  className="flex-[1.5] bg-gradient-to-r from-primary to-accent"
+                  className="flex-[1.5] bg-primary hover:bg-primary/90"
                   onClick={() => setIsEditing(true)}
                 >
                   <Icon name="Edit" size={16} className="mr-2" />
