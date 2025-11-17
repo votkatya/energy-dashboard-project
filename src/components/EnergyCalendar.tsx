@@ -250,7 +250,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
       </CardContent>
 
       <Dialog open={!!selectedDay} onOpenChange={() => { setSelectedDay(null); setIsEditing(false); setSelectedTags([]); }}>
-        <DialogContent className="max-w-md max-h-[90vh] flex flex-col">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Icon name="Calendar" size={20} />
@@ -259,7 +259,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           </DialogHeader>
           
           {!isEditing && selectedDay?.entry ? (
-            <div className="space-y-4 overflow-y-auto">
+            <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className={`w-16 h-16 rounded-full ${getColorClass(selectedDay.entry.score)} flex items-center justify-center text-white font-heading font-bold text-3xl shadow-md`}>
                   {selectedDay.entry.score === 1 ? '😢' : selectedDay.entry.score === 2 ? '😕' : selectedDay.entry.score === 3 ? '😐' : selectedDay.entry.score === 4 ? '😊' : '🤩'}
@@ -336,7 +336,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
               </div>
             </div>
           ) : (
-            <div className="space-y-4 overflow-y-auto">
+            <div className="space-y-4">
               <div>
                 <Label className="mb-3 block">Как прошёл день?</Label>
                 <div className="grid grid-cols-5 gap-3">
