@@ -408,11 +408,15 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                   variant="outline"
                   className="flex-1"
                   onClick={() => {
-                    setIsEditing(false);
                     if (selectedDay?.entry) {
+                      setIsEditing(false);
                       setEditScore(selectedDay.entry.score);
                       setEditNotes(selectedDay.entry.thoughts || '');
                       setSelectedTags(selectedDay.entry.tags || []);
+                    } else {
+                      setSelectedDay(null);
+                      setIsEditing(false);
+                      setSelectedTags([]);
                     }
                   }}
                 >
