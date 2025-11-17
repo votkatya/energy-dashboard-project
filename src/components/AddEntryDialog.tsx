@@ -114,10 +114,7 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Icon name="Plus" size={20} />
-            Добавить запись
-          </DialogTitle>
+          <DialogTitle className="flex items-center gap-2">Как ты сегодня?</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
