@@ -1,0 +1,33 @@
+{
+  "tests": [
+    {
+      "name": "Get user profile",
+      "method": "GET",
+      "path": "/",
+      "headers": {
+        "X-User-Id": "test-user-123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "name": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Update user name",
+      "method": "PUT",
+      "path": "/",
+      "headers": {
+        "X-User-Id": "test-user-123"
+      },
+      "body": {
+        "name": "Test User"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "name": "Test User"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

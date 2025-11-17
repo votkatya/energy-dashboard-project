@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,10 +14,61 @@ interface SettingsTabProps {
 const SettingsTab = ({ user, logout, totalEntries }: SettingsTabProps) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [userName, setUserName] = useState('');
+  const [originalName, setOriginalName] = useState('');
+  const [isLoadingName, setIsLoadingName] = useState(true);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/401ea5a5-2659-4eea-a94d-cfbe058746b6', {
+          method: 'GET',
+          headers: {
+            'X-User-Id': user?.id || ''
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.name || '');
+          setOriginalName(data.name || '');
+        }
+      } catch (error) {
+        console.error('Failed to fetch user name:', error);
+      } finally {
+        setIsLoadingName(false);
+      }
+    };
+
+    if (user?.id) {
+      fetchUserName();
+    }
+  }, [user]);
+
+  const handleSaveName = async () => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/401ea5a5-2659-4eea-a94d-cfbe058746b6', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': user?.id || ''
+        },
+        body: JSON.stringify({ name: userName })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setOriginalName(data.name);
+        setIsEditingName(false);
+      }
+    } catch (error) {
+      console.error('Failed to save user name:', error);
+      alert('Не удалось сохранить имя');
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -35,7 +86,7 @@ const SettingsTab = ({ user, logout, totalEntries }: SettingsTabProps) => {
               {!isEditingName ? (
                 <div className="flex items-center gap-2 mt-2">
                   <Input
-                    value={userName || 'Имя не задано'}
+                    value={isLoadingName ? 'Загрузка...' : (userName || 'Имя не задано')}
                     disabled
                     className="flex-1"
                   />
@@ -57,9 +108,7 @@ const SettingsTab = ({ user, logout, totalEntries }: SettingsTabProps) => {
                   />
                   <div className="flex gap-2">
                     <Button
-                      onClick={() => {
-                        setIsEditingName(false);
-                      }}
+                      onClick={handleSaveName}
                       size="sm"
                       className="flex-1"
                     >
@@ -67,7 +116,7 @@ const SettingsTab = ({ user, logout, totalEntries }: SettingsTabProps) => {
                     </Button>
                     <Button
                       onClick={() => {
-                        setUserName('');
+                        setUserName(originalName);
                         setIsEditingName(false);
                       }}
                       variant="outline"
