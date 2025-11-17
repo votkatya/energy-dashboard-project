@@ -28,36 +28,11 @@ const AppHeader = ({ onAddClick, onSettingsClick }: AppHeaderProps) => {
               onClick={onSettingsClick}
               size="icon"
               variant="outline"
-              className="sm:hidden"
             >
               <Icon name="Settings" size={20} />
             </Button>
-            <Button 
-              onClick={onSettingsClick}
-              size="lg"
-              variant="outline"
-              className="hidden sm:flex glass-effect hover:glass-card transition-all"
-            >
-              <Icon name="Settings" size={20} className="mr-2" />
-              Настройки
-            </Button>
-            <Button 
-              onClick={onAddClick}
-              size="lg"
-              className="hidden sm:flex"
-            >
-              <Icon name="Plus" size={20} className="mr-2" />
-              Добавить запись
-            </Button>
           </div>
         </div>
-        <Button 
-          onClick={onAddClick}
-          size="lg"
-          className="sm:hidden w-full"
-        >
-          Как ты сегодня?
-        </Button>
       </div>
     </header>
   );
