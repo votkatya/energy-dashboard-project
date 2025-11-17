@@ -423,7 +423,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                   value={editNotes}
                   onChange={(e) => setEditNotes(e.target.value)}
                   placeholder="Что происходило? Какие были мысли и чувства?"
-                  className="min-h-32 resize-none"
+                  className="min-h-32 resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               </div>
 
@@ -447,7 +447,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                   Отмена
                 </Button>
                 <Button
-                  className="flex-1 bg-gradient-to-r from-primary to-accent"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                   disabled={editScore === null || isSaving}
                   onClick={async () => {
                     if (editScore === null) return;

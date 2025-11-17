@@ -227,14 +227,14 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Что происходило сегодня? Какие были мысли и чувства?"
-              className="min-h-32 resize-none"
+              className="min-h-32 resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
 
           <Button 
             onClick={handleSave} 
             disabled={score === null || isSaving}
-            className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
+            className="w-full bg-primary hover:bg-primary/90"
             size="lg"
           >
             {isSaving ? (
