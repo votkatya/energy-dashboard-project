@@ -262,8 +262,8 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           {!isEditing && selectedDay?.entry ? (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className={`w-16 h-16 rounded-xl ${getColorClass(selectedDay.entry.score)} flex items-center justify-center text-white font-heading font-bold text-2xl shadow-md`}>
-                  {selectedDay.entry.score}
+                <div className={`w-16 h-16 rounded-xl ${getColorClass(selectedDay.entry.score)} flex items-center justify-center text-white font-heading font-bold text-3xl shadow-md`}>
+                  {selectedDay.entry.score === 1 ? '😢' : selectedDay.entry.score === 2 ? '😕' : selectedDay.entry.score === 3 ? '😐' : selectedDay.entry.score === 4 ? '😊' : '🤩'}
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Уровень энергии</p>
@@ -342,20 +342,20 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                 <Label className="mb-3 block">Как прошёл день?</Label>
                 <div className="grid grid-cols-5 gap-2">
                   {[
-                    { value: 1, color: 'bg-energy-low hover:bg-energy-low/80' },
-                    { value: 2, color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
-                    { value: 3, color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
-                    { value: 4, color: 'bg-energy-good hover:bg-energy-good/80' },
-                    { value: 5, color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
+                    { value: 1, emoji: '😢', color: 'bg-energy-low hover:bg-energy-low/80' },
+                    { value: 2, emoji: '😕', color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
+                    { value: 3, emoji: '😐', color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
+                    { value: 4, emoji: '😊', color: 'bg-energy-good hover:bg-energy-good/80' },
+                    { value: 5, emoji: '🤩', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
                   ].map((item) => (
                     <button
                       key={item.value}
                       onClick={() => setEditScore(item.value)}
-                      className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-2xl transition-all ${
+                      className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-3xl transition-all ${
                         editScore === item.value ? 'ring-4 ring-primary scale-110' : 'opacity-70'
                       }`}
                     >
-                      {item.value}
+                      {item.emoji}
                     </button>
                   ))}
                 </div>

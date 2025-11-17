@@ -27,11 +27,11 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
   const queryClient = useQueryClient();
 
   const scores = [
-    { value: 1, label: 'Ужасно', color: 'bg-energy-low hover:bg-energy-low/80' },
-    { value: 2, label: 'Плохо', color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
-    { value: 3, label: 'Нейтрально', color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
-    { value: 4, label: 'Хорошо', color: 'bg-energy-good hover:bg-energy-good/80' },
-    { value: 5, label: 'Отлично', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
+    { value: 1, label: 'Ужасно', emoji: '😢', color: 'bg-energy-low hover:bg-energy-low/80' },
+    { value: 2, label: 'Плохо', emoji: '😕', color: 'bg-energy-medium-low hover:bg-energy-medium-low/80' },
+    { value: 3, label: 'Нейтрально', emoji: '😐', color: 'bg-energy-neutral hover:bg-energy-neutral/80' },
+    { value: 4, label: 'Хорошо', emoji: '😊', color: 'bg-energy-good hover:bg-energy-good/80' },
+    { value: 5, label: 'Отлично', emoji: '🤩', color: 'bg-energy-excellent hover:bg-energy-excellent/80' },
   ];
 
   const tags = [
@@ -177,11 +177,11 @@ const AddEntryDialog = ({ open, onOpenChange }: AddEntryDialogProps) => {
                 <button
                   key={item.value}
                   onClick={() => setScore(item.value)}
-                  className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-2xl transition-all ${
+                  className={`aspect-square rounded-xl ${item.color} text-white font-heading font-bold text-3xl transition-all ${
                     score === item.value ? 'ring-4 ring-primary scale-110' : 'opacity-70'
                   }`}
                 >
-                  {item.value}
+                  {item.emoji}
                 </button>
               ))}
             </div>
