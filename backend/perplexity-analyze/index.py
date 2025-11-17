@@ -71,14 +71,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     user_id_escaped = str(user_id).replace("'", "''")
     
     cursor.execute(f'''
-        SELECT e.entry_date, e.score, e.thoughts, COALESCE(string_agg(t.tag_name, ', '), '') as tags
-        FROM t_p45717398_energy_dashboard_pro.energy_entries e
-        LEFT JOIN t_p45717398_energy_dashboard_pro.entry_tags et ON e.id = et.entry_id
-        LEFT JOIN t_p45717398_energy_dashboard_pro.tags t ON et.tag_id = t.id
-        WHERE e.user_id = '{user_id_escaped}' 
-        AND e.entry_date >= CURRENT_DATE - 7
-        GROUP BY e.id, e.entry_date, e.score, e.thoughts
-        ORDER BY e.entry_date DESC
+        SELECT entry_date, score, thoughts, tags::text as tags
+        FROM t_p45717398_energy_dashboard_pro.energy_entries
+        WHERE user_id = '{user_id_escaped}' 
+        AND entry_date >= CURRENT_DATE - 7
+        ORDER BY entry_date DESC
     ''')
     
     entries = cursor.fetchall()
