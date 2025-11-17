@@ -65,6 +65,31 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
     "Декабрь",
   ];
 
+  const monthNamesGenitive = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ];
+
+  const formatDateForDisplay = (dateStr: string) => {
+    const parts = dateStr.split('.');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0]);
+      const month = parseInt(parts[1]) - 1;
+      return `${day} ${monthNamesGenitive[month]}`;
+    }
+    return dateStr;
+  };
+
   const getDaysInMonth = (month: number, year: number) => {
     return new Date(year, month + 1, 0).getDate();
   };
@@ -254,7 +279,7 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Icon name="Calendar" size={20} />
-              {selectedDay?.date}
+              {selectedDay?.date ? formatDateForDisplay(selectedDay.date) : ''}
             </DialogTitle>
           </DialogHeader>
           
