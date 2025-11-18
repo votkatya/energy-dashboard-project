@@ -5,6 +5,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 import Icon from '@/components/ui/icon';
+import EnergyCircleStats from '@/components/EnergyCircleStats';
 import { parseDate } from '@/utils/dateUtils';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, addWeeks, addMonths, addYears, addDays, eachDayOfInterval } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -258,8 +259,10 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
   };
 
   const chartData = calculateTrendLine(filterEntriesByPeriod());
+  const { start, end } = getCurrentPeriodDates();
 
   return (
+    <>
     <Card className="glass-card">
       <CardHeader className="pb-3 sm:pb-6">
         <div className="flex flex-col gap-4">
@@ -449,6 +452,16 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         )}
       </CardContent>
     </Card>
+    
+    {period !== 'custom' && (
+      <EnergyCircleStats 
+        entries={entries}
+        period={period as 'week' | 'month' | 'year'}
+        startDate={start}
+        endDate={end}
+      />
+    )}
+    </>
   );
 };
 
