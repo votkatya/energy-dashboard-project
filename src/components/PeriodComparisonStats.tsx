@@ -32,14 +32,15 @@ const PeriodComparisonStats = ({ entries, period, startDate, endDate }: PeriodCo
     });
 
     const calculateMetrics = (data: EnergyEntry[]) => {
-      if (data.length === 0) return { average: 0, goodDays: 0, badDays: 0 };
+      if (data.length === 0) return { average: 0, goodDays: 0, neutralDays: 0, badDays: 0 };
       
       const sum = data.reduce((acc, e) => acc + e.score, 0);
       const average = sum / data.length;
       const goodDays = data.filter(e => e.score >= 4).length;
+      const neutralDays = data.filter(e => e.score === 3).length;
       const badDays = data.filter(e => e.score <= 2).length;
 
-      return { average, goodDays, badDays };
+      return { average, goodDays, neutralDays, badDays };
     };
 
     const current = calculateMetrics(currentEntries);
@@ -48,6 +49,7 @@ const PeriodComparisonStats = ({ entries, period, startDate, endDate }: PeriodCo
     const averageDiff = current.average - previous.average;
     const averagePercent = previous.average > 0 ? (averageDiff / previous.average) * 100 : 0;
     const goodDaysDiff = current.goodDays - previous.goodDays;
+    const neutralDaysDiff = current.neutralDays - previous.neutralDays;
     const badDaysDiff = current.badDays - previous.badDays;
 
     return {
@@ -56,6 +58,7 @@ const PeriodComparisonStats = ({ entries, period, startDate, endDate }: PeriodCo
       averageDiff,
       averagePercent,
       goodDaysDiff,
+      neutralDaysDiff,
       badDaysDiff
     };
   }, [entries, startDate, endDate]);
@@ -171,6 +174,39 @@ const PeriodComparisonStats = ({ entries, period, startDate, endDate }: PeriodCo
             </div>
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>{stats.previous.goodDays} {getDayLabel(stats.previous.goodDays)}</span>
+              <span className="text-xs">Прошлый {getPeriodLabel()}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t pt-6">
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-muted-foreground">Нейтральных дней (3★)</h4>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl font-bold text-foreground">
+                  {stats.current.neutralDays} {getDayLabel(stats.current.neutralDays)}
+                </span>
+                {stats.neutralDaysDiff !== 0 && (
+                  <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                    stats.neutralDaysDiff > 0
+                      ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400' 
+                      : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                  }`}>
+                    <Icon 
+                      name={stats.neutralDaysDiff > 0 ? "TrendingUp" : "TrendingDown"} 
+                      size={14} 
+                    />
+                    <span>{Math.abs(stats.neutralDaysDiff)}</span>
+                  </div>
+                )}
+              </div>
+              <div className="text-right">
+                <div className="text-xs text-muted-foreground">Этот {getPeriodLabel()}</div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <span>{stats.previous.neutralDays} {getDayLabel(stats.previous.neutralDays)}</span>
               <span className="text-xs">Прошлый {getPeriodLabel()}</span>
             </div>
           </div>
