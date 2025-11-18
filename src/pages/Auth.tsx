@@ -175,7 +175,7 @@ const Auth = () => {
                 className="mx-auto mb-3"
               >
                 <img 
-                  src="https://cdn.poehali.dev/files/1661565a-cbc8-49e4-b742-bae847b91466.png" 
+                  src="https://cdn.poehali.dev/files/5ad5321f-843c-4306-8c74-1b457105908d.png" 
                   alt="FlowKat Logo"
                   className="w-12 h-12"
                 />
