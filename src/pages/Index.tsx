@@ -250,7 +250,10 @@ const Index = () => {
                 />
 
                 <div className="mb-8">
-                  <AIAnalysisCard />
+                  <EnergyLevelCard 
+                    averageScore={allTimeStats.average}
+                    monthlyAverage={monthlyStats.average}
+                  />
                 </div>
 
                 <div className="flex justify-center mb-6">
@@ -377,7 +380,8 @@ const Index = () => {
             <EnergyStats data={data} isLoading={isLoading} />
           </TabsContent>
 
-          <TabsContent value="trends" className="animate-fade-in">
+          <TabsContent value="trends" className="animate-fade-in space-y-6">
+            <AIAnalysisCard />
             <EnergyTrends data={data} isLoading={isLoading} />
           </TabsContent>
 

@@ -8,12 +8,12 @@ interface EnergyLevelCardProps {
   monthlyAverage: number;
 }
 
-const getEnergyLevel = (score: number): { text: string; color: string; bgColor: string } => {
-  if (score >= 4.5) return { text: 'Отлично', color: 'text-green-700', bgColor: 'bg-green-400' };
-  if (score >= 3.5) return { text: 'Хорошо', color: 'text-lime-700', bgColor: 'bg-lime-400' };
-  if (score >= 2.5) return { text: 'Нормально', color: 'text-yellow-700', bgColor: 'bg-yellow-400' };
-  if (score >= 1.5) return { text: 'Низко', color: 'text-orange-700', bgColor: 'bg-orange-400' };
-  return { text: 'Очень низко', color: 'text-red-700', bgColor: 'bg-red-400' };
+const getEnergyLevel = (score: number): { text: string; color: string; bgColor: string; pillBg: string } => {
+  if (score >= 4.5) return { text: 'Отлично', color: 'text-black', bgColor: 'bg-green-400/90', pillBg: 'bg-green-500' };
+  if (score >= 3.5) return { text: 'Хорошо', color: 'text-black', bgColor: 'bg-lime-400/90', pillBg: 'bg-lime-500' };
+  if (score >= 2.5) return { text: 'Нормально', color: 'text-black', bgColor: 'bg-yellow-400/90', pillBg: 'bg-yellow-500' };
+  if (score >= 1.5) return { text: 'Низко', color: 'text-black', bgColor: 'bg-orange-400/90', pillBg: 'bg-orange-500' };
+  return { text: 'Очень низко', color: 'text-white', bgColor: 'bg-red-500/90', pillBg: 'bg-red-600' };
 };
 
 const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps) => {
@@ -22,79 +22,79 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
   const percentage = (monthlyAverage / 5) * 100;
 
   return (
-    <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 overflow-hidden">
+    <Card className="bg-card/60 border-border overflow-hidden">
       <CardContent className="p-6 space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-3">
-            <h3 className="text-white text-lg font-medium">Уровень энергии</h3>
+            <h3 className="text-foreground text-lg font-medium">Уровень энергии</h3>
             
-            <div className={`inline-block px-6 py-2 rounded-full ${energyLevel.bgColor}`}>
+            <div className={`inline-block px-6 py-2 rounded-full ${energyLevel.pillBg}`}>
               <span className={`${energyLevel.color} font-bold text-lg`}>
                 {energyLevel.text}
               </span>
             </div>
             
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               Тут что-то нужно написать, пока не знаю, что
             </p>
           </div>
 
-          <div className="relative w-32 h-32 flex-shrink-0">
-            <div className={`absolute inset-0 rounded-2xl ${energyLevel.bgColor} overflow-hidden`}>
+          <div className="relative w-36 h-36 flex-shrink-0">
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-gray-700 to-transparent overflow-hidden">
               <svg 
-                viewBox="0 0 128 128" 
+                viewBox="0 0 144 144" 
                 className="absolute inset-0 w-full h-full"
                 preserveAspectRatio="none"
               >
                 <defs>
                   <clipPath id="waveClip">
-                    <path d={`M0,${128 - (percentage * 1.28)} Q32,${128 - (percentage * 1.28) - 8} 64,${128 - (percentage * 1.28)} T128,${128 - (percentage * 1.28)} L128,128 L0,128 Z`}>
+                    <path d={`M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z`}>
                       <animate
                         attributeName="d"
                         dur="3s"
                         repeatCount="indefinite"
                         values={`
-                          M0,${128 - (percentage * 1.28)} Q32,${128 - (percentage * 1.28) - 8} 64,${128 - (percentage * 1.28)} T128,${128 - (percentage * 1.28)} L128,128 L0,128 Z;
-                          M0,${128 - (percentage * 1.28)} Q32,${128 - (percentage * 1.28) + 8} 64,${128 - (percentage * 1.28)} T128,${128 - (percentage * 1.28)} L128,128 L0,128 Z;
-                          M0,${128 - (percentage * 1.28)} Q32,${128 - (percentage * 1.28) - 8} 64,${128 - (percentage * 1.28)} T128,${128 - (percentage * 1.28)} L128,128 L0,128 Z
+                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z;
+                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) + 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z;
+                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z
                         `}
                       />
                     </path>
                   </clipPath>
                 </defs>
                 <rect 
-                  width="128" 
-                  height="128" 
-                  fill="rgba(0,0,0,0.2)" 
+                  width="144" 
+                  height="144" 
+                  className={energyLevel.bgColor}
                   clipPath="url(#waveClip)"
                 />
               </svg>
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-28 h-28 transform -rotate-90">
+              <svg className="w-32 h-32 transform -rotate-90">
                 <circle
-                  cx="56"
-                  cy="56"
-                  r="48"
+                  cx="64"
+                  cy="64"
+                  r="54"
                   fill="none"
-                  stroke="rgba(255,255,255,0.2)"
-                  strokeWidth="6"
+                  stroke="rgba(255,255,255,0.15)"
+                  strokeWidth="7"
                 />
                 <circle
-                  cx="56"
-                  cy="56"
-                  r="48"
+                  cx="64"
+                  cy="64"
+                  r="54"
                   fill="none"
-                  stroke="rgba(0,0,0,0.6)"
-                  strokeWidth="6"
-                  strokeDasharray={`${(monthlyAverage / 5) * 301.59} 301.59`}
+                  stroke="rgba(0,0,0,0.8)"
+                  strokeWidth="7"
+                  strokeDasharray={`${(monthlyAverage / 5) * 339.29} 339.29`}
                   strokeLinecap="round"
                   className="transition-all duration-1000"
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-gray-900">
+                <span className="text-3xl font-bold text-foreground">
                   {monthlyAverage.toFixed(1)}
                 </span>
               </div>
@@ -104,10 +104,12 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
 
         <Button 
           onClick={() => navigate('/?tab=trends')}
-          className={`w-full ${energyLevel.bgColor} hover:opacity-90 ${energyLevel.color} font-semibold text-base py-6 rounded-2xl gap-2`}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base py-6 rounded-2xl gap-2 flex items-center justify-center"
         >
           Персональные рекомендации
-          <Icon name="ArrowRight" size={20} />
+          <div className="ml-auto bg-black/20 rounded-full p-2">
+            <Icon name="ArrowRight" size={20} />
+          </div>
         </Button>
       </CardContent>
     </Card>
