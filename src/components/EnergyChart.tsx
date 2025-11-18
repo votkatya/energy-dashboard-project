@@ -124,6 +124,37 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
       });
     }
 
+    if (period === 'year') {
+      const yearDate = start;
+      const entriesMap = new Map();
+      
+      if (entries && entries.length > 0) {
+        entries.forEach(e => {
+          const date = parseDate(e.date);
+          if (date >= start && date <= end) {
+            const monthNum = date.getMonth() + 1;
+            const existing = entriesMap.get(monthNum);
+            if (!existing) {
+              entriesMap.set(monthNum, []);
+            }
+            entriesMap.get(monthNum).push(e.score);
+          }
+        });
+      }
+
+      return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(monthNum => {
+        const scores = entriesMap.get(monthNum);
+        let avgScore = null;
+        if (scores && scores.length > 0) {
+          avgScore = scores.reduce((sum, s) => sum + s, 0) / scores.length;
+        }
+        return {
+          date: String(monthNum),
+          score: avgScore
+        };
+      });
+    }
+
     if (!entries || entries.length === 0) return [];
 
     const filteredEntries = entries.filter(e => {
