@@ -25,18 +25,18 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
     <Card className="bg-card/60 border-border overflow-hidden">
       <CardContent className="p-6 space-y-4">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 flex flex-col justify-between h-36 py-1">
-            <div className="space-y-3">
-              <h3 className="text-foreground text-lg font-medium">Уровень энергии</h3>
+          <div className="flex-1 flex flex-col justify-between h-36">
+            <div className="space-y-2">
+              <h3 className="text-foreground text-base font-medium">Уровень энергии</h3>
               
-              <div className={`inline-block px-6 py-2 rounded-full ${energyLevel.pillBg}`}>
-                <span className={`${energyLevel.color} font-bold text-lg`}>
+              <div className={`inline-block px-5 py-1.5 rounded-full ${energyLevel.pillBg}`}>
+                <span className={`${energyLevel.color} font-bold text-base`}>
                   {energyLevel.text}
                 </span>
               </div>
             </div>
             
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-xs leading-relaxed">
               Тут что-то нужно написать, пока не знаю, что
             </p>
           </div>
