@@ -84,14 +84,14 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         entries.forEach(e => {
           const date = parseDate(e.date);
           if (date >= start && date <= end) {
-            const key = format(date, 'dd.MM', { locale: ru });
+            const key = format(date, 'd', { locale: ru });
             entriesMap.set(key, e.score);
           }
         });
       }
 
       return allDays.map(day => {
-        const key = format(day, 'dd.MM', { locale: ru });
+        const key = format(day, 'd', { locale: ru });
         return {
           date: key,
           score: entriesMap.get(key) || null
@@ -108,20 +108,22 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         entries.forEach(e => {
           const date = parseDate(e.date);
           if (date >= start && date <= end) {
-            const key = format(date, 'dd.MM', { locale: ru });
-            entriesMap.set(key, e.score);
+            const dayNum = date.getDate();
+            entriesMap.set(dayNum, e.score);
           }
         });
       }
 
-      return keyDays.map(day => {
-        const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
-        const key = format(date, 'dd.MM', { locale: ru });
-        return {
-          date: key,
-          score: entriesMap.get(key) || null
-        };
-      });
+      const allDaysInMonth = [];
+      for (let day = 1; day <= new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate(); day++) {
+        allDaysInMonth.push({
+          date: String(day),
+          score: entriesMap.get(day) || null,
+          isKeyDay: keyDays.includes(day)
+        });
+      }
+
+      return allDaysInMonth;
     }
 
     if (period === 'year') {
@@ -363,6 +365,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
+                ticks={period === 'month' ? ['1', '8', '15', '22', '29'] : undefined}
               />
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
