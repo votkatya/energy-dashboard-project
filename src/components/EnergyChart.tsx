@@ -348,9 +348,19 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
             <AreaChart data={chartData} margin={{ left: -30, right: 10, top: 20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
-                  <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor="#08D169" stopOpacity={0.6}/>
+                  <stop offset="20%" stopColor="#25DACE" stopOpacity={0.5}/>
+                  <stop offset="40%" stopColor="#48C0FF" stopOpacity={0.4}/>
+                  <stop offset="60%" stopColor="#FF9D78" stopOpacity={0.3}/>
+                  <stop offset="80%" stopColor="#FF5F72" stopOpacity={0.2}/>
                   <stop offset="100%" stopColor="hsl(var(--background))" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#08D169" stopOpacity={1}/>
+                  <stop offset="25%" stopColor="#25DACE" stopOpacity={1}/>
+                  <stop offset="50%" stopColor="#48C0FF" stopOpacity={1}/>
+                  <stop offset="75%" stopColor="#FF9D78" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="#FF5F72" stopOpacity={1}/>
                 </linearGradient>
               </defs>
               <CartesianGrid 
@@ -419,7 +429,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
               <Area 
                 type="natural" 
                 dataKey="score" 
-                stroke="hsl(var(--primary))" 
+                stroke="url(#lineGradient)" 
                 strokeWidth={3}
                 fill="url(#colorGradient)"
                 animationDuration={800}
