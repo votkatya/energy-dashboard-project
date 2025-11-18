@@ -315,6 +315,10 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
+                ticks={period === 'month' ? ['01', '08', '15', '22', '29'].map(d => {
+                  const monthDate = getCurrentPeriodDates().start;
+                  return format(new Date(monthDate.getFullYear(), monthDate.getMonth(), parseInt(d)), 'dd.MM', { locale: ru });
+                }) : undefined}
               />
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
