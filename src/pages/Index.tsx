@@ -15,7 +15,6 @@ import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import AIAnalysisCard from '@/components/AIAnalysisCard';
-import EnergyLevelCard from '@/components/EnergyLevelCard';
 import BottomNav from '@/components/BottomNav';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -251,10 +250,7 @@ const Index = () => {
                 />
 
                 <div className="mb-8">
-                  <EnergyLevelCard 
-                    averageScore={allTimeStats.average}
-                    monthlyAverage={monthlyStats.average}
-                  />
+                  <AIAnalysisCard />
                 </div>
 
                 <div className="flex justify-center mb-6">
@@ -382,9 +378,6 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in">
-            <div className="mb-8">
-              <AIAnalysisCard />
-            </div>
             <EnergyTrends data={data} isLoading={isLoading} />
           </TabsContent>
 
