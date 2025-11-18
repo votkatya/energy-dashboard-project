@@ -120,11 +120,11 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
 
         <Button 
           onClick={() => navigate('/?tab=trends')}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base py-6 rounded-2xl gap-2 flex items-center justify-center"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm py-4 rounded-2xl flex items-center justify-between px-6"
         >
-          Персональные рекомендации
-          <div className="ml-auto bg-black/20 rounded-full p-2">
-            <Icon name="ArrowRight" size={20} />
+          <span>Персональные рекомендации</span>
+          <div className="bg-black rounded-full p-2.5 flex items-center justify-center">
+            <Icon name="ArrowRight" size={18} className="text-white" />
           </div>
         </Button>
       </CardContent>
