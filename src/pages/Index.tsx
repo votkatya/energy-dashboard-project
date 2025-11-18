@@ -15,6 +15,7 @@ import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import AIAnalysisCard from '@/components/AIAnalysisCard';
+import EnergyLevelCard from '@/components/EnergyLevelCard';
 import BottomNav from '@/components/BottomNav';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
