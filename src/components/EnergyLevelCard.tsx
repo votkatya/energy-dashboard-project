@@ -29,8 +29,8 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
             <div className="space-y-2">
               <h3 className="text-foreground font-medium text-sm">Уровень энергии</h3>
               
-              <div className={`inline-block px-5 py-1.5 rounded-full ${energyLevel.pillBg}`}>
-                <span className={`${energyLevel.color} font-bold text-base`}>
+              <div className={`inline-block px-5 py-1.5 rounded-2xl ${energyLevel.pillBg}`}>
+                <span className="text-white font-bold text-base">
                   {energyLevel.text}
                 </span>
               </div>
