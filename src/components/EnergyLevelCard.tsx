@@ -42,20 +42,50 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
           </div>
 
           <div className="relative w-36 h-36 flex-shrink-0">
-            <div 
-              className="absolute inset-0 rounded-3xl overflow-hidden"
-              style={{
-                background: `linear-gradient(135deg, ${energyLevel.bgColor.replace('bg-', '').replace('-400/90', '')}-300 0%, ${energyLevel.bgColor.replace('bg-', '').replace('-400/90', '')}-500 100%)`,
-                backgroundImage: `
-                  radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 3px, transparent 3px),
-                  radial-gradient(circle at 70% 50%, rgba(255,255,255,0.3) 4px, transparent 4px),
-                  radial-gradient(circle at 45% 75%, rgba(255,255,255,0.35) 3.5px, transparent 3.5px),
-                  radial-gradient(circle at 80% 80%, rgba(255,255,255,0.25) 3px, transparent 3px),
-                  linear-gradient(135deg, rgb(180, 210, 100) 0%, rgb(160, 200, 80) 100%)
-                `,
-                backgroundSize: '100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%'
-              }}
-            >
+            <div className="absolute inset-0 rounded-3xl overflow-hidden" style={{ background: '#A8D146' }}>
+              <svg 
+                viewBox="0 0 144 144" 
+                className="absolute inset-0 w-full h-full"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <clipPath id="waveClip">
+                    <path d={`M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 8} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z`}>
+                      <animate
+                        attributeName="d"
+                        dur="3s"
+                        repeatCount="indefinite"
+                        values={`
+                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 8} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z;
+                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) + 8} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z;
+                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 8} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z
+                        `}
+                      />
+                    </path>
+                  </clipPath>
+                </defs>
+                <rect 
+                  width="144" 
+                  height="144" 
+                  fill="#D7F787"
+                  clipPath="url(#waveClip)"
+                />
+              </svg>
+              
+              <div 
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `
+                    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.5) 3px, transparent 3px),
+                    radial-gradient(circle at 70% 50%, rgba(255,255,255,0.4) 4px, transparent 4px),
+                    radial-gradient(circle at 45% 75%, rgba(255,255,255,0.45) 3.5px, transparent 3.5px),
+                    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.35) 3px, transparent 3px),
+                    radial-gradient(circle at 30% 85%, rgba(255,255,255,0.4) 3.5px, transparent 3.5px)
+                  `,
+                  backgroundSize: '100% 100%'
+                }}
+              />
+
               <div className="absolute inset-0 flex items-center justify-center">
                 <svg className="w-32 h-32 transform -rotate-90">
                   <circle
