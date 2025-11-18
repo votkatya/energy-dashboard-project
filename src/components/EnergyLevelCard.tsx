@@ -27,7 +27,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 flex flex-col justify-between h-36">
             <div className="space-y-2">
-              <h3 className="text-foreground text-base font-medium">Уровень энергии</h3>
+              <h3 className="text-foreground font-medium text-sm">Уровень энергии</h3>
               
               <div className={`inline-block px-5 py-1.5 rounded-full ${energyLevel.pillBg}`}>
                 <span className={`${energyLevel.color} font-bold text-base`}>
