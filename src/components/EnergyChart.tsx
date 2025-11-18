@@ -426,7 +426,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
               <Area 
                 type="natural" 
                 dataKey="score" 
-                stroke="url(#lineGradient)" 
+                stroke="#08D169" 
                 strokeWidth={3}
                 fill="url(#colorGradient)"
                 animationDuration={800}
