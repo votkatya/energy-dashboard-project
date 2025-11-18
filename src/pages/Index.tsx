@@ -24,7 +24,8 @@ import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
 import { HeroGeometric } from '@/components/ui/shape-landing-hero';
 import { motion } from 'framer-motion';
 import { analyzeBurnoutRisk } from '@/utils/predictiveAnalytics';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
+import html2canvas from 'html2canvas';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -39,6 +40,7 @@ const Index = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const { user, logout } = useAuth();
   const { data, isLoading, error, refetch } = useEnergyData();
+  const statsRef = useRef<HTMLDivElement>(null);
 
   const getColorClass = (score: number) => {
     if (score >= 5) return 'energy-excellent';
@@ -101,6 +103,26 @@ const Index = () => {
     if (!data?.entries || data.entries.length === 0) return null;
     return analyzeBurnoutRisk(data.entries);
   }, [data]);
+
+  const exportStatsAsImage = async () => {
+    if (!statsRef.current) return;
+
+    try {
+      const canvas = await html2canvas(statsRef.current, {
+        backgroundColor: '#09090b',
+        scale: 2,
+        logging: false,
+        useCORS: true
+      });
+
+      const link = document.createElement('a');
+      link.download = `flowkat-stats-${new Date().toISOString().split('T')[0]}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error('Ошибка при экспорте статистики:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -285,10 +307,23 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in space-y-6">
-            {data?.entries && data.entries.length > 0 && (
-              <EnergyChart entries={data.entries} />
-            )}
-            <EnergyStats data={data} isLoading={isLoading} />
+            <div className="flex justify-end mb-4">
+              <Button
+                onClick={exportStatsAsImage}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Icon name="Download" size={16} />
+                Экспорт в картинку
+              </Button>
+            </div>
+            <div ref={statsRef} className="space-y-6">
+              {data?.entries && data.entries.length > 0 && (
+                <EnergyChart entries={data.entries} />
+              )}
+              <EnergyStats data={data} isLoading={isLoading} />
+            </div>
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
