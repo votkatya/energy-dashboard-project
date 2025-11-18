@@ -257,15 +257,6 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
     });
   };
 
-  const getColorForScore = (score: number | null): string => {
-    if (score === null) return '#08D169';
-    if (score >= 4.5) return '#08D169';
-    if (score >= 3.5) return '#25DACE';
-    if (score >= 2.5) return '#48C0FF';
-    if (score >= 1.5) return '#FF9D78';
-    return '#FF5F72';
-  };
-
   const chartData = calculateTrendLine(filterEntriesByPeriod());
 
   return (
@@ -436,32 +427,12 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 type="natural" 
                 dataKey="score" 
                 stroke="#08D169" 
-                strokeWidth={0}
+                strokeWidth={3}
                 fill="url(#colorGradient)"
                 animationDuration={800}
                 dot={false}
                 connectNulls={false}
               />
-              {chartData.map((entry, index) => {
-                if (index === 0 || entry.score === null) return null;
-                const prevEntry = chartData[index - 1];
-                if (prevEntry.score === null) return null;
-                
-                const color = getColorForScore(entry.score);
-                return (
-                  <Line
-                    key={`segment-${index}`}
-                    type="natural"
-                    dataKey="score"
-                    stroke={color}
-                    strokeWidth={3}
-                    dot={false}
-                    data={[prevEntry, entry]}
-                    animationDuration={800}
-                    connectNulls={false}
-                  />
-                );
-              })}
               <Line
                 type="natural"
                 dataKey="trend"
