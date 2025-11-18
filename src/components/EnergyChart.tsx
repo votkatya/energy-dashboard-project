@@ -285,7 +285,39 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 tickLine={false}
                 axisLine={false}
                 domain={[0, 5]}
-                ticks={[0, 1, 2, 3, 4, 5]}
+                ticks={[1, 2, 3, 4, 5]}
+                tick={({ x, y, payload }) => {
+                  const emojiMap: { [key: number]: { emoji: string; bg: string } } = {
+                    1: { emoji: '😔', bg: '#fee2e2' },
+                    2: { emoji: '😕', bg: '#fef3c7' },
+                    3: { emoji: '😐', bg: '#dbeafe' },
+                    4: { emoji: '😊', bg: '#d9f99d' },
+                    5: { emoji: '😄', bg: '#bbf7d0' }
+                  };
+                  const data = emojiMap[payload.value as number];
+                  if (!data) return null;
+                  
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      <rect
+                        x={-12}
+                        y={-10}
+                        width={24}
+                        height={20}
+                        rx={6}
+                        fill={data.bg}
+                      />
+                      <text
+                        x={0}
+                        y={3}
+                        textAnchor="middle"
+                        fontSize={14}
+                      >
+                        {data.emoji}
+                      </text>
+                    </g>
+                  );
+                }}
               />
               <Tooltip 
                 contentStyle={{
