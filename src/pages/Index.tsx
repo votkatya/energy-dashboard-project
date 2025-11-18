@@ -38,6 +38,7 @@ const Index = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [exportedImage, setExportedImage] = useState<string | null>(null);
   const { user, logout } = useAuth();
   const { data, isLoading, error, refetch } = useEnergyData();
   const statsRef = useRef<HTMLDivElement>(null);
@@ -115,10 +116,16 @@ const Index = () => {
         useCORS: true
       });
 
-      const link = document.createElement('a');
-      link.download = `flowkat-stats-${new Date().toISOString().split('T')[0]}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      const imageUrl = canvas.toDataURL('image/png');
+      
+      if (window.innerWidth <= 768) {
+        setExportedImage(imageUrl);
+      } else {
+        const link = document.createElement('a');
+        link.download = `flowkat-stats-${new Date().toISOString().split('T')[0]}.png`;
+        link.href = imageUrl;
+        link.click();
+      }
     } catch (error) {
       console.error('Ошибка при экспорте статистики:', error);
     }
@@ -526,6 +533,34 @@ const Index = () => {
       </div>
 
       <AddEntryDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
+      
+      {exportedImage && (
+        <div 
+          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setExportedImage(null)}
+        >
+          <div className="relative max-w-2xl w-full">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute -top-12 right-0 text-foreground hover:bg-secondary"
+              onClick={() => setExportedImage(null)}
+            >
+              <Icon name="X" size={24} />
+            </Button>
+            <div className="bg-card rounded-lg p-4 space-y-4">
+              <p className="text-sm text-center text-muted-foreground">
+                Долгое нажатие на изображение → Сохранить
+              </p>
+              <img 
+                src={exportedImage} 
+                alt="Статистика FlowKat" 
+                className="w-full rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="sm:hidden">
         <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
