@@ -1,11 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import { useNavigate } from 'react-router-dom';
 
 interface EnergyLevelCardProps {
   averageScore: number;
   monthlyAverage: number;
+  onTrendsClick: () => void;
 }
 
 const getEnergyLevel = (score: number): { text: string; color: string; bgColor: string; pillBg: string } => {
@@ -16,8 +16,7 @@ const getEnergyLevel = (score: number): { text: string; color: string; bgColor: 
   return { text: 'Критический', color: 'text-white', bgColor: 'bg-red-500/90', pillBg: 'bg-[#DC2626]' };
 };
 
-const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps) => {
-  const navigate = useNavigate();
+const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: EnergyLevelCardProps) => {
   const energyLevel = getEnergyLevel(averageScore);
   const percentage = (monthlyAverage / 5) * 100;
 
@@ -119,7 +118,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
         </div>
 
         <Button 
-          onClick={() => navigate('/?tab=Тренды')}
+          onClick={onTrendsClick}
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm py-4 rounded-2xl flex items-center justify-between px-6"
         >
           <span>Персональные рекомендации</span>

@@ -248,6 +248,7 @@ const Index = () => {
                   <EnergyLevelCard 
                     averageScore={allTimeStats.average}
                     monthlyAverage={monthlyStats.average}
+                    onTrendsClick={() => setActiveTab('trends')}
                   />
                 </div>
 
