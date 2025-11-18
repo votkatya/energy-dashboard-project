@@ -244,13 +244,6 @@ const Index = () => {
                   </motion.div>
                 )}
 
-                <MonthlyGoalCard
-                  currentAverage={monthlyStats.average}
-                  totalEntries={monthlyStats.total}
-                  currentYear={new Date().getFullYear()}
-                  currentMonth={new Date().getMonth()}
-                />
-
                 <div className="mb-8">
                   <EnergyLevelCard 
                     averageScore={allTimeStats.average}
