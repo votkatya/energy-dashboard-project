@@ -17,7 +17,7 @@ const getEnergyLevel = (score: number): { text: string; pillBg: string; cardBg: 
 };
 
 const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: EnergyLevelCardProps) => {
-  const energyLevel = getEnergyLevel(averageScore);
+  const energyLevel = getEnergyLevel(monthlyAverage);
   const percentage = (monthlyAverage / 5) * 100;
 
   return (
