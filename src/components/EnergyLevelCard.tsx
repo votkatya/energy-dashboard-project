@@ -87,30 +87,30 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
               />
 
               <div className="absolute inset-0 flex items-center justify-center">
-                <svg className="w-32 h-32 transform -rotate-90">
+                <svg className="w-16 h-16 transform -rotate-90">
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="54"
+                    cx="32"
+                    cy="32"
+                    r="28"
                     fill="none"
-                    stroke="rgba(0,0,0,0.1)"
-                    strokeWidth="8"
+                    stroke="#AEAEAE"
+                    strokeWidth="6"
                   />
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="54"
+                    cx="32"
+                    cy="32"
+                    r="28"
                     fill="none"
-                    stroke="rgba(0,0,0,0.9)"
-                    strokeWidth="8"
-                    strokeDasharray={`${(monthlyAverage / 5) * 339.29} 339.29`}
+                    stroke="#222828"
+                    strokeWidth="6"
+                    strokeDasharray={`${(monthlyAverage / 5) * 175.93} 175.93`}
                     strokeLinecap="round"
                     className="transition-all duration-1000"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-4xl font-bold text-black">
-                    {Math.round(percentage)}%
+                  <span className="text-2xl font-bold text-black">
+                    {monthlyAverage.toFixed(1)}
                   </span>
                 </div>
               </div>
