@@ -108,7 +108,7 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
                   {segment.emoji}
                 </div>
                 <span className="text-sm font-semibold text-foreground">
-                  {segment.count} {segment.count === 1 ? 'день' : segment.count < 5 ? 'дня' : 'дней'}
+                  {segment.count} {segment.count === 0 ? 'дней' : segment.count === 1 ? 'день' : segment.count < 5 ? 'дня' : 'дней'}
                 </span>
               </div>
             ))}
