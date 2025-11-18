@@ -139,13 +139,15 @@ const Index = () => {
                 </Button>
               </div>
             </div>
-            <Button 
-              onClick={() => setShowAddDialog(true)}
-              size="lg"
-              className="sm:hidden w-full"
-            >
-              Как ты сегодня?
-            </Button>
+            {activeTab === 'home' && (
+              <Button 
+                onClick={() => setShowAddDialog(true)}
+                size="lg"
+                className="sm:hidden w-full"
+              >
+                Как ты сегодня?
+              </Button>
+            )}
           </div>
         </header>
 
