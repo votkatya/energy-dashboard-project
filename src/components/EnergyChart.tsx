@@ -395,13 +395,13 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                   return (
                     <g transform={`translate(${x},${y})`}>
                       <circle
-                        cx={0}
+                        cx={-10}
                         cy={0}
                         r={14}
                         fill={data.bg}
                       />
                       <text
-                        x={0}
+                        x={-10}
                         y={4}
                         textAnchor="middle"
                         fontSize={14}
