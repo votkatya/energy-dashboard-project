@@ -272,10 +272,7 @@ const Index = () => {
                           ? 'bg-primary text-primary-foreground shadow-sm' 
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
-                    >
-                      <Icon name="List" size={18} />
-                      Лента
-                    </button>
+                    >Записи</button>
                   </div>
                 </div>
 
