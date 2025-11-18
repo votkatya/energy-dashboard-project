@@ -60,10 +60,10 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
 
   return (
     <Card className="glass-card">
-      <CardContent className="py-6">
-        <div className="flex items-center gap-6">
+      <CardContent className="py-4">
+        <div className="flex items-center gap-4">
           <div className="relative flex-shrink-0">
-            <svg width="160" height="160" viewBox="0 0 200 200" className="transform -rotate-90">
+            <svg width="120" height="120" viewBox="0 0 200 200" className="transform -rotate-90">
               {segments.map((segment, index) => {
                 if (segment.count === 0 || total === 0) return null;
                 
@@ -91,23 +91,23 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
             
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-3xl font-bold text-foreground">
+                <div className="text-2xl font-bold text-foreground">
                   {average.toFixed(1)}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-1.5">
             {segments.map((segment, index) => (
               <div key={index} className="flex items-center gap-2">
                 <div 
-                  className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" 
+                  className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center text-xs" 
                   style={{ backgroundColor: segment.color }}
                 >
                   {segment.emoji}
                 </div>
-                <span className="text-base font-semibold text-foreground">
+                <span className="text-sm font-semibold text-foreground">
                   {segment.count} {segment.count === 1 ? 'день' : segment.count < 5 ? 'дня' : 'дней'}
                 </span>
               </div>
