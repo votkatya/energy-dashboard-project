@@ -8,12 +8,12 @@ interface EnergyLevelCardProps {
   onTrendsClick: () => void;
 }
 
-const getEnergyLevel = (score: number): { text: string; color: string; bgColor: string; pillBg: string } => {
-  if (score >= 4.5) return { text: 'Отлично', color: 'text-black', bgColor: 'bg-green-400/90', pillBg: 'bg-[#22C55E]' };
-  if (score >= 3.8) return { text: 'Хорошо', color: 'text-black', bgColor: 'bg-lime-400/90', pillBg: 'bg-[#84CC16]' };
-  if (score >= 3.1) return { text: 'Нормально', color: 'text-black', bgColor: 'bg-yellow-400/90', pillBg: 'bg-[#EAB308]' };
-  if (score >= 2.1) return { text: 'Низкий', color: 'text-black', bgColor: 'bg-orange-400/90', pillBg: 'bg-[#F97316]' };
-  return { text: 'Критический', color: 'text-white', bgColor: 'bg-red-500/90', pillBg: 'bg-[#DC2626]' };
+const getEnergyLevel = (score: number): { text: string; pillBg: string; cardBg: string; waveBg: string } => {
+  if (score >= 4.5) return { text: 'Отлично', pillBg: 'bg-[#08D169]', cardBg: '#08D169', waveBg: '#0AED76' };
+  if (score >= 3.8) return { text: 'Хорошо', pillBg: 'bg-[#25DACE]', cardBg: '#25DACE', waveBg: '#3FE8D8' };
+  if (score >= 3.1) return { text: 'Нормально', pillBg: 'bg-[#48C0FF]', cardBg: '#48C0FF', waveBg: '#6BCFFF' };
+  if (score >= 2.1) return { text: 'Низкий', pillBg: 'bg-[#FF9D78]', cardBg: '#FF9D78', waveBg: '#FFB396' };
+  return { text: 'Критический', pillBg: 'bg-[#FF5F72]', cardBg: '#FF5F72', waveBg: '#FF8494' };
 };
 
 const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: EnergyLevelCardProps) => {
@@ -41,7 +41,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: Energy
           </div>
 
           <div className="relative w-[120px] h-[120px] flex-shrink-0">
-            <div className="absolute inset-0 rounded-[2rem] overflow-hidden" style={{ background: '#A8D146' }}>
+            <div className="absolute inset-0 rounded-[2rem] overflow-hidden" style={{ background: energyLevel.cardBg }}>
               <svg 
                 viewBox="0 0 144 144" 
                 className="absolute inset-0 w-full h-full"
@@ -66,7 +66,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: Energy
                 <rect 
                   width="144" 
                   height="144" 
-                  fill="#D7F787"
+                  fill={energyLevel.waveBg}
                   clipPath="url(#waveClip)"
                 />
               </svg>
