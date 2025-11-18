@@ -42,63 +42,47 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
           </div>
 
           <div className="relative w-36 h-36 flex-shrink-0">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-gray-700 to-transparent overflow-hidden">
-              <svg 
-                viewBox="0 0 144 144" 
-                className="absolute inset-0 w-full h-full"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <clipPath id="waveClip">
-                    <path d={`M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z`}>
-                      <animate
-                        attributeName="d"
-                        dur="3s"
-                        repeatCount="indefinite"
-                        values={`
-                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z;
-                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) + 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z;
-                          M0,${144 - (percentage * 1.44)} Q36,${144 - (percentage * 1.44) - 10} 72,${144 - (percentage * 1.44)} T144,${144 - (percentage * 1.44)} L144,144 L0,144 Z
-                        `}
-                      />
-                    </path>
-                  </clipPath>
-                </defs>
-                <rect 
-                  width="144" 
-                  height="144" 
-                  className={energyLevel.bgColor}
-                  clipPath="url(#waveClip)"
-                />
-              </svg>
-            </div>
-
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-32 h-32 transform -rotate-90">
-                <circle
-                  cx="64"
-                  cy="64"
-                  r="54"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.15)"
-                  strokeWidth="7"
-                />
-                <circle
-                  cx="64"
-                  cy="64"
-                  r="54"
-                  fill="none"
-                  stroke="rgba(0,0,0,0.8)"
-                  strokeWidth="7"
-                  strokeDasharray={`${(monthlyAverage / 5) * 339.29} 339.29`}
-                  strokeLinecap="round"
-                  className="transition-all duration-1000"
-                />
-              </svg>
+            <div 
+              className="absolute inset-0 rounded-3xl overflow-hidden"
+              style={{
+                background: `linear-gradient(135deg, ${energyLevel.bgColor.replace('bg-', '').replace('-400/90', '')}-300 0%, ${energyLevel.bgColor.replace('bg-', '').replace('-400/90', '')}-500 100%)`,
+                backgroundImage: `
+                  radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 3px, transparent 3px),
+                  radial-gradient(circle at 70% 50%, rgba(255,255,255,0.3) 4px, transparent 4px),
+                  radial-gradient(circle at 45% 75%, rgba(255,255,255,0.35) 3.5px, transparent 3.5px),
+                  radial-gradient(circle at 80% 80%, rgba(255,255,255,0.25) 3px, transparent 3px),
+                  linear-gradient(135deg, rgb(180, 210, 100) 0%, rgb(160, 200, 80) 100%)
+                `,
+                backgroundSize: '100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%'
+              }}
+            >
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-3xl font-bold text-foreground">
-                  {monthlyAverage.toFixed(1)}
-                </span>
+                <svg className="w-32 h-32 transform -rotate-90">
+                  <circle
+                    cx="64"
+                    cy="64"
+                    r="54"
+                    fill="none"
+                    stroke="rgba(0,0,0,0.1)"
+                    strokeWidth="8"
+                  />
+                  <circle
+                    cx="64"
+                    cy="64"
+                    r="54"
+                    fill="none"
+                    stroke="rgba(0,0,0,0.9)"
+                    strokeWidth="8"
+                    strokeDasharray={`${(monthlyAverage / 5) * 339.29} 339.29`}
+                    strokeLinecap="round"
+                    className="transition-all duration-1000"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-4xl font-bold text-black">
+                    {Math.round(percentage)}%
+                  </span>
+                </div>
               </div>
             </div>
           </div>
