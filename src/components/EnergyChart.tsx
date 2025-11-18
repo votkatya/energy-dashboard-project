@@ -260,7 +260,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
   const chartData = calculateTrendLine(filterEntriesByPeriod());
 
   return (
-    <Card className="shadow-lg">
+    <Card className="glass-card">
       <CardHeader className="pb-3 sm:pb-6">
         <div className="flex flex-col gap-4">
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">График энергии</CardTitle>
