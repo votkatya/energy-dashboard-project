@@ -25,7 +25,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
     <Card className="bg-card/60 border-border overflow-hidden">
       <CardContent className="p-6 space-y-4">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 flex flex-col justify-between h-36">
+          <div className="flex-1 flex flex-col justify-between h-[120px]">
             <div className="space-y-2">
               <h3 className="text-foreground font-medium text-sm">Уровень энергии</h3>
               
@@ -41,7 +41,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
             </p>
           </div>
 
-          <div className="relative w-36 h-36 flex-shrink-0">
+          <div className="relative w-[120px] h-[120px] flex-shrink-0">
             <div className="absolute inset-0 rounded-[2rem] overflow-hidden" style={{ background: '#A8D146' }}>
               <svg 
                 viewBox="0 0 144 144" 
