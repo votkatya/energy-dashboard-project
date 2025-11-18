@@ -42,7 +42,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
           </div>
 
           <div className="relative w-36 h-36 flex-shrink-0">
-            <div className="absolute inset-0 rounded-3xl overflow-hidden" style={{ background: '#A8D146' }}>
+            <div className="absolute inset-0 rounded-[2rem] overflow-hidden" style={{ background: '#A8D146' }}>
               <svg 
                 viewBox="0 0 144 144" 
                 className="absolute inset-0 w-full h-full"
