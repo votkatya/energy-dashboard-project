@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 import Icon from '@/components/ui/icon';
 import EnergyCircleStats from '@/components/EnergyCircleStats';
+import PeriodComparisonStats from '@/components/PeriodComparisonStats';
 import { parseDate } from '@/utils/dateUtils';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, addWeeks, addMonths, addYears, addDays, eachDayOfInterval } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -454,12 +455,20 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
     </Card>
     
     {period !== 'custom' && (
-      <EnergyCircleStats 
-        entries={entries}
-        period={period as 'week' | 'month' | 'year'}
-        startDate={start}
-        endDate={end}
-      />
+      <>
+        <EnergyCircleStats 
+          entries={entries}
+          period={period as 'week' | 'month' | 'year'}
+          startDate={start}
+          endDate={end}
+        />
+        <PeriodComparisonStats
+          entries={entries}
+          period={period as 'week' | 'month' | 'year'}
+          startDate={start}
+          endDate={end}
+        />
+      </>
     )}
     </>
   );
