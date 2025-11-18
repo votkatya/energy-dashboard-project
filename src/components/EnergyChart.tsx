@@ -288,28 +288,26 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 ticks={[1, 2, 3, 4, 5]}
                 tick={({ x, y, payload }) => {
                   const emojiMap: { [key: number]: { emoji: string; bg: string } } = {
-                    1: { emoji: '😔', bg: '#fee2e2' },
-                    2: { emoji: '😕', bg: '#fef3c7' },
-                    3: { emoji: '😐', bg: '#dbeafe' },
-                    4: { emoji: '😊', bg: '#d9f99d' },
-                    5: { emoji: '😄', bg: '#bbf7d0' }
+                    1: { emoji: '😢', bg: 'hsl(356 100% 69%)' },
+                    2: { emoji: '😕', bg: 'hsl(18 100% 73%)' },
+                    3: { emoji: '😐', bg: 'hsl(203 100% 64%)' },
+                    4: { emoji: '😊', bg: 'hsl(174 76% 51%)' },
+                    5: { emoji: '🤩', bg: 'hsl(150 94% 43%)' }
                   };
                   const data = emojiMap[payload.value as number];
                   if (!data) return null;
                   
                   return (
                     <g transform={`translate(${x},${y})`}>
-                      <rect
-                        x={-12}
-                        y={-10}
-                        width={24}
-                        height={20}
-                        rx={6}
+                      <circle
+                        cx={0}
+                        cy={0}
+                        r={14}
                         fill={data.bg}
                       />
                       <text
                         x={0}
-                        y={3}
+                        y={4}
                         textAnchor="middle"
                         fontSize={14}
                       >
