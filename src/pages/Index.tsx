@@ -95,6 +95,8 @@ const Index = () => {
   
   const monthlyStats = getMonthlyStats();
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
+  
+  const allTimeStats = data?.entries ? calculateStats(data.entries) : { average: 0, total: 0 };
 
   const burnoutRisk = useMemo(() => {
     if (!data?.entries || data.entries.length === 0) return null;
