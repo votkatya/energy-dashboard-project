@@ -233,8 +233,8 @@ const Index = () => {
                               className={burnoutRisk.level === 'critical' ? 'text-destructive' : burnoutRisk.level === 'high' ? 'text-orange-500' : 'text-yellow-500'} 
                             />
                             <div>
-                              <p className="font-semibold">Критический риск выгорания!</p>
-                              <p className="text-sm text-muted-foreground">Нажми, чтобы узнать, что делать</p>
+                              <p className="font-semibold">Внимание: {burnoutRisk.level === 'critical' ? 'критический' : burnoutRisk.level === 'high' ? 'высокий' : 'средний'} риск выгорания</p>
+                              <p className="text-sm text-muted-foreground">Нажми, чтобы узнать подробности</p>
                             </div>
                           </div>
                           <Icon name="ArrowRight" size={20} className="text-muted-foreground" />
