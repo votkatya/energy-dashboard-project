@@ -21,7 +21,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: Energy
   const percentage = (monthlyAverage / 5) * 100;
 
   return (
-    <Card className="bg-gradient-to-r from-accent/10 to-transparent border-l-4 border-l-accent overflow-hidden">
+    <Card className="bg-card/60 border-border overflow-hidden">
       <CardContent className="p-6 space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 flex flex-col justify-between h-[120px]">
