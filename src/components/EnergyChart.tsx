@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
-import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, addWeeks, addMonths, addYears } from 'date-fns';
+import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, addWeeks, addMonths, addYears, addDays, eachDayOfInterval } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 interface EnergyEntry {
@@ -74,9 +74,40 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
   };
 
   const filterEntriesByPeriod = () => {
-    if (!entries || entries.length === 0) return [];
+    if (!entries || entries.length === 0) {
+      if (period === 'week') {
+        const { start, end } = getCurrentPeriodDates();
+        const allDays = eachDayOfInterval({ start, end });
+        return allDays.map(day => ({
+          date: format(day, 'dd.MM', { locale: ru }),
+          score: null
+        }));
+      }
+      return [];
+    }
 
     const { start, end } = getCurrentPeriodDates();
+
+    if (period === 'week') {
+      const allDays = eachDayOfInterval({ start, end });
+      const entriesMap = new Map();
+      
+      entries.forEach(e => {
+        const date = parseDate(e.date);
+        if (date >= start && date <= end) {
+          const key = format(date, 'dd.MM', { locale: ru });
+          entriesMap.set(key, e.score);
+        }
+      });
+
+      return allDays.map(day => {
+        const key = format(day, 'dd.MM', { locale: ru });
+        return {
+          date: key,
+          score: entriesMap.get(key) || null
+        };
+      });
+    }
 
     const filteredEntries = entries.filter(e => {
       const date = parseDate(e.date);
@@ -152,22 +183,28 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
     }
   };
 
-  const calculateTrendLine = (data: { date: string; score: number }[]) => {
-    if (data.length < 2) return data;
+  const calculateTrendLine = (data: { date: string; score: number | null }[]) => {
+    const validData = data.filter(d => d.score !== null);
+    if (validData.length < 2) return data;
 
-    const n = data.length;
-    const sumX = data.reduce((sum, _, i) => sum + i, 0);
-    const sumY = data.reduce((sum, d) => sum + d.score, 0);
-    const sumXY = data.reduce((sum, d, i) => sum + i * d.score, 0);
-    const sumX2 = data.reduce((sum, _, i) => sum + i * i, 0);
+    const n = validData.length;
+    const sumX = validData.reduce((sum, _, i) => sum + i, 0);
+    const sumY = validData.reduce((sum, d) => sum + (d.score || 0), 0);
+    const sumXY = validData.reduce((sum, d, i) => sum + i * (d.score || 0), 0);
+    const sumX2 = validData.reduce((sum, _, i) => sum + i * i, 0);
 
     const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    return data.map((d, i) => ({
-      ...d,
-      trend: slope * i + intercept
-    }));
+    let validIndex = 0;
+    return data.map((d) => {
+      if (d.score !== null) {
+        const trend = slope * validIndex + intercept;
+        validIndex++;
+        return { ...d, trend };
+      }
+      return { ...d, trend: undefined };
+    });
   };
 
   const chartData = calculateTrendLine(filterEntriesByPeriod());
@@ -249,7 +286,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:px-6">
-        {chartData.length === 0 ? (
+        {chartData.length === 0 || chartData.every(d => d.score === null) ? (
           <div className="h-64 flex items-center justify-center text-muted-foreground">
             <div className="text-center">
               <Icon name="BarChart3" size={48} className="mx-auto mb-2 opacity-50" />
@@ -336,6 +373,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 fill="url(#colorGradient)"
                 animationDuration={800}
                 dot={false}
+                connectNulls={false}
               />
               <Line
                 type="natural"
@@ -346,6 +384,7 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 dot={false}
                 activeDot={false}
                 animationDuration={800}
+                connectNulls={false}
               />
             </AreaChart>
           </ResponsiveContainer>
