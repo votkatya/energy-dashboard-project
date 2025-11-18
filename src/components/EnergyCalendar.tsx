@@ -258,18 +258,14 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
           })}
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-3 md:gap-6">
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-low"></div>
-            <span className="text-xs md:text-sm">Плохие</span>
-          </div>
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-neutral"></div>
-            <span className="text-xs md:text-sm">Нейтральные</span>
-          </div>
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-energy-good"></div>
-            <span className="text-xs md:text-sm">Хорошие</span>
+        <div className="mt-6 flex flex-col items-center gap-2">
+          <div className="w-full max-w-xs h-3 rounded-full" style={{
+            background: 'linear-gradient(to right, #FF5F72, #FF9D78, #48C0FF, #25DACE, #08D169)'
+          }} />
+          <div className="flex items-center justify-between w-full max-w-xs text-xs text-muted-foreground">
+            <span>Плохие</span>
+            <span>Нейтральные</span>
+            <span>Хорошие</span>
           </div>
         </div>
       </CardContent>
