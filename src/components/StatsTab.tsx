@@ -8,8 +8,8 @@ import type { EnergyEntry } from '@/types/energy';
 interface StatsTabProps {
   data: { entries: EnergyEntry[] } | undefined;
   isLoading: boolean;
-  timePeriod: '3days' | 'week' | 'month' | 'year';
-  onTimePeriodChange: (period: '3days' | 'week' | 'month' | 'year') => void;
+  timePeriod: 'week' | 'month' | 'year';
+  onTimePeriodChange: (period: 'week' | 'month' | 'year') => void;
 }
 
 const StatsTab = ({ data, isLoading, timePeriod, onTimePeriodChange }: StatsTabProps) => {
@@ -17,15 +17,6 @@ const StatsTab = ({ data, isLoading, timePeriod, onTimePeriodChange }: StatsTabP
     <>
       <Card className="glass-card mb-6 p-4">
         <div className="flex flex-wrap gap-2">
-          <Button
-            variant={timePeriod === '3days' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => onTimePeriodChange('3days')}
-            className="flex-1 sm:flex-none"
-          >
-            <Icon name="Clock" size={16} className="mr-2" />
-            3 дня
-          </Button>
           <Button
             variant={timePeriod === 'week' ? 'default' : 'outline'}
             size="sm"

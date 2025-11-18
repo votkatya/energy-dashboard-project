@@ -29,7 +29,7 @@ const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [homeView, setHomeView] = useState<'calendar' | 'feed'>('calendar');
-  const [timePeriod, setTimePeriod] = useState<'3days' | 'week' | 'month' | 'year'>('week');
+  const [timePeriod, setTimePeriod] = useState<'week' | 'month' | 'year'>('week');
   const [isEditingName, setIsEditingName] = useState(false);
   const [userName, setUserName] = useState('');
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -55,9 +55,6 @@ const Index = () => {
     let days: number;
     
     switch (timePeriod) {
-      case '3days':
-        days = 3;
-        break;
       case 'week':
         days = 7;
         break;
