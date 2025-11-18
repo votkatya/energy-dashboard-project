@@ -261,10 +261,7 @@ const Index = () => {
                           ? 'bg-primary text-primary-foreground shadow-sm' 
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
-                    >
-                      <Icon name="Calendar" size={18} />
-                      Календарь
-                    </button>
+                    >Календарь</button>
                     <button
                       onClick={() => setHomeView('feed')}
                       className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
