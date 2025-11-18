@@ -293,14 +293,6 @@ const Index = () => {
             <div className="mb-6 flex justify-center">
               <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1">
                 <button
-                  onClick={() => setTimePeriod('3days')}
-                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
-                    timePeriod === '3days' 
-                      ? 'bg-primary text-primary-foreground shadow-sm' 
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >3 дня</button>
-                <button
                   onClick={() => setTimePeriod('week')}
                   className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
                     timePeriod === 'week' 
