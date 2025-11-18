@@ -61,9 +61,9 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
   return (
     <Card className="glass-card">
       <CardContent className="py-6">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           <div className="relative flex-shrink-0">
-            <svg width="200" height="200" viewBox="0 0 200 200" className="transform -rotate-90">
+            <svg width="160" height="160" viewBox="0 0 200 200" className="transform -rotate-90">
               {segments.map((segment, index) => {
                 if (segment.count === 0 || total === 0) return null;
                 
@@ -91,24 +91,21 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
             
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-4xl font-bold text-foreground">
+                <div className="text-3xl font-bold text-foreground">
                   {average.toFixed(1)}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 space-y-3">
+          <div className="flex-1 space-y-2">
             {segments.map((segment, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-6 h-6 rounded-full flex-shrink-0" 
-                    style={{ backgroundColor: segment.color }}
-                  />
-                  <span className="text-sm font-medium text-foreground">{segment.label}</span>
-                </div>
-                <span className="text-lg font-semibold text-foreground">
+              <div key={index} className="flex items-center gap-2">
+                <div 
+                  className="w-5 h-5 rounded-full flex-shrink-0" 
+                  style={{ backgroundColor: segment.color }}
+                />
+                <span className="text-base font-semibold text-foreground">
                   {segment.count} {segment.count === 1 ? 'день' : segment.count < 5 ? 'дня' : 'дней'}
                 </span>
               </div>
