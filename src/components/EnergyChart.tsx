@@ -74,31 +74,21 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
   };
 
   const filterEntriesByPeriod = () => {
-    if (!entries || entries.length === 0) {
-      if (period === 'week') {
-        const { start, end } = getCurrentPeriodDates();
-        const allDays = eachDayOfInterval({ start, end });
-        return allDays.map(day => ({
-          date: format(day, 'dd.MM', { locale: ru }),
-          score: null
-        }));
-      }
-      return [];
-    }
-
     const { start, end } = getCurrentPeriodDates();
 
     if (period === 'week') {
       const allDays = eachDayOfInterval({ start, end });
       const entriesMap = new Map();
       
-      entries.forEach(e => {
-        const date = parseDate(e.date);
-        if (date >= start && date <= end) {
-          const key = format(date, 'dd.MM', { locale: ru });
-          entriesMap.set(key, e.score);
-        }
-      });
+      if (entries && entries.length > 0) {
+        entries.forEach(e => {
+          const date = parseDate(e.date);
+          if (date >= start && date <= end) {
+            const key = format(date, 'dd.MM', { locale: ru });
+            entriesMap.set(key, e.score);
+          }
+        });
+      }
 
       return allDays.map(day => {
         const key = format(day, 'dd.MM', { locale: ru });
@@ -108,6 +98,33 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         };
       });
     }
+
+    if (period === 'month') {
+      const keyDays = [1, 8, 15, 22, 29];
+      const monthDate = start;
+      const entriesMap = new Map();
+      
+      if (entries && entries.length > 0) {
+        entries.forEach(e => {
+          const date = parseDate(e.date);
+          if (date >= start && date <= end) {
+            const key = format(date, 'dd.MM', { locale: ru });
+            entriesMap.set(key, e.score);
+          }
+        });
+      }
+
+      return keyDays.map(day => {
+        const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
+        const key = format(date, 'dd.MM', { locale: ru });
+        return {
+          date: key,
+          score: entriesMap.get(key) || null
+        };
+      });
+    }
+
+    if (!entries || entries.length === 0) return [];
 
     const filteredEntries = entries.filter(e => {
       const date = parseDate(e.date);
@@ -315,10 +332,6 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                ticks={period === 'month' ? ['01', '08', '15', '22', '29'].map(d => {
-                  const monthDate = getCurrentPeriodDates().start;
-                  return format(new Date(monthDate.getFullYear(), monthDate.getMonth(), parseInt(d)), 'dd.MM', { locale: ru });
-                }) : undefined}
               />
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
