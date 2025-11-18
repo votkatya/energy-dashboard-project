@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
-import { format } from 'date-fns';
+import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, addWeeks, addMonths, addYears } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 interface EnergyEntry {
@@ -21,45 +21,67 @@ interface EnergyChartProps {
 type PeriodType = 'week' | 'month' | 'year' | 'custom';
 
 const EnergyChart = ({ entries }: EnergyChartProps) => {
-  const [period, setPeriod] = useState<PeriodType>('month');
+  const [period, setPeriod] = useState<PeriodType>('week');
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [monthOffset, setMonthOffset] = useState(0);
+  const [yearOffset, setYearOffset] = useState(0);
   const [customDateRange, setCustomDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
     from: undefined,
     to: undefined
   });
   const [showCalendar, setShowCalendar] = useState(false);
 
-  const filterEntriesByPeriod = () => {
-    if (!entries || entries.length === 0) return [];
-
+  const getCurrentPeriodDates = () => {
     const now = new Date();
-    let filteredEntries = [...entries];
+    let start: Date, end: Date;
 
     switch (period) {
       case 'week': {
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        filteredEntries = entries.filter(e => parseDate(e.date) >= weekAgo);
+        const targetDate = addWeeks(now, weekOffset);
+        start = startOfWeek(targetDate, { locale: ru });
+        end = endOfWeek(targetDate, { locale: ru });
         break;
       }
       case 'month': {
-        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        filteredEntries = entries.filter(e => parseDate(e.date) >= monthAgo);
+        const targetDate = addMonths(now, monthOffset);
+        start = startOfMonth(targetDate);
+        end = endOfMonth(targetDate);
         break;
       }
       case 'year': {
-        const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-        filteredEntries = entries.filter(e => parseDate(e.date) >= yearAgo);
+        const targetDate = addYears(now, yearOffset);
+        start = startOfYear(targetDate);
+        end = endOfYear(targetDate);
         break;
       }
       case 'custom': {
         if (customDateRange.from && customDateRange.to) {
-          filteredEntries = entries.filter(e => {
-            const date = parseDate(e.date);
-            return date >= customDateRange.from! && date <= customDateRange.to!;
-          });
+          start = customDateRange.from;
+          end = customDateRange.to;
+        } else {
+          start = now;
+          end = now;
         }
         break;
       }
+      default: {
+        start = now;
+        end = now;
+      }
     }
+
+    return { start, end };
+  };
+
+  const filterEntriesByPeriod = () => {
+    if (!entries || entries.length === 0) return [];
+
+    const { start, end } = getCurrentPeriodDates();
+
+    const filteredEntries = entries.filter(e => {
+      const date = parseDate(e.date);
+      return date >= start && date <= end;
+    });
 
     return filteredEntries
       .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
@@ -67,6 +89,67 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
         date: format(parseDate(entry.date), 'dd.MM', { locale: ru }),
         score: entry.score
       }));
+  };
+
+  const getPeriodLabel = () => {
+    const { start, end } = getCurrentPeriodDates();
+    
+    switch (period) {
+      case 'week':
+        return `${format(start, 'd', { locale: ru })} — ${format(end, 'd MMMM yyyy', { locale: ru })}`;
+      case 'month':
+        return format(start, 'LLLL yyyy', { locale: ru });
+      case 'year':
+        return format(start, 'yyyy', { locale: ru });
+      case 'custom':
+        if (customDateRange.from && customDateRange.to) {
+          return `${format(customDateRange.from, 'd MMM yyyy', { locale: ru })} — ${format(customDateRange.to, 'd MMM yyyy', { locale: ru })}`;
+        }
+        return 'Выберите период';
+      default:
+        return '';
+    }
+  };
+
+  const handlePrevious = () => {
+    switch (period) {
+      case 'week':
+        setWeekOffset(weekOffset - 1);
+        break;
+      case 'month':
+        setMonthOffset(monthOffset - 1);
+        break;
+      case 'year':
+        setYearOffset(yearOffset - 1);
+        break;
+    }
+  };
+
+  const handleNext = () => {
+    switch (period) {
+      case 'week':
+        setWeekOffset(weekOffset + 1);
+        break;
+      case 'month':
+        setMonthOffset(monthOffset + 1);
+        break;
+      case 'year':
+        setYearOffset(yearOffset + 1);
+        break;
+    }
+  };
+
+  const isCurrentPeriod = () => {
+    switch (period) {
+      case 'week':
+        return weekOffset === 0;
+      case 'month':
+        return monthOffset === 0;
+      case 'year':
+        return yearOffset === 0;
+      default:
+        return false;
+    }
   };
 
   const calculateTrendLine = (data: { date: string; score: number }[]) => {
@@ -92,130 +175,78 @@ const EnergyChart = ({ entries }: EnergyChartProps) => {
   return (
     <Card className="shadow-lg">
       <CardHeader className="pb-3 sm:pb-6">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">График энергии</CardTitle>
           
-          <div className="hidden sm:flex flex-wrap gap-2">
-            <Button
-              size="sm"
-              variant={period === 'week' ? 'default' : 'outline'}
-              onClick={() => setPeriod('week')}
+          <div className="inline-flex bg-secondary/30 rounded-full p-1 gap-1 w-full">
+            <button
+              onClick={() => {
+                setPeriod('week');
+                setWeekOffset(0);
+              }}
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center flex-1 ${
+                period === 'week' 
+                  ? 'bg-primary text-primary-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Неделя
-            </Button>
-            <Button
-              size="sm"
-              variant={period === 'month' ? 'default' : 'outline'}
-              onClick={() => setPeriod('month')}
+            </button>
+            <button
+              onClick={() => {
+                setPeriod('month');
+                setMonthOffset(0);
+              }}
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center flex-1 ${
+                period === 'month' 
+                  ? 'bg-primary text-primary-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Месяц
-            </Button>
-            <Button
-              size="sm"
-              variant={period === 'year' ? 'default' : 'outline'}
-              onClick={() => setPeriod('year')}
+            </button>
+            <button
+              onClick={() => {
+                setPeriod('year');
+                setYearOffset(0);
+              }}
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center flex-1 ${
+                period === 'year' 
+                  ? 'bg-primary text-primary-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Год
-            </Button>
-            <Popover open={showCalendar} onOpenChange={setShowCalendar}>
-              <PopoverTrigger asChild>
-                <Button
-                  size="sm"
-                  variant={period === 'custom' ? 'default' : 'outline'}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowCalendar(!showCalendar);
-                  }}
-                >
-                  <Icon name="Calendar" size={16} className="mr-1" />
-                  Свой период
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="end">
-                <Calendar
-                  mode="range"
-                  selected={{
-                    from: customDateRange.from,
-                    to: customDateRange.to
-                  }}
-                  onSelect={(range) => {
-                    setCustomDateRange({
-                      from: range?.from,
-                      to: range?.to
-                    });
-                    if (range?.from && range?.to) {
-                      setPeriod('custom');
-                      setShowCalendar(false);
-                    }
-                  }}
-                  locale={ru}
-                  numberOfMonths={1}
-                />
-              </PopoverContent>
-            </Popover>
+            </button>
           </div>
 
-          <div className="flex sm:hidden w-full gap-2">
-            <Button
-              size="sm"
-              variant={period === 'week' ? 'default' : 'outline'}
-              onClick={() => setPeriod('week')}
-              className="flex-1"
-            >
-              Неделя
-            </Button>
-            <Button
-              size="sm"
-              variant={period === 'month' ? 'default' : 'outline'}
-              onClick={() => setPeriod('month')}
-              className="flex-1"
-            >
-              Месяц
-            </Button>
-            <Popover open={showCalendar} onOpenChange={setShowCalendar}>
-              <PopoverTrigger asChild>
-                <Button
-                  size="sm"
-                  variant={period === 'custom' ? 'default' : 'outline'}
-                  className="flex-1"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowCalendar(!showCalendar);
-                  }}
-                >
-                  <Icon name="Calendar" size={16} />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="end">
-                <Calendar
-                  mode="range"
-                  selected={{
-                    from: customDateRange.from,
-                    to: customDateRange.to
-                  }}
-                  onSelect={(range) => {
-                    setCustomDateRange({
-                      from: range?.from,
-                      to: range?.to
-                    });
-                    if (range?.from && range?.to) {
-                      setPeriod('custom');
-                      setShowCalendar(false);
-                    }
-                  }}
-                  locale={ru}
-                  numberOfMonths={1}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+          {period !== 'custom' && (
+            <div className="flex items-center justify-between">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handlePrevious}
+                className="h-8 w-8"
+              >
+                <Icon name="ChevronLeft" size={20} />
+              </Button>
+              
+              <div className="text-center flex-1">
+                <p className="text-sm font-medium">{getPeriodLabel()}</p>
+              </div>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleNext}
+                disabled={isCurrentPeriod()}
+                className="h-8 w-8"
+              >
+                <Icon name="ChevronRight" size={20} />
+              </Button>
+            </div>
+          )}
         </div>
-        
-        {period === 'custom' && customDateRange.from && customDateRange.to && (
-          <p className="text-sm text-muted-foreground mt-2">
-            {format(customDateRange.from, 'd MMM yyyy', { locale: ru })} — {format(customDateRange.to, 'd MMM yyyy', { locale: ru })}
-          </p>
-        )}
       </CardHeader>
       <CardContent className="px-2 sm:px-6">
         {chartData.length === 0 ? (
