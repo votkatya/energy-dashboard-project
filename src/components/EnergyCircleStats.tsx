@@ -49,11 +49,11 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
   const circumference = 2 * Math.PI * 80;
   
   const segments = [
-    { count: counts.excellent, color: '#08D169', label: 'Отличные' },
-    { count: counts.good, color: '#25DACE', label: 'Хорошие' },
-    { count: counts.neutral, color: '#48C0FF', label: 'Нейтральные' },
-    { count: counts.mediumLow, color: '#FF9D78', label: 'Средне-низкие' },
-    { count: counts.low, color: '#FF5F72', label: 'Плохие' }
+    { count: counts.excellent, color: '#08D169', label: 'Отличные', emoji: '🤩' },
+    { count: counts.good, color: '#25DACE', label: 'Хорошие', emoji: '😊' },
+    { count: counts.neutral, color: '#48C0FF', label: 'Нейтральные', emoji: '😐' },
+    { count: counts.mediumLow, color: '#FF9D78', label: 'Средне-низкие', emoji: '😕' },
+    { count: counts.low, color: '#FF5F72', label: 'Плохие', emoji: '😢' }
   ];
 
   let currentOffset = 0;
@@ -102,9 +102,11 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
             {segments.map((segment, index) => (
               <div key={index} className="flex items-center gap-2">
                 <div 
-                  className="w-5 h-5 rounded-full flex-shrink-0" 
+                  className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" 
                   style={{ backgroundColor: segment.color }}
-                />
+                >
+                  {segment.emoji}
+                </div>
                 <span className="text-base font-semibold text-foreground">
                   {segment.count} {segment.count === 1 ? 'день' : segment.count < 5 ? 'дня' : 'дней'}
                 </span>
