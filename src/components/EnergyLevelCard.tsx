@@ -119,7 +119,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps)
         </div>
 
         <Button 
-          onClick={() => navigate('/?tab=trends')}
+          onClick={() => navigate('/?tab=Тренды')}
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm py-4 rounded-2xl flex items-center justify-between px-6"
         >
           <span>Персональные рекомендации</span>
