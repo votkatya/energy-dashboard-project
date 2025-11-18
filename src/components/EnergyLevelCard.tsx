@@ -9,11 +9,11 @@ interface EnergyLevelCardProps {
 }
 
 const getEnergyLevel = (score: number): { text: string; color: string; bgColor: string; pillBg: string } => {
-  if (score >= 4.5) return { text: 'Отлично', color: 'text-black', bgColor: 'bg-green-400/90', pillBg: 'bg-green-500' };
-  if (score >= 3.5) return { text: 'Хорошо', color: 'text-black', bgColor: 'bg-lime-400/90', pillBg: 'bg-lime-500' };
-  if (score >= 2.5) return { text: 'Нормально', color: 'text-black', bgColor: 'bg-yellow-400/90', pillBg: 'bg-yellow-500' };
-  if (score >= 1.5) return { text: 'Низко', color: 'text-black', bgColor: 'bg-orange-400/90', pillBg: 'bg-orange-500' };
-  return { text: 'Очень низко', color: 'text-white', bgColor: 'bg-red-500/90', pillBg: 'bg-red-600' };
+  if (score >= 4.5) return { text: 'Отлично', color: 'text-black', bgColor: 'bg-green-400/90', pillBg: 'bg-[#22C55E]' };
+  if (score >= 3.8) return { text: 'Хорошо', color: 'text-black', bgColor: 'bg-lime-400/90', pillBg: 'bg-[#84CC16]' };
+  if (score >= 3.1) return { text: 'Нормально', color: 'text-black', bgColor: 'bg-yellow-400/90', pillBg: 'bg-[#EAB308]' };
+  if (score >= 2.1) return { text: 'Низкий', color: 'text-black', bgColor: 'bg-orange-400/90', pillBg: 'bg-[#F97316]' };
+  return { text: 'Критический', color: 'text-white', bgColor: 'bg-red-500/90', pillBg: 'bg-[#DC2626]' };
 };
 
 const EnergyLevelCard = ({ averageScore, monthlyAverage }: EnergyLevelCardProps) => {
