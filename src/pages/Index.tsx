@@ -118,8 +118,15 @@ const Index = () => {
 
       const imageUrl = canvas.toDataURL('image/png');
       
-      if (window.innerWidth <= 768) {
-        setExportedImage(imageUrl);
+      if (navigator.share && window.innerWidth <= 768) {
+        const blob = await (await fetch(imageUrl)).blob();
+        const file = new File([blob], `flowkat-stats-${new Date().toISOString().split('T')[0]}.png`, { type: 'image/png' });
+        
+        await navigator.share({
+          title: 'FlowKat Статистика',
+          text: 'Моя статистика энергии за период',
+          files: [file]
+        });
       } else {
         const link = document.createElement('a');
         link.download = `flowkat-stats-${new Date().toISOString().split('T')[0]}.png`;
@@ -128,6 +135,13 @@ const Index = () => {
       }
     } catch (error) {
       console.error('Ошибка при экспорте статистики:', error);
+      const imageUrl = statsRef.current ? (await html2canvas(statsRef.current, {
+        backgroundColor: '#09090b',
+        scale: 2,
+        logging: false,
+        useCORS: true
+      })).toDataURL('image/png') : '';
+      if (imageUrl) setExportedImage(imageUrl);
     }
   };
 
