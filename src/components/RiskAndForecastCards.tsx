@@ -92,12 +92,12 @@ const RiskAndForecastCards = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Card className={`${riskConfig.bgClass} ${riskConfig.borderClass} border`}>
-          <CardContent className="p-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <Icon name={riskConfig.icon} size={20} className={riskConfig.iconColor} />
-                <h3 className="font-semibold text-sm">Риск выгорания</h3>
+        <Card className={`${riskConfig.bgClass} ${riskConfig.borderClass} border h-full`}>
+          <CardContent className="p-4 h-full">
+            <div className="flex flex-col gap-2 h-full">
+              <div className="flex items-start gap-2">
+                <Icon name={riskConfig.icon} size={20} className={`${riskConfig.iconColor} flex-shrink-0 mt-0.5`} />
+                <h3 className="font-semibold text-sm leading-tight">Риск выгорания</h3>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {riskDescription}
@@ -112,12 +112,12 @@ const RiskAndForecastCards = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className={`${forecastConfig.bgClass} ${forecastConfig.borderClass} border`}>
-          <CardContent className="p-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <Icon name={forecastConfig.icon} size={20} className={forecastConfig.iconColor} />
-                <h3 className="font-semibold text-sm">Прогноз</h3>
+        <Card className={`${forecastConfig.bgClass} ${forecastConfig.borderClass} border h-full`}>
+          <CardContent className="p-4 h-full">
+            <div className="flex flex-col gap-2 h-full">
+              <div className="flex items-start gap-2">
+                <Icon name={forecastConfig.icon} size={20} className={`${forecastConfig.iconColor} flex-shrink-0 mt-0.5`} />
+                <h3 className="font-semibold text-sm leading-tight">Прогноз</h3>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {forecastDescription}

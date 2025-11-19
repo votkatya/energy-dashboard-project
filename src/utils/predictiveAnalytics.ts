@@ -145,15 +145,15 @@ export const predictNextWeek = (entries: EnergyEntry[]): WeekPrediction => {
 
   let message = '';
   if (probability >= 75 && trend === 'up') {
-    message = `Отличный прогноз! Тренд растёт, вероятность хорошей недели ${Math.round(probability)}%`;
+    message = `Тренд растёт, вероятность хорошей недели ${Math.round(probability)}%`;
   } else if (probability >= 70) {
-    message = `Отличные шансы! Вероятность хорошей недели ${Math.round(probability)}%`;
+    message = `Вероятность хорошей недели ${Math.round(probability)}%`;
   } else if (probability >= 50) {
-    message = `Неплохие шансы. Вероятность хорошей недели около ${Math.round(probability)}%`;
+    message = `Вероятность хорошей недели около ${Math.round(probability)}%`;
   } else if (trend === 'down') {
-    message = `Энергия снижается. Вероятность хорошей недели ${Math.round(probability)}%. Планируй восстановление`;
+    message = `Энергия снижается. Вероятность хорошей недели ${Math.round(probability)}%`;
   } else {
-    message = `Прогноз нестабилен. Фокус на отдыхе повысит шансы на успешную неделю`;
+    message = `Прогноз нестабилен, вероятность ${Math.round(probability)}%`;
   }
 
   return {
