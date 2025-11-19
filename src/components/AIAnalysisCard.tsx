@@ -24,7 +24,7 @@ const AIAnalysisCard = () => {
     setError(null);
     
     try {
-      const response = await fetch('https://functions.poehali.dev/6008afa7-60fc-4a40-86b2-8042fb78ec44', {
+      const response = await fetch('https://functions.poehali.dev/173fefe5-c3ef-45db-90f8-060626f176ce', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const AIAnalysisCard = () => {
             <div className="flex-1">
               <p className="text-sm font-medium text-destructive">{error}</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Проверьте, что добавлен API ключ Perplexity в настройках
+                Проверьте, что добавлен API ключ ChatGPT в настройках
               </p>
             </div>
           </div>
