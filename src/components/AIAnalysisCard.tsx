@@ -5,6 +5,12 @@ import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface AIAnalysis {
   analysis: string;
@@ -16,7 +22,21 @@ const AIAnalysisCard = () => {
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { user } = useAuth();
+
+  const handleCopy = async () => {
+    if (!analysis?.analysis) return;
+    
+    try {
+      await navigator.clipboard.writeText(analysis.analysis);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
 
   const fetchAnalysis = async () => {
     if (!user?.id) return;
@@ -39,6 +59,7 @@ const AIAnalysisCard = () => {
       
       const data = await response.json();
       setAnalysis(data);
+      setIsDialogOpen(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при получении анализа');
     } finally {
@@ -97,9 +118,42 @@ const AIAnalysisCard = () => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4 mt-4"
+            className="mt-4"
           >
-            <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
+            <Button
+              onClick={() => setIsDialogOpen(true)}
+              variant="outline"
+              className="w-full gap-2"
+            >
+              <Icon name="FileText" size={16} />
+              Показать анализ
+            </Button>
+          </motion.div>
+        )}
+      </CardContent>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between pr-8">
+              <span className="flex items-center gap-2">
+                <Icon name="Sparkles" size={20} className="text-primary" />
+                AI Анализ
+              </span>
+              <Button
+                onClick={handleCopy}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Icon name={copied ? "Check" : "Copy"} size={16} />
+                {copied ? 'Скопировано' : 'Копировать'}
+              </Button>
+            </DialogTitle>
+          </DialogHeader>
+          
+          {analysis && (
+            <div className="space-y-4">
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown
                   components={{
@@ -123,13 +177,13 @@ const AIAnalysisCard = () => {
                   {analysis.analysis}
                 </ReactMarkdown>
               </div>
-              <p className="text-xs text-muted-foreground mt-4 pt-3 border-t">
+              <p className="text-xs text-muted-foreground pt-3 border-t">
                 На основе {analysis.total_entries} записей
               </p>
             </div>
-          </motion.div>
-        )}
-      </CardContent>
+          )}
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
