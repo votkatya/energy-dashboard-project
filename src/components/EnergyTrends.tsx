@@ -25,15 +25,17 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
     });
 
-    const tagScores: { [tag: string]: { sum: number; count: number } } = {};
+    const tagScores: { [tag: string]: { sum: number; count: number; highCount: number; lowCount: number } } = {};
     monthEntries.forEach((e: any) => {
       if (e.category) {
         const tag = e.category.toLowerCase();
         if (!tagScores[tag]) {
-          tagScores[tag] = { sum: 0, count: 0 };
+          tagScores[tag] = { sum: 0, count: 0, highCount: 0, lowCount: 0 };
         }
         tagScores[tag].sum += e.score;
         tagScores[tag].count += 1;
+        if (e.score >= 4) tagScores[tag].highCount += 1;
+        if (e.score < 3) tagScores[tag].lowCount += 1;
       }
     });
 
@@ -45,8 +47,25 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       }))
       .sort((a, b) => b.avg - a.avg);
 
-    const bestTags = tagAverages.slice(0, 3);
-    const worstTags = tagAverages.slice(-3).reverse();
+    const bestTags = Object.entries(tagScores)
+      .map(([tag, data]) => ({
+        tag,
+        highCount: data.highCount,
+        count: data.count
+      }))
+      .filter(t => t.highCount > 0)
+      .sort((a, b) => b.highCount - a.highCount)
+      .slice(0, 3);
+
+    const worstTags = Object.entries(tagScores)
+      .map(([tag, data]) => ({
+        tag,
+        lowCount: data.lowCount,
+        count: data.count
+      }))
+      .filter(t => t.lowCount > 0)
+      .sort((a, b) => b.lowCount - a.lowCount)
+      .slice(0, 3);
 
     const wordFrequency: { [word: string]: number } = {};
     monthEntries.forEach((e: any) => {
@@ -151,7 +170,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
                   {analytics.bestTags.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-primary/5">
                       <span className="text-sm font-medium capitalize">{item.tag}</span>
-                      <span className="text-sm text-primary font-semibold">{item.avg.toFixed(1)}</span>
+                      <span className="text-sm text-primary font-semibold">×{item.highCount}</span>
                     </div>
                   ))}
                 </div>
@@ -176,7 +195,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
                   {analytics.worstTags.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-orange-500/5">
                       <span className="text-sm font-medium capitalize">{item.tag}</span>
-                      <span className="text-sm text-orange-500 font-semibold">{item.avg.toFixed(1)}</span>
+                      <span className="text-sm text-orange-500 font-semibold">×{item.lowCount}</span>
                     </div>
                   ))}
                 </div>
