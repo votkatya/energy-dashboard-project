@@ -51,7 +51,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     return {
       level: 'critical',
       daysLow: consecutiveLowDays,
-      message: `Критический уровень! ${consecutiveLowDays} дней подряд низкая энергия. Срочно нужен отдых.`,
+      message: `Критический уровень! ${consecutiveLowDays} дней подряд низкая энергия.`,
       color: 'text-destructive',
       icon: 'AlertTriangle'
     };
@@ -61,7 +61,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     return {
       level: 'high',
       daysLow: consecutiveLowDays,
-      message: `Высокий риск выгорания. ${lowDaysCount} дней за неделю с низкой энергией. Запланируй отдых.`,
+      message: `Высокий риск выгорания. ${lowDaysCount} дней за неделю с низкой энергией.`,
       color: 'text-orange-600',
       icon: 'AlertCircle'
     };
@@ -71,7 +71,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     return {
       level: 'medium',
       daysLow: consecutiveLowDays,
-      message: 'Средний риск. Энергия снижается — самое время позаботиться о себе.',
+      message: 'Средний риск. Энергия снижается.',
       color: 'text-yellow-600',
       icon: 'Info'
     };
@@ -81,7 +81,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     return {
       level: 'low',
       daysLow: 0,
-      message: 'Отлично! Энергия на высоком уровне, риск выгорания минимален.',
+      message: 'Энергия на высоком уровне, риск выгорания минимален.',
       color: 'text-energy-excellent',
       icon: 'CheckCircle2'
     };
@@ -90,7 +90,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
   return {
     level: 'low',
     daysLow: 0,
-    message: 'Всё хорошо! Энергия стабильна, риск выгорания низкий.',
+    message: 'Энергия стабильна, риск выгорания низкий.',
     color: 'text-energy-excellent',
     icon: 'CheckCircle2'
   };
