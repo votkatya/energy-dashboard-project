@@ -35,9 +35,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: Energy
               </div>
             </div>
             
-            <p className="text-muted-foreground text-xs leading-relaxed">
-              Тут что-то нужно написать, пока не знаю, что
-            </p>
+            <p className="text-muted-foreground text-xs leading-relaxed">Нажми на кнопку, чтобы получить рекомендации</p>
           </div>
 
           <div className="relative w-[120px] h-[120px] flex-shrink-0">
