@@ -127,29 +127,6 @@ const AIAnalysisCard = () => {
                 На основе {analysis.total_entries} записей
               </p>
             </div>
-
-            {analysis.recommendations && analysis.recommendations.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold flex items-center gap-2">
-                  <Icon name="Lightbulb" size={16} className="text-amber-500" />
-                  Рекомендации
-                </h4>
-                <ul className="space-y-2">
-                  {analysis.recommendations.map((rec, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-start gap-2 text-sm p-3 rounded-lg bg-accent/5 border border-accent/10"
-                    >
-                      <span className="text-accent font-bold mt-0.5">{index + 1}.</span>
-                      <span className="flex-1">{rec}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </motion.div>
         )}
       </CardContent>
