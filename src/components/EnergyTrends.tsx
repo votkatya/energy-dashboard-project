@@ -10,6 +10,17 @@ interface EnergyTrendsProps {
 }
 
 const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
+  const tagLabels: { [key: string]: string } = {
+    work: 'Работа',
+    family: 'Семья',
+    sport: 'Спорт',
+    sleep: 'Сон',
+    hobby: 'Хобби',
+    social: 'Общение',
+    study: 'Учёба',
+    health: 'Здоровье'
+  };
+
   const analytics = useMemo(() => {
     if (!data?.entries || data.entries.length === 0) {
       return null;
@@ -27,21 +38,23 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
 
     const tagScores: { [tag: string]: { sum: number; count: number; highCount: number; lowCount: number } } = {};
     monthEntries.forEach((e: any) => {
-      if (e.category) {
-        const tag = e.category.toLowerCase();
-        if (!tagScores[tag]) {
-          tagScores[tag] = { sum: 0, count: 0, highCount: 0, lowCount: 0 };
-        }
-        tagScores[tag].sum += e.score;
-        tagScores[tag].count += 1;
-        if (e.score >= 4) tagScores[tag].highCount += 1;
-        if (e.score < 3) tagScores[tag].lowCount += 1;
+      if (e.tags && Array.isArray(e.tags)) {
+        e.tags.forEach((tag: string) => {
+          const tagKey = tag.toLowerCase();
+          if (!tagScores[tagKey]) {
+            tagScores[tagKey] = { sum: 0, count: 0, highCount: 0, lowCount: 0 };
+          }
+          tagScores[tagKey].sum += e.score;
+          tagScores[tagKey].count += 1;
+          if (e.score >= 4) tagScores[tagKey].highCount += 1;
+          if (e.score < 3) tagScores[tagKey].lowCount += 1;
+        });
       }
     });
 
     const tagAverages = Object.entries(tagScores)
       .map(([tag, data]) => ({
-        tag,
+        tag: tagLabels[tag] || tag,
         avg: data.sum / data.count,
         count: data.count
       }))
@@ -49,7 +62,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
 
     const bestTags = Object.entries(tagScores)
       .map(([tag, data]) => ({
-        tag,
+        tag: tagLabels[tag] || tag,
         highCount: data.highCount,
         count: data.count
       }))
@@ -59,7 +72,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
 
     const worstTags = Object.entries(tagScores)
       .map(([tag, data]) => ({
-        tag,
+        tag: tagLabels[tag] || tag,
         lowCount: data.lowCount,
         count: data.count
       }))
@@ -131,7 +144,7 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
       avgLowPeriod,
       avgHighPeriod
     };
-  }, [data]);
+  }, [data, tagLabels]);
 
   if (isLoading) {
     return (
