@@ -10,6 +10,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     Business: Analyze user energy entries using ChatGPT and provide recommendations
     Args: event with httpMethod, headers (X-User-Id)
     Returns: AI-generated insights and recommendations based on energy patterns
+    Version: 1.0.1
     '''
     method: str = event.get('httpMethod', 'GET')
     
