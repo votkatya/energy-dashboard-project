@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 
 interface AIAnalysis {
   analysis: string;
@@ -99,8 +100,30 @@ const AIAnalysisCard = () => {
             className="space-y-4 mt-4"
           >
             <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
-              <p className="text-sm leading-relaxed">{analysis.analysis}</p>
-              <p className="text-xs text-muted-foreground mt-2">
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <ReactMarkdown
+                  components={{
+                    h3: ({ children }) => (
+                      <h3 className="text-lg font-bold mt-4 mb-2 text-foreground">{children}</h3>
+                    ),
+                    p: ({ children }) => (
+                      <p className="text-sm leading-relaxed mb-3 text-foreground">{children}</p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc pl-5 space-y-1 mb-3">{children}</ul>
+                    ),
+                    li: ({ children }) => (
+                      <li className="text-sm text-foreground">{children}</li>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-foreground">{children}</strong>
+                    ),
+                  }}
+                >
+                  {analysis.analysis}
+                </ReactMarkdown>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4 pt-3 border-t">
                 На основе {analysis.total_entries} записей
               </p>
             </div>
