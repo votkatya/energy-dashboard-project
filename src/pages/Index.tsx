@@ -354,6 +354,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
+            <AIAnalysisCard />
             {burnoutRisk && weekForecast && (
               <RiskAndForecastCards
                 riskLevel={burnoutRisk.level}
@@ -362,7 +363,6 @@ const Index = () => {
                 forecastDescription={weekForecast.message}
               />
             )}
-            <AIAnalysisCard />
             <EnergyTrends data={data} isLoading={isLoading} />
           </TabsContent>
 

@@ -86,22 +86,22 @@ const RiskAndForecastCards = ({
   const forecastConfig = getForecastConfig();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-3">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
         <Card className={`${riskConfig.bgClass} ${riskConfig.borderClass} border`}>
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <Icon name={riskConfig.icon} size={24} className={riskConfig.iconColor} />
-              <div className="flex-1">
-                <h3 className="font-semibold mb-2">{riskConfig.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {riskDescription}
-                </p>
+          <CardContent className="p-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Icon name={riskConfig.icon} size={20} className={riskConfig.iconColor} />
+                <h3 className="font-semibold text-sm">Риск выгорания</h3>
               </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {riskDescription}
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -113,15 +113,15 @@ const RiskAndForecastCards = ({
         transition={{ delay: 0.2 }}
       >
         <Card className={`${forecastConfig.bgClass} ${forecastConfig.borderClass} border`}>
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <Icon name={forecastConfig.icon} size={24} className={forecastConfig.iconColor} />
-              <div className="flex-1">
-                <h3 className="font-semibold mb-2">{forecastConfig.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {forecastDescription}
-                </p>
+          <CardContent className="p-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Icon name={forecastConfig.icon} size={20} className={forecastConfig.iconColor} />
+                <h3 className="font-semibold text-sm">Прогноз</h3>
               </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {forecastDescription}
+              </p>
             </div>
           </CardContent>
         </Card>
