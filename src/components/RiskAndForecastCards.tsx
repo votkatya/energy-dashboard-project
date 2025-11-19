@@ -117,7 +117,7 @@ const RiskAndForecastCards = ({
             <div className="flex flex-col gap-2 h-full">
               <div className="flex items-start gap-2">
                 <Icon name={forecastConfig.icon} size={20} className={`${forecastConfig.iconColor} flex-shrink-0 mt-0.5`} />
-                <h3 className="font-semibold text-sm leading-tight">Прогноз</h3>
+                <h3 className="font-semibold text-sm leading-tight">Прогноз<br />на неделю</h3>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {forecastDescription}
