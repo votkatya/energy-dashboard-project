@@ -16,6 +16,7 @@ import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import AIAnalysisCard from '@/components/AIAnalysisCard';
 import EnergyLevelCard from '@/components/EnergyLevelCard';
+import RiskAndForecastCards from '@/components/RiskAndForecastCards';
 import BottomNav from '@/components/BottomNav';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -23,7 +24,7 @@ import { parseDate } from '@/utils/dateUtils';
 import { calculateStats, filterEntriesByDays } from '@/utils/statsCalculator';
 import { HeroGeometric } from '@/components/ui/shape-landing-hero';
 import { motion } from 'framer-motion';
-import { analyzeBurnoutRisk } from '@/utils/predictiveAnalytics';
+import { analyzeBurnoutRisk, predictNextWeek } from '@/utils/predictiveAnalytics';
 import { useMemo, useRef } from 'react';
 import html2canvas from 'html2canvas';
 
@@ -103,6 +104,11 @@ const Index = () => {
   const burnoutRisk = useMemo(() => {
     if (!data?.entries || data.entries.length === 0) return null;
     return analyzeBurnoutRisk(data.entries);
+  }, [data]);
+
+  const weekForecast = useMemo(() => {
+    if (!data?.entries || data.entries.length === 0) return null;
+    return predictNextWeek(data.entries);
   }, [data]);
 
   const exportStatsAsImage = async () => {
@@ -348,6 +354,14 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
+            {burnoutRisk && weekForecast && (
+              <RiskAndForecastCards
+                riskLevel={burnoutRisk.level}
+                riskDescription={burnoutRisk.message}
+                forecastTrend={weekForecast.trend === 'up' ? 'improving' : weekForecast.trend === 'down' ? 'declining' : 'stable'}
+                forecastDescription={weekForecast.message}
+              />
+            )}
             <AIAnalysisCard />
             <EnergyTrends data={data} isLoading={isLoading} />
           </TabsContent>
