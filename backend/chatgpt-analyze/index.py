@@ -10,7 +10,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     Business: Analyze user energy entries using ChatGPT and provide recommendations
     Args: event with httpMethod, headers (X-User-Id)
     Returns: AI-generated insights and recommendations based on energy patterns
-    Version: 1.0.2
+    Version: 1.0.3
     '''
     method: str = event.get('httpMethod', 'GET')
     
@@ -102,6 +102,16 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps({'error': 'OpenAI API key not configured'})
+        }
+    
+    if not proxy_url:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'Proxy URL not configured. Add OPENAI_PROXY_URL secret.'})
         }
     
     conn = psycopg2.connect(database_url)
