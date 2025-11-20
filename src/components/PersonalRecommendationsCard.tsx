@@ -69,7 +69,8 @@ const PersonalRecommendationsCard = () => {
       });
       
       if (!response.ok) {
-        throw new Error('Не удалось получить анализ');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Не удалось получить анализ');
       }
       
       const data = await response.json();
