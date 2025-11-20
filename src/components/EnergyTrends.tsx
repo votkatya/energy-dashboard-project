@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
 import { motion } from 'framer-motion';
-import PersonalRecommendationsCard from '@/components/PersonalRecommendationsCard';
 
 interface EnergyTrendsProps {
   data?: any;
@@ -169,8 +168,6 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
 
   return (
     <div className="space-y-4">
-      <PersonalRecommendationsCard />
-      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <Card className="h-full">
