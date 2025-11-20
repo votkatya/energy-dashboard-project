@@ -14,7 +14,6 @@ import AddEntryDialog from '@/components/AddEntryDialog';
 import NotificationsDialog from '@/components/NotificationsDialog';
 import AnimatedCard from '@/components/AnimatedCard';
 import MonthlyGoalCard from '@/components/MonthlyGoalCard';
-import AIAnalysisCard from '@/components/AIAnalysisCard';
 import EnergyLevelCard from '@/components/EnergyLevelCard';
 import RiskAndForecastCards from '@/components/RiskAndForecastCards';
 import BottomNav from '@/components/BottomNav';
@@ -354,7 +353,6 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
-            <AIAnalysisCard />
             {burnoutRisk && weekForecast && (
               <RiskAndForecastCards
                 riskLevel={burnoutRisk.level}
