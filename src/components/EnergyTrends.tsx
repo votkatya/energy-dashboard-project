@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
 import { motion } from 'framer-motion';
+import PersonalRecommendationsCard from '@/components/PersonalRecommendationsCard';
 
 interface EnergyTrendsProps {
   data?: any;
@@ -332,6 +333,8 @@ const EnergyTrends = ({ data, isLoading }: EnergyTrendsProps) => {
           </Card>
         </motion.div>
       </div>
+
+      <PersonalRecommendationsCard />
     </div>
   );
 };

@@ -26,6 +26,46 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': ''
         }
     
+    if method == 'GET':
+        # Return existing analysis from DB
+        conn = psycopg2.connect(database_url)
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        
+        user_id_escaped = str(user_id).replace("'", "''")
+        
+        cursor.execute(f'''
+            SELECT analysis_text, total_entries, updated_at
+            FROM t_p45717398_energy_dashboard_pro.ai_analyses
+            WHERE user_id = '{user_id_escaped}'
+        ''')
+        
+        existing = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        
+        if not existing:
+            return {
+                'statusCode': 404,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': 'No analysis found'})
+            }
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'analysis': existing['analysis_text'],
+                'total_entries': existing['total_entries'],
+                'updated_at': existing['updated_at'].isoformat() if existing['updated_at'] else None
+            })
+        }
+    
     if method != 'POST':
         return {
             'statusCode': 405,
@@ -68,6 +108,16 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     user_id_escaped = str(user_id).replace("'", "''")
     
+    # Check if analysis already exists
+    cursor.execute(f'''
+        SELECT analysis_text, total_entries, updated_at
+        FROM t_p45717398_energy_dashboard_pro.ai_analyses
+        WHERE user_id = '{user_id_escaped}'
+    ''')
+    
+    existing_analysis = cursor.fetchone()
+    
+    # Get entries for analysis
     cursor.execute(f'''
         SELECT entry_date, score, thoughts, tags::text as tags
         FROM t_p45717398_energy_dashboard_pro.energy_entries
@@ -240,6 +290,24 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 continue
             if in_recommendations and (line.startswith('-') or line.startswith('•') or line[0].isdigit()):
                 recommendations.append(line.lstrip('•-0123456789. '))
+        
+        # Save or update analysis in database
+        conn = psycopg2.connect(database_url)
+        cursor = conn.cursor()
+        
+        cursor.execute(f'''
+            INSERT INTO t_p45717398_energy_dashboard_pro.ai_analyses 
+                (user_id, analysis_text, total_entries, updated_at)
+            VALUES ('{user_id_escaped}', %s, {len(entries)}, CURRENT_TIMESTAMP)
+            ON CONFLICT (user_id) DO UPDATE SET
+                analysis_text = EXCLUDED.analysis_text,
+                total_entries = EXCLUDED.total_entries,
+                updated_at = CURRENT_TIMESTAMP
+        ''', (analysis,))
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
         
         return {
             'statusCode': 200,
