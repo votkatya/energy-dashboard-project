@@ -26,6 +26,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': ''
         }
     
+    headers = event.get('headers', {})
+    user_id = headers.get('x-user-id') or headers.get('X-User-Id')
+    
+    if not user_id:
+        return {
+            'statusCode': 401,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': 'User ID required'})
+        }
+    
+    database_url = os.environ.get('DATABASE_URL')
+    
     if method == 'GET':
         # Return existing analysis from DB
         conn = psycopg2.connect(database_url)
@@ -76,20 +91,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': json.dumps({'error': 'Method not allowed'})
         }
     
-    headers = event.get('headers', {})
-    user_id = headers.get('x-user-id') or headers.get('X-User-Id')
-    
-    if not user_id:
-        return {
-            'statusCode': 401,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({'error': 'User ID required'})
-        }
-    
-    database_url = os.environ.get('DATABASE_URL')
     openai_key = os.environ.get('OPENAI_API_KEY')
     proxy_url = os.environ.get('OPENAI_PROXY_URL')
     
