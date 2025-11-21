@@ -359,7 +359,6 @@ const Index = () => {
             <PersonalRecommendationsCard />
             <EnergyTrendOverview entries={data?.entries || []} />
             <TagInfluenceCard entries={data?.entries || []} />
-            <EnergyTrends data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="settings" className="animate-fade-in">
