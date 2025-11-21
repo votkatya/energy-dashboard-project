@@ -48,7 +48,7 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
       ? secondWeekEntries.reduce((sum: number, e: any) => sum + e.score, 0) / secondWeekEntries.length
       : avgEnergy;
 
-    const lowEnergyDays = twoWeeksEntries.filter((e: any) => e.score <= 4).length;
+    const lowEnergyDays = twoWeeksEntries.filter((e: any) => e.score <= 2).length;
     const burnoutRisk = Math.round((lowEnergyDays / twoWeeksEntries.length) * 100);
 
     const trend = secondWeekAvg > firstWeekAvg ? 'up' : secondWeekAvg < firstWeekAvg ? 'down' : 'stable';
@@ -56,29 +56,29 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
     
     let weekForecast = 0;
     if (trend === 'up') {
-      weekForecast = Math.min(100, Math.round(70 + (trendDiff * 10)));
+      weekForecast = Math.min(100, Math.round(70 + (trendDiff * 20)));
     } else if (trend === 'down') {
-      weekForecast = Math.max(0, Math.round(50 - (trendDiff * 10)));
+      weekForecast = Math.max(0, Math.round(50 - (trendDiff * 20)));
     } else {
       weekForecast = 60;
     }
 
     let phase: PhaseInfo;
-    if (avgEnergy < 4) {
+    if (avgEnergy < 2) {
       phase = {
         name: 'Истощение',
         icon: 'BatteryLow',
         color: 'text-red-500',
         description: 'Требуется восстановление'
       };
-    } else if (avgEnergy >= 4 && avgEnergy < 5) {
+    } else if (avgEnergy >= 2 && avgEnergy < 3) {
       phase = {
         name: 'Восстановление',
         icon: 'RefreshCw',
         color: 'text-orange-500',
         description: 'Энергия возвращается'
       };
-    } else if (avgEnergy >= 5 && avgEnergy < 7) {
+    } else if (avgEnergy >= 3 && avgEnergy < 4) {
       phase = {
         name: 'Баланс',
         icon: 'Target',
@@ -151,7 +151,7 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-xs text-muted-foreground">Средняя энергия:</span>
-                <span className="text-sm font-semibold">{avgEnergy} / 10</span>
+                <span className="text-sm font-semibold">{avgEnergy} / 5</span>
               </div>
             </div>
 
