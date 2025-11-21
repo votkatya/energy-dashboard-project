@@ -206,9 +206,18 @@ const EnergyIndexesCard = ({ entries }: EnergyIndexesCardProps) => {
                   </span>
                 </div>
                 {peaksCount > 0 && (
-                  <p className="text-xs text-muted-foreground">
-                    Всего пиков: {peaksCount}
-                  </p>
+                  <>
+                    <p className="text-xs text-muted-foreground">
+                      Всего пиков: {peaksCount}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2 pt-2 border-t border-secondary">
+                      {peakFrequency > 7 
+                        ? '⚠️ Пики энергии стали редкими — стоит обратить внимание на отдых и восстановление'
+                        : peakFrequency > 4
+                        ? '✓ Нормальная частота пиков — вы регулярно чувствуете подъёмы'
+                        : '✓ Частые пики энергии — отличный ритм!'}
+                    </p>
+                  </>
                 )}
               </div>
             </div>
@@ -230,9 +239,18 @@ const EnergyIndexesCard = ({ entries }: EnergyIndexesCardProps) => {
                   </span>
                 </div>
                 {lowStreaksCount > 0 && (
-                  <p className="text-xs text-muted-foreground">
-                    Всего спадов: {lowStreaksCount}
-                  </p>
+                  <>
+                    <p className="text-xs text-muted-foreground">
+                      Всего спадов: {lowStreaksCount}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2 pt-2 border-t border-secondary">
+                      {lowStreaksCount > 5
+                        ? '⚠️ Спады стали частыми — стоит найти причины и проработать их'
+                        : lowStreakLength > 3
+                        ? '⚠️ Спады длятся долго — требуется больше времени на восстановление'
+                        : '✓ Спады короткие и редкие — вы хорошо справляетесь'}
+                    </p>
+                  </>
                 )}
               </div>
             </div>
@@ -256,11 +274,11 @@ const EnergyIndexesCard = ({ entries }: EnergyIndexesCardProps) => {
                 <p className="text-xs text-muted-foreground">
                   {recoverySpeed > 0
                     ? recoverySpeed < 2
-                      ? 'Быстрое восстановление'
+                      ? '✓ Быстрое восстановление — вы хорошо выходите из спадов'
                       : recoverySpeed < 4
-                      ? 'Нормальное восстановление'
-                      : 'Медленное восстановление'
-                    : 'Недостаточно циклов'}
+                      ? '✓ Нормальное восстановление — стабильный темп'
+                      : '⚠️ Медленное восстановление — возможно, нужен более качественный отдых'
+                    : 'Недостаточно циклов для анализа'}
                 </p>
               </div>
             </div>
@@ -280,10 +298,10 @@ const EnergyIndexesCard = ({ entries }: EnergyIndexesCardProps) => {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {cyclicity === 'stable' && 'Пики происходят регулярно'}
-                  {cyclicity === 'moderate' && 'Пики с небольшими колебаниями'}
-                  {cyclicity === 'unstable' && 'Хаотичные интервалы между пиками'}
-                  {cyclicity === 'insufficient' && 'Недостаточно пиков для анализа'}
+                  {cyclicity === 'stable' && '✓ Пики происходят регулярно — у вас стабильный ритм энергии'}
+                  {cyclicity === 'moderate' && '✓ Пики с небольшими колебаниями — нормальная вариативность'}
+                  {cyclicity === 'unstable' && '⚠️ Хаотичные интервалы между пиками — стоит найти свой ритм'}
+                  {cyclicity === 'insufficient' && 'Недостаточно пиков для анализа ритма'}
                 </p>
               </div>
             </div>
