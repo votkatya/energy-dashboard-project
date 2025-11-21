@@ -20,39 +20,39 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
     if (!entries || entries.length === 0) return null;
 
     const now = new Date();
-    const twoWeeksAgo = new Date(now);
-    twoWeeksAgo.setDate(now.getDate() - 14);
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(now.getDate() - 30);
 
-    const twoWeeksEntries = entries.filter((e: any) => {
+    const thirtyDaysEntries = entries.filter((e: any) => {
       const date = parseDate(e.date);
-      return date >= twoWeeksAgo && date <= now;
+      return date >= thirtyDaysAgo && date <= now;
     });
 
-    if (twoWeeksEntries.length === 0) return null;
+    if (thirtyDaysEntries.length === 0) return null;
 
-    const scores = twoWeeksEntries.map((e: any) => e.score);
+    const scores = thirtyDaysEntries.map((e: any) => e.score);
     const avgEnergy = scores.reduce((a: number, b: number) => a + b, 0) / scores.length;
     
-    const sortedByDate = [...twoWeeksEntries].sort((a: any, b: any) => {
+    const sortedByDate = [...thirtyDaysEntries].sort((a: any, b: any) => {
       return parseDate(a.date).getTime() - parseDate(b.date).getTime();
     });
 
-    const firstWeekEntries = sortedByDate.slice(0, Math.floor(sortedByDate.length / 2));
-    const secondWeekEntries = sortedByDate.slice(Math.floor(sortedByDate.length / 2));
+    const firstHalfEntries = sortedByDate.slice(0, Math.floor(sortedByDate.length / 2));
+    const secondHalfEntries = sortedByDate.slice(Math.floor(sortedByDate.length / 2));
     
-    const firstWeekAvg = firstWeekEntries.length > 0
-      ? firstWeekEntries.reduce((sum: number, e: any) => sum + e.score, 0) / firstWeekEntries.length
+    const firstHalfAvg = firstHalfEntries.length > 0
+      ? firstHalfEntries.reduce((sum: number, e: any) => sum + e.score, 0) / firstHalfEntries.length
       : avgEnergy;
     
-    const secondWeekAvg = secondWeekEntries.length > 0
-      ? secondWeekEntries.reduce((sum: number, e: any) => sum + e.score, 0) / secondWeekEntries.length
+    const secondHalfAvg = secondHalfEntries.length > 0
+      ? secondHalfEntries.reduce((sum: number, e: any) => sum + e.score, 0) / secondHalfEntries.length
       : avgEnergy;
 
-    const lowEnergyDays = twoWeeksEntries.filter((e: any) => e.score <= 2).length;
-    const burnoutRisk = Math.round((lowEnergyDays / twoWeeksEntries.length) * 100);
+    const lowEnergyDays = thirtyDaysEntries.filter((e: any) => e.score <= 2).length;
+    const burnoutRisk = Math.round((lowEnergyDays / thirtyDaysEntries.length) * 100);
 
-    const trend = secondWeekAvg > firstWeekAvg ? 'up' : secondWeekAvg < firstWeekAvg ? 'down' : 'stable';
-    const trendDiff = Math.abs(secondWeekAvg - firstWeekAvg);
+    const trend = secondHalfAvg > firstHalfAvg ? 'up' : secondHalfAvg < firstHalfAvg ? 'down' : 'stable';
+    const trendDiff = Math.abs(secondHalfAvg - firstHalfAvg);
     
     let weekForecast = 0;
     if (trend === 'up') {
@@ -109,7 +109,7 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
       <Card>
         <CardContent className="py-8 text-center">
           <p className="text-sm text-muted-foreground">
-            Недостаточно данных за последние 2 недели
+            Недостаточно данных за последние 30 дней
           </p>
         </CardContent>
       </Card>
@@ -130,7 +130,7 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
             <Icon name="Activity" size={20} className="text-primary" />
             Общий тренд энергии
             <span className="text-xs text-muted-foreground font-normal ml-auto">
-              за 2 недели
+              за 30 дней
             </span>
           </CardTitle>
         </CardHeader>

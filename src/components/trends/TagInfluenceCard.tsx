@@ -41,21 +41,21 @@ const TagInfluenceCard = ({ entries }: TagInfluenceCardProps) => {
     if (!entries || entries.length === 0) return null;
 
     const now = new Date();
-    const twoWeeksAgo = new Date(now);
-    twoWeeksAgo.setDate(now.getDate() - 14);
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(now.getDate() - 30);
 
-    const twoWeeksEntries = entries.filter((e: any) => {
+    const thirtyDaysEntries = entries.filter((e: any) => {
       const date = parseDate(e.date);
-      return date >= twoWeeksAgo && date <= now;
+      return date >= thirtyDaysAgo && date <= now;
     });
 
-    if (twoWeeksEntries.length === 0) return null;
+    if (thirtyDaysEntries.length === 0) return null;
 
-    const overallAvg = twoWeeksEntries.reduce((sum: number, e: any) => sum + e.score, 0) / twoWeeksEntries.length;
+    const overallAvg = thirtyDaysEntries.reduce((sum: number, e: any) => sum + e.score, 0) / thirtyDaysEntries.length;
 
     const tagScores: { [tag: string]: { sum: number; count: number } } = {};
     
-    twoWeeksEntries.forEach((e: any) => {
+    thirtyDaysEntries.forEach((e: any) => {
       if (e.tags && Array.isArray(e.tags)) {
         e.tags.forEach((tag: string) => {
           const tagKey = tag.toLowerCase();
