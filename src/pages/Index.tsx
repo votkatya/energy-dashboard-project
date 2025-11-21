@@ -153,6 +153,35 @@ const Index = () => {
     }
   };
 
+  const exportDataToCSV = () => {
+    if (!data?.entries || data.entries.length === 0) {
+      alert('Нет данных для экспорта');
+      return;
+    }
+
+    const headers = ['Дата', 'Энергия', 'Теги', 'Мысли'];
+    const rows = data.entries.map((entry: any) => {
+      const date = entry.date || '';
+      const energy = entry.score || '';
+      const tags = entry.tags ? entry.tags.join(', ') : '';
+      const thoughts = entry.thoughts ? entry.thoughts.replace(/"/g, '""') : '';
+      
+      return `"${date}","${energy}","${tags}","${thoughts}"`;
+    });
+
+    const csvContent = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `flowkat-data-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <div 
@@ -511,6 +540,28 @@ const Index = () => {
                       )}
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Download" size={24} />
+                    Экспорт данных
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Выгрузите все свои записи в формате CSV для анализа в Excel или Google Sheets
+                  </p>
+                  <Button
+                    onClick={exportDataToCSV}
+                    variant="outline"
+                    className="w-full gap-2"
+                  >
+                    <Icon name="FileDown" size={18} />
+                    Выгрузить базу записей
+                  </Button>
                 </CardContent>
               </Card>
 
