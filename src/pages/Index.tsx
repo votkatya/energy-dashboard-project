@@ -20,6 +20,7 @@ import RiskAndForecastCards from '@/components/RiskAndForecastCards';
 import EnergyTrendOverview from '@/components/trends/EnergyTrendOverview';
 import TagInfluenceCard from '@/components/trends/TagInfluenceCard';
 import BurnoutIndicatorsCard from '@/components/trends/BurnoutIndicatorsCard';
+import EnergyIndexesCard from '@/components/trends/EnergyIndexesCard';
 import BottomNav from '@/components/BottomNav';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -389,6 +390,7 @@ const Index = () => {
             <PersonalRecommendationsCard />
             <EnergyTrendOverview entries={data?.entries || []} />
             <TagInfluenceCard entries={data?.entries || []} />
+            <EnergyIndexesCard entries={data?.entries || []} />
             <BurnoutIndicatorsCard entries={data?.entries || []} />
           </TabsContent>
 
