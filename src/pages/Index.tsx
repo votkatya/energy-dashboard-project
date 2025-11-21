@@ -356,7 +356,12 @@ const Index = () => {
                 </div>
 
                 {homeView === 'calendar' ? (
-                  <EnergyCalendar data={data} isLoading={isLoading} />
+                  <>
+                    <EnergyCalendar data={data} isLoading={isLoading} />
+                    <p className="text-center text-sm text-muted-foreground mt-4">
+                      Нажмите на дату, чтобы добавить или удалить запись
+                    </p>
+                  </>
                 ) : (
                   <EntriesFeed entries={data?.entries || []} />
                 )}
