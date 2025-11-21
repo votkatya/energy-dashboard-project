@@ -399,6 +399,72 @@ const Index = () => {
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
+                    <Icon name="Info" size={24} />
+                    О приложении
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm">
+                  <p className="text-foreground">
+                    Привет! Я — Катя и я сделала это приложение. А вот здесь про меня подробнее —{' '}
+                    <a 
+                      href="https://votkatya.ru" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-primary hover:text-primary-light underline transition-colors"
+                    >
+                      votkatya.ru
+                    </a>
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="MessageCircle" size={24} />
+                    Обратная связь
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Что тебе здесь понравилось или не очень? Расскажи
+                  </p>
+                  <Button
+                    onClick={() => window.open('https://t.me/votkatya', '_blank')}
+                    variant="outline"
+                    className="w-full gap-2"
+                  >
+                    <Icon name="Send" size={18} />
+                    Написать в Telegram
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Bell" size={24} />
+                    Уведомления
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Настройте ежедневные напоминания и получайте уведомления о важных событиях
+                  </p>
+                  <Button
+                    onClick={() => setShowNotificationsDialog(true)}
+                    variant="outline"
+                    className="w-full gap-2"
+                  >
+                    <Icon name="Bell" size={18} />
+                    Настроить уведомления
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
                     <Icon name="User" size={24} />
                     Профиль
                   </CardTitle>
@@ -499,28 +565,6 @@ const Index = () => {
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Icon name="Bell" size={24} />
-                    Уведомления
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Настройте ежедневные напоминания и получайте уведомления о важных событиях
-                  </p>
-                  <Button
-                    onClick={() => setShowNotificationsDialog(true)}
-                    variant="outline"
-                    className="w-full gap-2"
-                  >
-                    <Icon name="Bell" size={18} />
-                    Настроить уведомления
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
                     <Icon name="Download" size={24} />
                     Экспорт данных
                   </CardTitle>
@@ -537,20 +581,6 @@ const Index = () => {
                     <Icon name="FileDown" size={18} />
                     Выгрузить базу записей
                   </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Icon name="Info" size={24} />
-                    О приложении
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm text-muted-foreground">
-                  <p><strong className="text-foreground">FlowKat</strong> — персональный трекер энергии и настроения</p>
-                  <p>Версия: 1.0.0</p>
-                  <p>Всего записей: {data?.entries?.length || 0}</p>
                 </CardContent>
               </Card>
 
