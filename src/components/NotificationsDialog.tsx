@@ -29,8 +29,12 @@ const defaultSettings: NotificationSettings = {
   weeklyReport: false,
 };
 
-const NotificationsDialog = () => {
-  const [open, setOpen] = useState(false);
+interface NotificationsDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+const NotificationsDialog = ({ open, onOpenChange }: NotificationsDialogProps) => {
   const [settings, setSettings] = useState<NotificationSettings>(defaultSettings);
   const [hasPermission, setHasPermission] = useState<'granted' | 'denied' | 'default'>('default');
   const [isSaving, setIsSaving] = useState(false);
@@ -126,7 +130,7 @@ const NotificationsDialog = () => {
       if (result) {
         setSaveSuccess(true);
         setTimeout(() => {
-          setOpen(false);
+          onOpenChange(false);
           setSaveSuccess(false);
         }, 1500);
       } else {
@@ -140,19 +144,7 @@ const NotificationsDialog = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          size="icon"
-          variant="outline"
-          className="relative glass-effect hover:glass-card transition-all"
-        >
-          <Icon name="Bell" size={20} />
-          {settings.dailyReminder && (
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
-          )}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

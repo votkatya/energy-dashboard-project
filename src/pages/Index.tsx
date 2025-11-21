@@ -34,6 +34,7 @@ import html2canvas from 'html2canvas';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showNotificationsDialog, setShowNotificationsDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [homeView, setHomeView] = useState<'calendar' | 'feed'>('calendar');
   const [timePeriod, setTimePeriod] = useState<'week' | 'month' | 'year'>('week');
@@ -212,7 +213,6 @@ const Index = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <NotificationsDialog />
                 <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
@@ -490,6 +490,28 @@ const Index = () => {
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
+                    <Icon name="Bell" size={24} />
+                    Уведомления
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Настройте ежедневные напоминания и получайте уведомления о важных событиях
+                  </p>
+                  <Button
+                    onClick={() => setShowNotificationsDialog(true)}
+                    variant="outline"
+                    className="w-full gap-2"
+                  >
+                    <Icon name="Bell" size={18} />
+                    Настроить уведомления
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
                     <Icon name="Download" size={24} />
                     Экспорт данных
                   </CardTitle>
@@ -551,6 +573,7 @@ const Index = () => {
       </div>
 
       <AddEntryDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
+      <NotificationsDialog open={showNotificationsDialog} onOpenChange={setShowNotificationsDialog} />
       
       {exportedImage && (
         <div 
