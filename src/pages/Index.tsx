@@ -391,7 +391,6 @@ const Index = () => {
             <EnergyTrendOverview entries={data?.entries || []} />
             <TagInfluenceCard entries={data?.entries || []} />
             <EnergyIndexesCard entries={data?.entries || []} />
-            <BurnoutIndicatorsCard entries={data?.entries || []} />
           </TabsContent>
 
           <TabsContent value="settings" className="animate-fade-in">
