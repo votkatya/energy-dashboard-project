@@ -218,7 +218,7 @@ const Index = () => {
                 <Button
                   onClick={() => setShowHelpDialog(true)}
                   size="icon"
-                  className="bg-green-500 hover:bg-green-600 text-white"
+                  className="bg-primary hover:bg-primary-dark text-primary-foreground"
                 >
                   <Icon name="HelpCircle" size={20} />
                 </Button>
@@ -588,7 +588,7 @@ const Index = () => {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl">
-              <Icon name="HelpCircle" size={24} className="text-green-500" />
+              <Icon name="HelpCircle" size={24} className="text-primary" />
               Как пользоваться FlowKat
             </DialogTitle>
           </DialogHeader>
@@ -596,8 +596,8 @@ const Index = () => {
           <div className="space-y-6 py-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                  <Icon name="Home" size={16} className="text-green-500" />
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Home" size={16} className="text-primary" />
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Главная</h3>
@@ -651,19 +651,19 @@ const Index = () => {
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex gap-2">
-                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span className="text-primary flex-shrink-0">•</span>
                   <span>Заполняйте записи регулярно — лучше всего в конце дня</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span className="text-primary flex-shrink-0">•</span>
                   <span>Используйте теги, чтобы понять, что влияет на вашу энергию</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span className="text-primary flex-shrink-0">•</span>
                   <span>Обращайте внимание на тренды — они помогут предотвратить выгорание</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span className="text-primary flex-shrink-0">•</span>
                   <span>Включите уведомления, чтобы не забывать добавлять записи</span>
                 </li>
               </ul>
