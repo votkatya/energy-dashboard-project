@@ -402,58 +402,7 @@ const Index = () => {
                 <CardContent className="space-y-4">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="name" className="text-sm font-medium">Имя</Label>
-                      {!isEditingName ? (
-                        <div className="flex items-center gap-2 mt-2">
-                          <Input
-                            value={userName || 'Имя не задано'}
-                            disabled
-                            className="flex-1"
-                          />
-                          <Button
-                            onClick={() => setIsEditingName(true)}
-                            variant="outline"
-                            size="icon"
-                          >
-                            <Icon name="Pencil" size={16} />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="space-y-2 mt-2">
-                          <Input
-                            id="name"
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
-                            placeholder="Введите имя"
-                          />
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() => {
-                                setIsEditingName(false);
-                              }}
-                              size="sm"
-                              className="flex-1"
-                            >
-                              Сохранить
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                setUserName('');
-                                setIsEditingName(false);
-                              }}
-                              variant="outline"
-                              size="sm"
-                              className="flex-1"
-                            >
-                              Отмена
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="pt-4 border-t">
-                      <Label className="text-sm font-medium">Пароль</Label>
+                      <Label className="text-sm font-medium">Изменить пароль</Label>
                       {!isEditingPassword ? (
                         <div className="flex items-center gap-2 mt-2">
                           <Input
