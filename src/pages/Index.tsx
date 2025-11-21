@@ -359,7 +359,7 @@ const Index = () => {
                   <>
                     <EnergyCalendar data={data} isLoading={isLoading} />
                     <p className="text-center text-sm text-muted-foreground mt-4">
-                      Нажмите на дату, чтобы добавить или удалить запись
+                      Нажмите на дату, чтобы добавить, изменить или удалить запись
                     </p>
                   </>
                 ) : (
