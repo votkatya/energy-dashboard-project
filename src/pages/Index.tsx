@@ -176,48 +176,40 @@ const Index = () => {
     });
 
     const csvContent = [headers.join(','), ...rows].join('\n');
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const fileName = `flowkat-data-${new Date().toISOString().split('T')[0]}.csv`;
-    
     const platform = getPlatform();
     
     if (platform === 'telegram') {
       const tg = getTelegramWebApp();
       
-      if (tg && navigator.share) {
-        try {
-          const file = new File([blob], fileName, { type: 'text/csv' });
-          await navigator.share({
-            title: 'FlowKat данные',
-            text: 'Экспорт данных из FlowKat',
-            files: [file]
+      try {
+        await navigator.clipboard.writeText(csvContent);
+        
+        if (tg?.showPopup) {
+          tg.showPopup({
+            title: 'Данные скопированы!',
+            message: 'CSV данные скопированы в буфер обмена. Вставьте их в любой текстовый редактор или Google Sheets',
+            buttons: [{ type: 'ok' }]
           });
-          return;
-        } catch (error) {
-          console.error('Ошибка при шаринге через Telegram:', error);
+        } else {
+          alert('Данные скопированы в буфер обмена! Вставьте их в любой текстовый редактор или Google Sheets');
         }
+        return;
+      } catch (error) {
+        console.error('Ошибка копирования:', error);
       }
-      
-      const reader = new FileReader();
-      reader.onload = function() {
-        const dataUrl = reader.result as string;
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = fileName;
-        link.click();
-      };
-      reader.readAsDataURL(blob);
-    } else {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', fileName);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
     }
+    
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const fileName = `flowkat-data-${new Date().toISOString().split('T')[0]}.csv`;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -604,15 +596,18 @@ const Index = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Выгрузите все свои записи в формате CSV для анализа в Excel или Google Sheets
+                    {getPlatform() === 'telegram' 
+                      ? 'Скопируйте данные в буфер обмена и вставьте в Google Sheets или текстовый редактор'
+                      : 'Выгрузите все свои записи в формате CSV для анализа в Excel или Google Sheets'
+                    }
                   </p>
                   <Button
                     onClick={exportDataToCSV}
                     variant="outline"
                     className="w-full gap-2"
                   >
-                    <Icon name="FileDown" size={18} />
-                    Выгрузить базу записей
+                    <Icon name={getPlatform() === 'telegram' ? 'Copy' : 'FileDown'} size={18} />
+                    {getPlatform() === 'telegram' ? 'Скопировать данные' : 'Выгрузить базу записей'}
                   </Button>
                 </CardContent>
               </Card>
