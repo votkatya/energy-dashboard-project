@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 import EnergyCalendar from '@/components/EnergyCalendar';
 import EntriesFeed from '@/components/EntriesFeed';
@@ -35,6 +36,7 @@ import html2canvas from 'html2canvas';
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showNotificationsDialog, setShowNotificationsDialog] = useState(false);
+  const [showHelpDialog, setShowHelpDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [homeView, setHomeView] = useState<'calendar' | 'feed'>('calendar');
   const [timePeriod, setTimePeriod] = useState<'week' | 'month' | 'year'>('week');
@@ -213,6 +215,13 @@ const Index = () => {
                 </div>
               </div>
               <div className="flex gap-2">
+                <Button
+                  onClick={() => setShowHelpDialog(true)}
+                  size="icon"
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                >
+                  <Icon name="HelpCircle" size={20} />
+                </Button>
                 <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
@@ -574,6 +583,100 @@ const Index = () => {
 
       <AddEntryDialog open={showAddDialog} onOpenChange={setShowAddDialog} />
       <NotificationsDialog open={showNotificationsDialog} onOpenChange={setShowNotificationsDialog} />
+      
+      <Dialog open={showHelpDialog} onOpenChange={setShowHelpDialog}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <Icon name="HelpCircle" size={24} className="text-green-500" />
+              Как пользоваться FlowKat
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Home" size={16} className="text-green-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Главная</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Добавляйте записи о вашей энергии каждый день. Нажмите на дату в календаре, чтобы добавить, изменить или удалить запись. Оцените энергию по шкале 1-5 и добавьте теги (работа, спорт, семья и т.д.)
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <Icon name="BarChart3" size={16} className="text-blue-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Статистика</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Смотрите графики вашей энергии за неделю, месяц или год. Анализируйте среднюю энергию и распределение по уровням. Переключайте периоды стрелками или выберите произвольный диапазон.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Activity" size={16} className="text-purple-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Тренды</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Получите персональные рекомендации от ИИ, узнайте свою текущую фазу энергии, что влияет на неё больше всего, и отслеживайте ключевые индексы: частоту пиков, длительность спадов и скорость восстановления.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Settings" size={16} className="text-orange-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Настройки</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Настройте уведомления для ежедневных напоминаний, экспортируйте свои данные в CSV для анализа в Excel, и управляйте своим профилем.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t pt-4">
+              <h3 className="font-semibold mb-3 flex items-center gap-2">
+                <Icon name="Lightbulb" size={18} className="text-yellow-500" />
+                Советы по использованию
+              </h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex gap-2">
+                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span>Заполняйте записи регулярно — лучше всего в конце дня</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span>Используйте теги, чтобы понять, что влияет на вашу энергию</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span>Обращайте внимание на тренды — они помогут предотвратить выгорание</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-green-500 flex-shrink-0">•</span>
+                  <span>Включите уведомления, чтобы не забывать добавлять записи</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
+              <p className="text-sm">
+                <strong className="text-accent">💡 Важно:</strong> FlowKat анализирует данные персонально для вас. Ваши пики и спады определяются относительно вашей собственной нормы, а не абсолютных значений.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       {exportedImage && (
         <div 
