@@ -50,7 +50,7 @@ const EnergyCircleStats = ({ entries, period, startDate, endDate }: EnergyCircle
   
   const segments = [
     { count: counts.excellent, color: '#08D169', label: 'Отличные', emoji: '🤩' },
-    { count: counts.good, color: '#25DACE', label: 'Отличные', emoji: '😊' },
+    { count: counts.good, color: '#25DACE', label: 'Хорошие', emoji: '😊' },
     { count: counts.neutral, color: '#48C0FF', label: 'Нейтральные', emoji: '😐' },
     { count: counts.mediumLow, color: '#FF9D78', label: 'Средне-низкие', emoji: '😕' },
     { count: counts.low, color: '#FF5F72', label: 'Плохие', emoji: '😢' }
