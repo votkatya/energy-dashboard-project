@@ -32,6 +32,7 @@ import { motion } from 'framer-motion';
 import { analyzeBurnoutRisk, predictNextWeek } from '@/utils/predictiveAnalytics';
 import { useMemo, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import { getPlatform, getTelegramWebApp } from '@/utils/platformDetector';
 
 const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -158,7 +159,7 @@ const Index = () => {
     }
   };
 
-  const exportDataToCSV = () => {
+  const exportDataToCSV = async () => {
     if (!data?.entries || data.entries.length === 0) {
       alert('Нет данных для экспорта');
       return;
@@ -176,15 +177,47 @@ const Index = () => {
 
     const csvContent = [headers.join(','), ...rows].join('\n');
     const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
+    const fileName = `flowkat-data-${new Date().toISOString().split('T')[0]}.csv`;
     
-    link.setAttribute('href', url);
-    link.setAttribute('download', `flowkat-data-${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const platform = getPlatform();
+    
+    if (platform === 'telegram') {
+      const tg = getTelegramWebApp();
+      
+      if (tg && navigator.share) {
+        try {
+          const file = new File([blob], fileName, { type: 'text/csv' });
+          await navigator.share({
+            title: 'FlowKat данные',
+            text: 'Экспорт данных из FlowKat',
+            files: [file]
+          });
+          return;
+        } catch (error) {
+          console.error('Ошибка при шаринге через Telegram:', error);
+        }
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function() {
+        const dataUrl = reader.result as string;
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = fileName;
+        link.click();
+      };
+      reader.readAsDataURL(blob);
+    } else {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', fileName);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
   };
 
   return (
