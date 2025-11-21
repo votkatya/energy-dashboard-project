@@ -367,23 +367,10 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="stats" className="animate-fade-in space-y-6">
-            <div ref={statsRef} className="space-y-6">
-              {data?.entries && data.entries.length > 0 && (
-                <EnergyChart entries={data.entries} />
-              )}
-              <EnergyStats data={data} isLoading={isLoading} />
-            </div>
-            <div className="mt-6">
-              <Button
-                onClick={exportStatsAsImage}
-                variant="default"
-                size="lg"
-                className="w-full gap-2"
-              >
-                <Icon name="Share2" size={20} />
-                Поделиться статистикой
-              </Button>
-            </div>
+            {data?.entries && data.entries.length > 0 && (
+              <EnergyChart entries={data.entries} />
+            )}
+            <EnergyStats data={data} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
