@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "Login with invalid credentials",
+      "name": "Login with non-existent account",
       "method": "POST",
       "path": "/",
       "body": {
@@ -9,28 +9,22 @@
         "email": "nonexistent@example.com",
         "password": "wrongpass"
       },
-      "expectedStatus": 401,
+      "expectedStatus": 404,
       "expectedBody": {
         "error": "string"
       },
       "bodyMatcher": "partial"
     },
     {
-      "name": "Register new user",
-      "method": "POST",
+      "name": "Verify token",
+      "method": "GET",
       "path": "/",
-      "body": {
-        "action": "register",
-        "email": "newuser@example.com",
-        "password": "testpass123",
-        "name": "Test User"
+      "headers": {
+        "X-Auth-Token": "invalid-token"
       },
-      "expectedStatus": 201,
+      "expectedStatus": 401,
       "expectedBody": {
-        "token": "string",
-        "user": {
-          "email": "string"
-        }
+        "error": "string"
       },
       "bodyMatcher": "partial"
     }

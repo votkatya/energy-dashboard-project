@@ -100,7 +100,14 @@ const Auth = () => {
       }
       navigate('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Что-то пошло не так');
+      const errorMessage = err instanceof Error ? err.message : 'Что-то пошло не так';
+      setError(errorMessage);
+      
+      if (errorMessage.includes('не найден') || errorMessage.includes('зарегистрируйтесь')) {
+        setTimeout(() => {
+          setIsLogin(false);
+        }, 2000);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -189,6 +196,31 @@ const Auth = () => {
             </CardHeader>
 
             <CardContent>
+              <div className="flex gap-2 mb-6">
+                <Button
+                  type="button"
+                  variant={isLogin ? "default" : "outline"}
+                  className="flex-1"
+                  onClick={() => {
+                    setIsLogin(true);
+                    setError('');
+                  }}
+                >
+                  Вход
+                </Button>
+                <Button
+                  type="button"
+                  variant={!isLogin ? "default" : "outline"}
+                  className="flex-1"
+                  onClick={() => {
+                    setIsLogin(false);
+                    setError('');
+                  }}
+                >
+                  Регистрация
+                </Button>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 {!isLogin && (
                   <div className="space-y-2">
@@ -243,9 +275,19 @@ const Auth = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm"
+                    className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm space-y-2"
                   >
-                    {error}
+                    <div className="flex items-start gap-2">
+                      <Icon name="AlertCircle" size={18} className="flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p>{error}</p>
+                        {(error.includes('не найден') || error.includes('зарегистрируйтесь')) && (
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            Переключаемся на регистрацию через 2 секунды...
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </motion.div>
                 )}
 

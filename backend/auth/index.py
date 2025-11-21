@@ -183,11 +183,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 cur.execute("SELECT id, email, full_name, password_hash FROM t_p45717398_energy_dashboard_pro.users WHERE LOWER(email) = %s", (email_lower,))
                 user = cur.fetchone()
                 
-                if not user or not verify_password(password, user['password_hash']):
+                if not user:
+                    return {
+                        'statusCode': 404,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'Аккаунт не найден. Пожалуйста, зарегистрируйтесь'}),
+                        'isBase64Encoded': False
+                    }
+                
+                if not verify_password(password, user['password_hash']):
                     return {
                         'statusCode': 401,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                        'body': json.dumps({'error': 'Неверный email или пароль'}),
+                        'body': json.dumps({'error': 'Неверный пароль'}),
                         'isBase64Encoded': False
                     }
                 
