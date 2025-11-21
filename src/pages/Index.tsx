@@ -17,6 +17,7 @@ import MonthlyGoalCard from '@/components/MonthlyGoalCard';
 import EnergyLevelCard from '@/components/EnergyLevelCard';
 import PersonalRecommendationsCard from '@/components/PersonalRecommendationsCard';
 import RiskAndForecastCards from '@/components/RiskAndForecastCards';
+import EnergyTrendOverview from '@/components/trends/EnergyTrendOverview';
 import BottomNav from '@/components/BottomNav';
 import { useEnergyData } from '@/hooks/useEnergyData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -355,6 +356,7 @@ const Index = () => {
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
             <PersonalRecommendationsCard />
+            <EnergyTrendOverview entries={data?.entries || []} />
             {burnoutRisk && weekForecast && (
               <RiskAndForecastCards
                 riskLevel={burnoutRisk.level}
