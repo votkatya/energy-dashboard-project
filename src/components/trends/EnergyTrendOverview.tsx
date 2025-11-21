@@ -48,49 +48,108 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
       ? secondHalfEntries.reduce((sum: number, e: any) => sum + e.score, 0) / secondHalfEntries.length
       : avgEnergy;
 
-    const lowEnergyDays = thirtyDaysEntries.filter((e: any) => e.score <= 2).length;
-    const burnoutRisk = Math.round((lowEnergyDays / thirtyDaysEntries.length) * 100);
+    const allScores = entries.map((e: any) => e.score).sort((a: number, b: number) => a - b);
+    const q25Index = Math.floor(allScores.length * 0.25);
+    const q75Index = Math.floor(allScores.length * 0.75);
+    const userLowThreshold = allScores[q25Index];
+    const userHighThreshold = allScores[q75Index];
+
+    const lowEnergyDays = thirtyDaysEntries.filter((e: any) => e.score <= userLowThreshold).length;
+    const highEnergyDays = thirtyDaysEntries.filter((e: any) => e.score >= userHighThreshold).length;
+
+    const lowStreaks: number[] = [];
+    let currentLowStreak = 0;
+    for (const entry of sortedByDate) {
+      if (entry.score <= userLowThreshold) {
+        currentLowStreak++;
+      } else {
+        if (currentLowStreak > 0) {
+          lowStreaks.push(currentLowStreak);
+          currentLowStreak = 0;
+        }
+      }
+    }
+    if (currentLowStreak > 0) lowStreaks.push(currentLowStreak);
+
+    const avgLowStreakLength = lowStreaks.length > 0
+      ? lowStreaks.reduce((a, b) => a + b, 0) / lowStreaks.length
+      : 0;
+
+    const peakDistances: number[] = [];
+    let lastPeakIndex = -1;
+    for (let i = 0; i < sortedByDate.length; i++) {
+      if (sortedByDate[i].score >= userHighThreshold) {
+        if (lastPeakIndex !== -1) {
+          peakDistances.push(i - lastPeakIndex);
+        }
+        lastPeakIndex = i;
+      }
+    }
+    const avgPeakDistance = peakDistances.length > 0
+      ? peakDistances.reduce((a, b) => a + b, 0) / peakDistances.length
+      : 0;
+
+    let burnoutRisk = 0;
+    if (lowStreaks.length > 5) {
+      burnoutRisk += 30;
+    } else if (lowStreaks.length > 3) {
+      burnoutRisk += 15;
+    }
+    if (avgLowStreakLength > 3) {
+      burnoutRisk += 30;
+    } else if (avgLowStreakLength > 2) {
+      burnoutRisk += 15;
+    }
+    if (avgPeakDistance > 7) {
+      burnoutRisk += 25;
+    } else if (avgPeakDistance > 4) {
+      burnoutRisk += 10;
+    }
+    if ((lowEnergyDays / thirtyDaysEntries.length) > 0.4) {
+      burnoutRisk += 15;
+    }
+    burnoutRisk = Math.min(100, burnoutRisk);
 
     const trend = secondHalfAvg > firstHalfAvg ? 'up' : secondHalfAvg < firstHalfAvg ? 'down' : 'stable';
     const trendDiff = Math.abs(secondHalfAvg - firstHalfAvg);
     
     let weekForecast = 0;
     if (trend === 'up') {
-      weekForecast = Math.min(100, Math.round(70 + (trendDiff * 20)));
+      weekForecast = Math.min(100, Math.round(60 + (trendDiff * 30) + (highEnergyDays / thirtyDaysEntries.length * 20)));
     } else if (trend === 'down') {
-      weekForecast = Math.max(0, Math.round(50 - (trendDiff * 20)));
+      weekForecast = Math.max(0, Math.round(50 - (trendDiff * 30) - (burnoutRisk * 0.2)));
     } else {
-      weekForecast = 60;
+      weekForecast = Math.round(55 + (avgEnergy / 5 * 20));
     }
 
     let phase: PhaseInfo;
-    if (avgEnergy < 2) {
+    if (avgEnergy < 2.5 && trend === 'down') {
       phase = {
         name: 'Истощение',
         icon: 'BatteryLow',
         color: 'text-red-500',
         description: 'Требуется восстановление'
       };
-    } else if (avgEnergy >= 2 && avgEnergy < 3) {
+    } else if (avgEnergy < 3 || (avgEnergy < 3.5 && lowStreaks.length > 4)) {
       phase = {
         name: 'Восстановление',
         icon: 'RefreshCw',
         color: 'text-orange-500',
         description: 'Энергия возвращается'
       };
-    } else if (avgEnergy >= 3 && avgEnergy < 4) {
+    } else if (avgEnergy >= 4 && trend === 'up' && highEnergyDays > lowEnergyDays * 2) {
+      phase = {
+        name: 'Подъём',
+        icon: 'TrendingUp',
+        color: 'text-green-500',
+        description: 'Отличная форма'
+      };
+    } else {
       phase = {
         name: 'Баланс',
         icon: 'Target',
         color: 'text-blue-500',
-        description: 'Оптимальное состояние'
-      };
-    } else {
-      phase = {
-        name: 'Перегрузка',
-        icon: 'Zap',
-        color: 'text-yellow-500',
-        description: 'Риск спада'
+        description: 'Стабильное состояние'
       };
     }
 
