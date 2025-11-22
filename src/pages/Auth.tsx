@@ -113,6 +113,21 @@ const Auth = () => {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setError('');
+    setIsLoading(true);
+
+    try {
+      await login('test@test', 'demo123');
+      navigate('/');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Не удалось войти в демо-профиль';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-background">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.05] blur-3xl" />
@@ -308,6 +323,27 @@ const Auth = () => {
                       {isLogin ? 'Войти' : 'Зарегистрироваться'}
                     </>
                   )}
+                </Button>
+
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">или</span>
+                  </div>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  size="lg"
+                  onClick={handleDemoLogin}
+                  disabled={isLoading}
+                >
+                  <Icon name="Eye" className="mr-2" size={20} />
+                  Посмотреть демо-профиль
                 </Button>
 
                 <div className="text-center">
