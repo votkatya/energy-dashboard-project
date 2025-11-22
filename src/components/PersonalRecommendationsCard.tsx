@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { analyzeBurnoutRisk, BurnoutRisk } from '@/utils/predictiveAnalytics';
 
 interface AIAnalysis {
   analysis: string;
@@ -20,9 +21,10 @@ interface AIAnalysis {
 
 interface PersonalRecommendationsCardProps {
   entriesCount?: number;
+  entries?: any[];
 }
 
-const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendationsCardProps) => {
+const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: PersonalRecommendationsCardProps) => {
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -164,10 +166,21 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
 
   const needsUpdate = (dateString?: string) => {
     if (!dateString) return true;
+    
     const date = new Date(dateString);
     const now = new Date();
     const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    return diffInDays >= 7;
+    
+    if (diffInDays >= 7) return true;
+    
+    if (entries.length >= 3) {
+      const burnoutRisk = analyzeBurnoutRisk(entries);
+      if (burnoutRisk.level === 'medium' || burnoutRisk.level === 'high' || burnoutRisk.level === 'critical') {
+        return true;
+      }
+    }
+    
+    return false;
   };
 
   const getPreviewText = (analysisText?: string) => {

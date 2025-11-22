@@ -424,7 +424,10 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
-            <PersonalRecommendationsCard entriesCount={data?.entries?.length || 0} />
+            <PersonalRecommendationsCard 
+              entriesCount={data?.entries?.length || 0} 
+              entries={data?.entries || []}
+            />
             <EnergyTrendOverview entries={data?.entries || []} />
             <TagInfluenceCard entries={data?.entries || []} />
             <EnergyIndexesCard entries={data?.entries || []} />
