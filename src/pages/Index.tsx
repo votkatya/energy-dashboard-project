@@ -433,14 +433,8 @@ const Index = () => {
           <TabsContent value="settings" className="animate-fade-in">
             <div className="max-w-2xl mx-auto space-y-6">
               <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Icon name="Info" size={24} />
-                    О приложении
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm">
-                  <p className="text-foreground">
+                <CardContent className="py-6 px-6">
+                  <p className="text-base text-foreground leading-relaxed">
                     Привет! Я — Катя и я сделала это приложение. А вот здесь про меня подробнее —{' '}
                     <a 
                       href="https://votkatya.ru" 
