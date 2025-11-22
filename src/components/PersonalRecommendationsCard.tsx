@@ -107,9 +107,15 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
       }
       
       const data = await response.json();
-      setAnalysis(data);
-      if (data.updated_at && user?.id) {
-        localStorage.setItem(`analysis_updated_${user.id}`, data.updated_at);
+      const currentTime = new Date().toISOString();
+      const updatedData = {
+        ...data,
+        updated_at: data.updated_at || currentTime
+      };
+      
+      setAnalysis(updatedData);
+      if (user?.id) {
+        localStorage.setItem(`analysis_updated_${user.id}`, updatedData.updated_at);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при получении анализа');
