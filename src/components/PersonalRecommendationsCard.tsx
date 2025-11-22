@@ -207,7 +207,7 @@ const PersonalRecommendationsCard = () => {
                   {analysis?.updated_at ? getRelativeTime(analysis.updated_at) : ''}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-2">
                 <Button
                   onClick={handleRefresh}
                   disabled={isRefreshing}
@@ -222,6 +222,16 @@ const PersonalRecommendationsCard = () => {
                   />
                   <span className="ml-1.5 text-xs">Обновить</span>
                 </Button>
+                {isRefreshing && (
+                  <div className="w-32 h-1 bg-secondary rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-gradient-to-r from-primary to-accent"
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: 2.5, ease: 'easeInOut', repeat: Infinity }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </DialogHeader>
