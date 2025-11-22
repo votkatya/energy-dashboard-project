@@ -24,6 +24,7 @@ const PersonalRecommendationsCard = () => {
   const [error, setError] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isAutoUpdating, setIsAutoUpdating] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -45,7 +46,9 @@ const PersonalRecommendationsCard = () => {
     await loadExistingAnalysis();
     
     if (daysSinceUpdate === null || daysSinceUpdate >= 7) {
+      setIsAutoUpdating(true);
       await fetchNewAnalysis();
+      setIsAutoUpdating(false);
     }
   };
 
@@ -152,9 +155,26 @@ const PersonalRecommendationsCard = () => {
         transition={{ delay: 0.3 }}
       >
         <Card 
-          className="glass-card border-primary/20 shadow-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-all"
+          className="glass-card border-primary/20 shadow-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-all relative"
           onClick={handleCardClick}
         >
+          {isAutoUpdating && (
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-4">
+              <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+              <div className="text-center">
+                <p className="text-sm font-medium">Обновляем рекомендации...</p>
+                <p className="text-xs text-muted-foreground mt-1">Это займёт несколько секунд</p>
+              </div>
+              <div className="w-48 h-1.5 bg-secondary rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-primary to-accent"
+                  initial={{ width: '0%' }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: 3, ease: 'easeInOut', repeat: Infinity }}
+                />
+              </div>
+            </div>
+          )}
           <CardContent className="py-8 text-center">
             <div className="flex flex-col items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
