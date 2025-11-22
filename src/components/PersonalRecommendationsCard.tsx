@@ -33,32 +33,6 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
   
   const hasEnoughData = entriesCount >= 3;
 
-  useEffect(() => {
-    const initAnalysis = async () => {
-      if (user?.id) {
-        await loadExistingAnalysis();
-      }
-    };
-
-    initAnalysis();
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (user?.id && entries.length >= 3) {
-      const burnoutRisk = analyzeBurnoutRisk(entries);
-      if (burnoutRisk.level === 'medium' || burnoutRisk.level === 'high' || burnoutRisk.level === 'critical') {
-        const existingRiskDate = localStorage.getItem(`burnout_risk_detected_${user.id}`);
-        if (!existingRiskDate) {
-          localStorage.setItem(`burnout_risk_detected_${user.id}`, new Date().toISOString());
-        }
-      } else {
-        localStorage.removeItem(`burnout_risk_detected_${user.id}`);
-      }
-    }
-  }, [entries, user?.id]);
-
-
-
   const loadExistingAnalysis = async () => {
     if (!user?.id) return;
     
@@ -82,6 +56,30 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
       console.log('No existing analysis');
     }
   };
+
+  useEffect(() => {
+    const initAnalysis = async () => {
+      if (user?.id) {
+        await loadExistingAnalysis();
+      }
+    };
+
+    initAnalysis();
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user?.id && entries.length >= 3) {
+      const burnoutRisk = analyzeBurnoutRisk(entries);
+      if (burnoutRisk.level === 'medium' || burnoutRisk.level === 'high' || burnoutRisk.level === 'critical') {
+        const existingRiskDate = localStorage.getItem(`burnout_risk_detected_${user.id}`);
+        if (!existingRiskDate) {
+          localStorage.setItem(`burnout_risk_detected_${user.id}`, new Date().toISOString());
+        }
+      } else {
+        localStorage.removeItem(`burnout_risk_detected_${user.id}`);
+      }
+    }
+  }, [entries, user?.id]);
 
   const fetchNewAnalysis = async () => {
     if (!user?.id) return;
