@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { parseDate } from '@/utils/dateUtils';
 import { motion } from 'framer-motion';
+import { analyzeBurnoutRisk } from '@/utils/predictiveAnalytics';
 
 interface EnergyTrendOverviewProps {
   entries: any[];
@@ -89,26 +90,23 @@ const EnergyTrendOverview = ({ entries }: EnergyTrendOverviewProps) => {
       ? peakDistances.reduce((a, b) => a + b, 0) / peakDistances.length
       : 0;
 
+    const burnoutAnalysis = analyzeBurnoutRisk(entries);
     let burnoutRisk = 0;
-    if (lowStreaks.length > 5) {
-      burnoutRisk += 30;
-    } else if (lowStreaks.length > 3) {
-      burnoutRisk += 15;
+    
+    switch (burnoutAnalysis.level) {
+      case 'critical':
+        burnoutRisk = 90;
+        break;
+      case 'high':
+        burnoutRisk = 70;
+        break;
+      case 'medium':
+        burnoutRisk = 45;
+        break;
+      case 'low':
+        burnoutRisk = 15;
+        break;
     }
-    if (avgLowStreakLength > 3) {
-      burnoutRisk += 30;
-    } else if (avgLowStreakLength > 2) {
-      burnoutRisk += 15;
-    }
-    if (avgPeakDistance > 7) {
-      burnoutRisk += 25;
-    } else if (avgPeakDistance > 4) {
-      burnoutRisk += 10;
-    }
-    if ((lowEnergyDays / thirtyDaysEntries.length) > 0.4) {
-      burnoutRisk += 15;
-    }
-    burnoutRisk = Math.min(100, burnoutRisk);
 
     const trend = secondHalfAvg > firstHalfAvg ? 'up' : secondHalfAvg < firstHalfAvg ? 'down' : 'stable';
     const trendDiff = Math.abs(secondHalfAvg - firstHalfAvg);
