@@ -26,11 +26,9 @@ interface PersonalRecommendationsCardProps {
 
 const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: PersonalRecommendationsCardProps) => {
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isAutoUpdating, setIsAutoUpdating] = useState(false);
   const { user } = useAuth();
   
   const hasEnoughData = entriesCount >= 3;
@@ -38,31 +36,14 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
   useEffect(() => {
     const initAnalysis = async () => {
       if (user?.id) {
-        await checkAndLoadAnalysis();
+        await loadExistingAnalysis();
       }
     };
 
     initAnalysis();
   }, [user?.id]);
 
-  const checkAndLoadAnalysis = async () => {
-    if (!user?.id) return;
-    
-    const lastUpdateStr = localStorage.getItem(`analysis_updated_${user.id}`);
-    const lastUpdate = lastUpdateStr ? new Date(lastUpdateStr) : null;
-    const now = new Date();
-    const daysSinceUpdate = lastUpdate 
-      ? Math.floor((now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24))
-      : null;
-    
-    if (daysSinceUpdate === null || daysSinceUpdate >= 7) {
-      setIsAutoUpdating(true);
-      await fetchNewAnalysis();
-      setIsAutoUpdating(false);
-    } else {
-      await loadExistingAnalysis();
-    }
-  };
+
 
   const loadExistingAnalysis = async () => {
     if (!user?.id) return;
@@ -129,9 +110,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
   const handleCardClick = async () => {
     setIsDialogOpen(true);
     if (!analysis) {
-      setIsLoading(true);
       await fetchNewAnalysis();
-      setIsLoading(false);
     }
   };
 
@@ -237,28 +216,9 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
         transition={{ delay: 0.3 }}
       >
         <Card 
-          className={`glass-card border-primary/20 shadow-lg overflow-hidden transition-all relative ${
-            isAutoUpdating ? 'cursor-not-allowed opacity-75' : 'cursor-pointer hover:border-primary/40'
-          }`}
-          onClick={isAutoUpdating ? undefined : handleCardClick}
+          className="glass-card border-primary/20 shadow-lg overflow-hidden transition-all cursor-pointer hover:border-primary/40"
+          onClick={handleCardClick}
         >
-          {isAutoUpdating && (
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-4">
-              <Icon name="Loader2" size={32} className="animate-spin text-primary" />
-              <div className="text-center">
-                <p className="text-sm font-medium">Обновляем рекомендации...</p>
-                <p className="text-xs text-muted-foreground mt-1">Это займёт несколько секунд</p>
-              </div>
-              <div className="w-48 h-1.5 bg-secondary rounded-full overflow-hidden">
-                <motion.div 
-                  className="h-full bg-gradient-to-r from-primary to-accent"
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 3, ease: 'easeInOut', repeat: Infinity }}
-                />
-              </div>
-            </div>
-          )}
           <CardContent className="py-6 px-6">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
@@ -286,7 +246,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
                 <p className="text-sm text-muted-foreground mb-2">
                   {analysis && getPreviewText(analysis.analysis) 
                     ? getPreviewText(analysis.analysis)
-                    : 'Получите AI-анализ ваших записей с персональными советами'}
+                    : 'Нажмите для получения AI-анализа с персональными советами'}
                 </p>
                 <div className="flex items-center gap-3">
                   {analysis && (
@@ -365,12 +325,6 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
           </DialogHeader>
           
           <div className="flex-1 overflow-y-auto px-6 py-4">
-            {isLoading && (
-              <div className="flex items-center justify-center py-12">
-                <Icon name="Loader2" size={32} className="animate-spin text-primary" />
-              </div>
-            )}
-
             {error && (
               <div className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
                 <Icon name="AlertCircle" size={20} className="text-destructive mt-0.5" />
@@ -383,7 +337,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
               </div>
             )}
 
-            {analysis && !isLoading && (
+            {analysis && (
               <div className="space-y-4">
                 <div className="prose prose-sm dark:prose-invert max-w-none">
                   <ReactMarkdown
