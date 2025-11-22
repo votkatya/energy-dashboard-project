@@ -118,7 +118,7 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      await login('test@test', 'demo123');
+      await login('test@test', 'test123');
       navigate('/');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось войти в демо-профиль';
