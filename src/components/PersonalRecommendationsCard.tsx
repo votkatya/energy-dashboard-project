@@ -43,6 +43,20 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
     initAnalysis();
   }, [user?.id]);
 
+  useEffect(() => {
+    if (user?.id && entries.length >= 3) {
+      const burnoutRisk = analyzeBurnoutRisk(entries);
+      if (burnoutRisk.level === 'medium' || burnoutRisk.level === 'high' || burnoutRisk.level === 'critical') {
+        const existingRiskDate = localStorage.getItem(`burnout_risk_detected_${user.id}`);
+        if (!existingRiskDate) {
+          localStorage.setItem(`burnout_risk_detected_${user.id}`, new Date().toISOString());
+        }
+      } else {
+        localStorage.removeItem(`burnout_risk_detected_${user.id}`);
+      }
+    }
+  }, [entries, user?.id]);
+
 
 
   const loadExistingAnalysis = async () => {
@@ -146,16 +160,22 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
   const needsUpdate = (dateString?: string) => {
     if (!dateString) return true;
     
-    const date = new Date(dateString);
+    const updateDate = new Date(dateString);
     const now = new Date();
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    const diffInDays = Math.floor((now.getTime() - updateDate.getTime()) / (1000 * 60 * 60 * 24));
     
     if (diffInDays >= 7) return true;
     
-    if (entries.length >= 3) {
+    if (entries.length >= 3 && user?.id) {
       const burnoutRisk = analyzeBurnoutRisk(entries);
       if (burnoutRisk.level === 'medium' || burnoutRisk.level === 'high' || burnoutRisk.level === 'critical') {
-        return true;
+        const riskDetectedStr = localStorage.getItem(`burnout_risk_detected_${user.id}`);
+        if (riskDetectedStr) {
+          const riskDetectedDate = new Date(riskDetectedStr);
+          if (riskDetectedDate > updateDate) {
+            return true;
+          }
+        }
       }
     }
     
