@@ -281,7 +281,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
                       {getRelativeTime(analysis.updated_at)}
                     </span>
                   )}
-                  {analysis && (
+                  {analysis && needsUpdate(analysis.updated_at) && (
                     <div onClick={(e) => e.stopPropagation()}>
                       <Button
                         onClick={handleRefresh}
