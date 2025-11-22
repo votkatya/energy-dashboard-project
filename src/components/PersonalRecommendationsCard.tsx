@@ -227,20 +227,22 @@ const PersonalRecommendationsCard = () => {
                     </span>
                   )}
                   {analysis && (
-                    <Button
-                      onClick={handleRefresh}
-                      disabled={isRefreshing}
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 text-xs -ml-2"
-                    >
-                      <Icon 
-                        name="RefreshCw" 
-                        size={12} 
-                        className={isRefreshing ? 'animate-spin' : ''} 
-                      />
-                      <span className="ml-1">Обновить</span>
-                    </Button>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        onClick={handleRefresh}
+                        disabled={isRefreshing}
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs -ml-2"
+                      >
+                        <Icon 
+                          name="RefreshCw" 
+                          size={12} 
+                          className={isRefreshing ? 'animate-spin' : ''} 
+                        />
+                        <span className="ml-1">Обновить</span>
+                      </Button>
+                    </div>
                   )}
                 </div>
               </div>
