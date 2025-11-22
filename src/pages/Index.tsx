@@ -253,7 +253,7 @@ const Index = () => {
                   size="icon"
                   variant="outline"
                   title="Выйти из профиля"
-                  className="hover:border-destructive hover:text-destructive transition-colors"
+                  className="hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-colors"
                 >
                   <Icon name="LogOut" size={20} />
                 </Button>
