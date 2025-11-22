@@ -18,7 +18,11 @@ interface AIAnalysis {
   updated_at?: string;
 }
 
-const PersonalRecommendationsCard = () => {
+interface PersonalRecommendationsCardProps {
+  entriesCount?: number;
+}
+
+const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendationsCardProps) => {
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +30,8 @@ const PersonalRecommendationsCard = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAutoUpdating, setIsAutoUpdating] = useState(false);
   const { user } = useAuth();
+  
+  const hasEnoughData = entriesCount >= 3;
 
   useEffect(() => {
     if (user?.id) {
@@ -162,6 +168,44 @@ const PersonalRecommendationsCard = () => {
     const cleanText = firstLine.replace(/[#*]/g, '').trim();
     return cleanText.length > 80 ? cleanText.substring(0, 80) + '...' : cleanText;
   };
+
+  if (!hasEnoughData) {
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ delay: 0.3 }}
+      >
+        <Card className="glass-card border-primary/20 shadow-lg overflow-hidden">
+          <CardContent className="py-6 px-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center flex-shrink-0">
+                <Icon name="Sparkles" size={24} className="text-muted-foreground/50" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-semibold text-base text-muted-foreground">
+                    Персональные рекомендации
+                  </h3>
+                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
+                    <Icon name="Lock" size={12} />
+                    <span>Недоступно</span>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Добавьте минимум 3 записи, чтобы получить персональные рекомендации от AI
+                </p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Icon name="Info" size={14} />
+                  <span>Записей добавлено: {entriesCount} из 3</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    );
+  }
 
   return (
     <>

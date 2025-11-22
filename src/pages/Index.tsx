@@ -365,6 +365,7 @@ const Index = () => {
                     averageScore={allTimeStats.average}
                     monthlyAverage={monthlyStats.average}
                     onTrendsClick={() => setActiveTab('trends')}
+                    hasData={data?.entries && data.entries.length >= 3}
                   />
                 </div>
 
@@ -413,7 +414,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="trends" className="animate-fade-in space-y-6">
-            <PersonalRecommendationsCard />
+            <PersonalRecommendationsCard entriesCount={data?.entries?.length || 0} />
             <EnergyTrendOverview entries={data?.entries || []} />
             <TagInfluenceCard entries={data?.entries || []} />
             <EnergyIndexesCard entries={data?.entries || []} />

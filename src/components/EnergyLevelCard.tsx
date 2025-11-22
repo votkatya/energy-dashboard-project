@@ -6,6 +6,7 @@ interface EnergyLevelCardProps {
   averageScore: number;
   monthlyAverage: number;
   onTrendsClick: () => void;
+  hasData?: boolean;
 }
 
 const getEnergyLevel = (score: number): { text: string; pillBg: string; cardBg: string; waveBg: string } => {
@@ -16,9 +17,51 @@ const getEnergyLevel = (score: number): { text: string; pillBg: string; cardBg: 
   return { text: 'Критический', pillBg: 'bg-[#FF5F72]', cardBg: '#FF5F72', waveBg: '#FF8494' };
 };
 
-const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick }: EnergyLevelCardProps) => {
+const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick, hasData = true }: EnergyLevelCardProps) => {
   const energyLevel = getEnergyLevel(monthlyAverage);
   const percentage = (monthlyAverage / 5) * 100;
+
+  if (!hasData || monthlyAverage === 0) {
+    return (
+      <Card className="glass-card overflow-hidden">
+        <CardContent className="p-6 space-y-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 flex flex-col justify-between h-[120px]">
+              <div className="space-y-2">
+                <h3 className="text-foreground font-medium text-sm">Уровень энергии</h3>
+                
+                <div className="inline-block px-4 py-1.5 rounded-full bg-muted">
+                  <span className="text-muted-foreground font-semibold text-sm">
+                    Нет данных
+                  </span>
+                </div>
+              </div>
+              
+              <p className="text-muted-foreground text-xs leading-relaxed">
+                Добавьте минимум 3 записи, чтобы увидеть статистику и получить рекомендации
+              </p>
+            </div>
+
+            <div className="relative w-[120px] h-[120px] flex-shrink-0">
+              <div className="absolute inset-0 rounded-[2rem] overflow-hidden bg-muted/50 flex items-center justify-center">
+                <Icon name="TrendingUp" size={48} className="text-muted-foreground/30" />
+              </div>
+            </div>
+          </div>
+
+          <Button 
+            disabled
+            className="w-full bg-muted hover:bg-muted text-muted-foreground font-semibold text-sm py-4 rounded-2xl flex items-center justify-between px-6 cursor-not-allowed"
+          >
+            <span>Добавьте записи</span>
+            <div className="bg-muted-foreground/20 rounded-full p-2.5 flex items-center justify-center">
+              <Icon name="Plus" size={18} className="text-muted-foreground/50" />
+            </div>
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="glass-card overflow-hidden">
