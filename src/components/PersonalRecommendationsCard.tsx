@@ -43,12 +43,12 @@ const PersonalRecommendationsCard = () => {
       ? Math.floor((now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24))
       : null;
     
-    await loadExistingAnalysis();
-    
     if (daysSinceUpdate === null || daysSinceUpdate >= 7) {
       setIsAutoUpdating(true);
       await fetchNewAnalysis();
       setIsAutoUpdating(false);
+    } else {
+      await loadExistingAnalysis();
     }
   };
 
