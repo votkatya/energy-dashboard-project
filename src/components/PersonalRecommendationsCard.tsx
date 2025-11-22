@@ -34,24 +34,16 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
   const hasEnoughData = entriesCount >= 3;
 
   useEffect(() => {
-    let isMounted = true;
-    const abortController = new AbortController();
-
     const initAnalysis = async () => {
-      if (user?.id && isMounted) {
-        await checkAndLoadAnalysis(abortController.signal, isMounted);
+      if (user?.id) {
+        await checkAndLoadAnalysis();
       }
     };
 
     initAnalysis();
-
-    return () => {
-      isMounted = false;
-      abortController.abort();
-    };
   }, [user?.id]);
 
-  const checkAndLoadAnalysis = async (signal?: AbortSignal, mounted: boolean = true) => {
+  const checkAndLoadAnalysis = async () => {
     if (!user?.id) return;
     
     const lastUpdateStr = localStorage.getItem(`analysis_updated_${user.id}`);
@@ -62,15 +54,15 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
       : null;
     
     if (daysSinceUpdate === null || daysSinceUpdate >= 7) {
-      if (mounted) setIsAutoUpdating(true);
-      await fetchNewAnalysis(signal);
-      if (mounted) setIsAutoUpdating(false);
+      setIsAutoUpdating(true);
+      await fetchNewAnalysis();
+      setIsAutoUpdating(false);
     } else {
-      await loadExistingAnalysis(signal);
+      await loadExistingAnalysis();
     }
   };
 
-  const loadExistingAnalysis = async (signal?: AbortSignal) => {
+  const loadExistingAnalysis = async () => {
     if (!user?.id) return;
     
     try {
@@ -79,8 +71,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
         headers: {
           'Content-Type': 'application/json',
           'X-User-Id': user.id.toString()
-        },
-        signal
+        }
       });
       
       if (response.ok) {
@@ -91,13 +82,11 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
         }
       }
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
-        console.log('No existing analysis');
-      }
+      console.log('No existing analysis');
     }
   };
 
-  const fetchNewAnalysis = async (signal?: AbortSignal) => {
+  const fetchNewAnalysis = async () => {
     if (!user?.id) return;
     
     setIsRefreshing(true);
@@ -109,8 +98,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
         headers: {
           'Content-Type': 'application/json',
           'X-User-Id': user.id.toString()
-        },
-        signal
+        }
       });
       
       if (!response.ok) {
@@ -124,9 +112,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
         localStorage.setItem(`analysis_updated_${user.id}`, data.updated_at);
       }
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
-        setError(err instanceof Error ? err.message : 'Ошибка при получении анализа');
-      }
+      setError(err instanceof Error ? err.message : 'Ошибка при получении анализа');
     } finally {
       setIsRefreshing(false);
     }
