@@ -147,6 +147,22 @@ const PersonalRecommendationsCard = () => {
     return `Обновлено ${formatDate(dateString)}`;
   };
 
+  const needsUpdate = (dateString?: string) => {
+    if (!dateString) return true;
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    return diffInDays >= 7;
+  };
+
+  const getPreviewText = (analysisText?: string) => {
+    if (!analysisText) return '';
+    const firstLine = analysisText.split('\n').find(line => line.trim().length > 20);
+    if (!firstLine) return '';
+    const cleanText = firstLine.replace(/[#*]/g, '').trim();
+    return cleanText.length > 80 ? cleanText.substring(0, 80) + '...' : cleanText;
+  };
+
   return (
     <>
       <motion.div 
@@ -175,24 +191,59 @@ const PersonalRecommendationsCard = () => {
               </div>
             </div>
           )}
-          <CardContent className="py-8 text-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                <Icon name="Sparkles" size={32} className="text-primary" />
+          <CardContent className="py-6 px-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
+                <Icon name="Sparkles" size={24} className="text-primary" />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Персональные рекомендации
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {analysis ? 'Нажмите, чтобы посмотреть' : 'Получите AI-анализ ваших записей'}
-                </p>
-              </div>
-              {analysis && (
-                <div className="text-xs text-muted-foreground">
-                  {getRelativeTime(analysis.updated_at)}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-semibold text-base bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    Персональные рекомендации
+                  </h3>
+                  {analysis && (
+                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs ${
+                      needsUpdate(analysis.updated_at) 
+                        ? 'bg-orange-500/10 text-orange-500' 
+                        : 'bg-green-500/10 text-green-500'
+                    }`}>
+                      <Icon 
+                        name={needsUpdate(analysis.updated_at) ? 'AlertCircle' : 'CheckCircle2'} 
+                        size={12} 
+                      />
+                      <span>{needsUpdate(analysis.updated_at) ? 'Требуется обновление' : 'Актуально'}</span>
+                    </div>
+                  )}
                 </div>
-              )}
+                <p className="text-sm text-muted-foreground mb-2">
+                  {analysis && getPreviewText(analysis.analysis) 
+                    ? getPreviewText(analysis.analysis)
+                    : 'Получите AI-анализ ваших записей с персональными советами'}
+                </p>
+                <div className="flex items-center gap-3">
+                  {analysis && (
+                    <span className="text-xs text-muted-foreground">
+                      {getRelativeTime(analysis.updated_at)}
+                    </span>
+                  )}
+                  {analysis && (
+                    <Button
+                      onClick={handleRefresh}
+                      disabled={isRefreshing}
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 text-xs -ml-2"
+                    >
+                      <Icon 
+                        name="RefreshCw" 
+                        size={12} 
+                        className={isRefreshing ? 'animate-spin' : ''} 
+                      />
+                      <span className="ml-1">Обновить</span>
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
