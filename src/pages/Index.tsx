@@ -38,6 +38,7 @@ const Index = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showNotificationsDialog, setShowNotificationsDialog] = useState(false);
   const [showHelpDialog, setShowHelpDialog] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [homeView, setHomeView] = useState<'calendar' | 'feed'>('calendar');
   const [timePeriod, setTimePeriod] = useState<'week' | 'month' | 'year'>('week');
@@ -248,13 +249,11 @@ const Index = () => {
                   <Icon name="HelpCircle" size={20} />
                 </Button>
                 <Button
-                  onClick={() => {
-                    logout();
-                    window.location.href = '/auth';
-                  }}
+                  onClick={() => setShowLogoutDialog(true)}
                   size="icon"
                   variant="outline"
                   title="Выйти из профиля"
+                  className="hover:border-destructive hover:text-destructive transition-colors"
                 >
                   <Icon name="LogOut" size={20} />
                 </Button>
@@ -743,6 +742,44 @@ const Index = () => {
               <p className="text-sm">
                 <strong className="text-accent">💡 Важно:</strong> FlowKat анализирует данные персонально для вас. Ваши пики и спады определяются относительно вашей собственной нормы, а не абсолютных значений.
               </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <Icon name="LogOut" size={24} className="text-destructive" />
+              Выход из профиля
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <p className="text-muted-foreground mb-6">
+              Вы уверены, что хотите выйти из профиля?
+            </p>
+            
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setShowLogoutDialog(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Отмена
+              </Button>
+              <Button
+                onClick={() => {
+                  logout();
+                  window.location.href = '/auth';
+                }}
+                variant="destructive"
+                className="flex-1"
+              >
+                <Icon name="LogOut" size={18} className="mr-2" />
+                Выйти
+              </Button>
             </div>
           </div>
         </DialogContent>
