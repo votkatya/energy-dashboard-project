@@ -119,11 +119,9 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
   };
 
   const handleCardClick = async () => {
-    if (analysis) {
-      setIsDialogOpen(true);
-    } else {
+    setIsDialogOpen(true);
+    if (!analysis) {
       setIsLoading(true);
-      setIsDialogOpen(true);
       await fetchNewAnalysis();
       setIsLoading(false);
     }
@@ -131,6 +129,7 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
 
   const handleRefresh = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsDialogOpen(true);
     await fetchNewAnalysis();
   };
 
@@ -311,29 +310,36 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
                 </span>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <Button
-                  onClick={handleRefresh}
-                  disabled={isRefreshing}
-                  variant="outline"
-                  size="sm"
-                  className="h-8"
-                >
-                  <Icon 
-                    name="RefreshCw" 
-                    size={14} 
-                    className={isRefreshing ? 'animate-spin' : ''} 
-                  />
-                  <span className="ml-1.5 text-xs">Обновить</span>
-                </Button>
                 {isRefreshing && (
-                  <div className="w-32 h-1 bg-secondary rounded-full overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-gradient-to-r from-primary to-accent"
-                      initial={{ width: '0%' }}
-                      animate={{ width: '100%' }}
-                      transition={{ duration: 2.5, ease: 'easeInOut', repeat: Infinity }}
-                    />
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 text-orange-500">
+                      <Icon name="AlertCircle" size={14} />
+                      <span className="text-xs font-medium">Не закрывайте страницу</span>
+                    </div>
+                    <div className="w-32 h-1 bg-secondary rounded-full overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-gradient-to-r from-primary to-accent"
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 2.5, ease: 'easeInOut', repeat: Infinity }}
+                      />
+                    </div>
                   </div>
+                )}
+                {!isRefreshing && (
+                  <Button
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    variant="outline"
+                    size="sm"
+                    className="h-8"
+                  >
+                    <Icon 
+                      name="RefreshCw" 
+                      size={14} 
+                    />
+                    <span className="ml-1.5 text-xs">Обновить</span>
+                  </Button>
                 )}
               </div>
             </div>
