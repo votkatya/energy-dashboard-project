@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import NotificationsDialog from '@/components/NotificationsDialog';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface AppHeaderProps {
   onAddClick: () => void;
@@ -8,6 +10,14 @@ interface AppHeaderProps {
 }
 
 const AppHeader = ({ onAddClick, onSettingsClick }: AppHeaderProps) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth');
+  };
+
   return (
     <header className="mb-8 animate-fade-in">
       <div className="flex flex-col gap-4 mb-6">
@@ -30,6 +40,14 @@ const AppHeader = ({ onAddClick, onSettingsClick }: AppHeaderProps) => {
               variant="outline"
             >
               <Icon name="Settings" size={20} />
+            </Button>
+            <Button 
+              onClick={handleLogout}
+              size="icon"
+              variant="outline"
+              title="Выйти из профиля"
+            >
+              <Icon name="LogOut" size={20} />
             </Button>
           </div>
         </div>
