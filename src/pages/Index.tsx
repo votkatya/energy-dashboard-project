@@ -435,27 +435,6 @@ const Index = () => {
 
           <TabsContent value="settings" className="animate-fade-in">
             <div className="max-w-2xl mx-auto space-y-6">
-              <Card className="glass-card bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Icon name="Smartphone" size={24} className="text-blue-500" />
-                    Используй в Telegram
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-muted-foreground">
-                    FlowKat удобнее использовать как мини-приложение в Telegram — всегда под рукой и с push-уведомлениями
-                  </p>
-                  <Button
-                    onClick={() => window.open('https://t.me/katflow_bot', '_blank')}
-                    className="w-full gap-2 bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    <Icon name="Send" size={18} />
-                    Открыть бота @katflow_bot
-                  </Button>
-                </CardContent>
-              </Card>
-
               <Card className="glass-card">
                 <CardContent className="py-6 px-6">
                   <p className="text-base text-foreground leading-relaxed">
@@ -490,6 +469,27 @@ const Index = () => {
                   >
                     <Icon name="Send" size={18} />
                     Написать в Telegram
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Smartphone" size={24} className="text-blue-500" />
+                    Используй в Telegram
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    FlowKat удобнее использовать как мини-приложение в Telegram — всегда под рукой и с push-уведомлениями
+                  </p>
+                  <Button
+                    onClick={() => window.open('https://t.me/katflow_bot', '_blank')}
+                    className="w-full gap-2 bg-blue-500 hover:bg-blue-600 text-white"
+                  >
+                    <Icon name="Send" size={18} />
+                    Открыть бота @katflow_bot
                   </Button>
                 </CardContent>
               </Card>
