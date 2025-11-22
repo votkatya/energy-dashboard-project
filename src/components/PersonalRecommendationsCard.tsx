@@ -28,9 +28,26 @@ const PersonalRecommendationsCard = () => {
 
   useEffect(() => {
     if (user?.id) {
-      loadExistingAnalysis();
+      checkAndLoadAnalysis();
     }
   }, [user?.id]);
+
+  const checkAndLoadAnalysis = async () => {
+    if (!user?.id) return;
+    
+    const lastUpdateStr = localStorage.getItem(`analysis_updated_${user.id}`);
+    const lastUpdate = lastUpdateStr ? new Date(lastUpdateStr) : null;
+    const now = new Date();
+    const daysSinceUpdate = lastUpdate 
+      ? Math.floor((now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24))
+      : null;
+    
+    await loadExistingAnalysis();
+    
+    if (daysSinceUpdate === null || daysSinceUpdate >= 7) {
+      await fetchNewAnalysis();
+    }
+  };
 
   const loadExistingAnalysis = async () => {
     if (!user?.id) return;
@@ -47,6 +64,9 @@ const PersonalRecommendationsCard = () => {
       if (response.ok) {
         const data = await response.json();
         setAnalysis(data);
+        if (data.updated_at) {
+          localStorage.setItem(`analysis_updated_${user.id}`, data.updated_at);
+        }
       }
     } catch (err) {
       console.log('No existing analysis');
@@ -75,6 +95,9 @@ const PersonalRecommendationsCard = () => {
       
       const data = await response.json();
       setAnalysis(data);
+      if (data.updated_at && user?.id) {
+        localStorage.setItem(`analysis_updated_${user.id}`, data.updated_at);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при получении анализа');
     } finally {
@@ -109,6 +132,18 @@ const PersonalRecommendationsCard = () => {
     });
   };
 
+  const getRelativeTime = (dateString?: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffInDays === 0) return 'Обновлено сегодня';
+    if (diffInDays === 1) return 'Обновлено вчера';
+    if (diffInDays < 7) return `Обновлено ${diffInDays} ${diffInDays === 2 || diffInDays === 3 || diffInDays === 4 ? 'дня' : 'дней'} назад`;
+    return `Обновлено ${formatDate(dateString)}`;
+  };
+
   return (
     <>
       <motion.div 
@@ -135,7 +170,7 @@ const PersonalRecommendationsCard = () => {
               </div>
               {analysis && (
                 <div className="text-xs text-muted-foreground">
-                  Обновлено: {formatDate(analysis.updated_at)}
+                  {getRelativeTime(analysis.updated_at)}
                 </div>
               )}
             </div>
@@ -148,24 +183,24 @@ const PersonalRecommendationsCard = () => {
           <DialogHeader className="border-b pb-4">
             <div className="flex items-center justify-between pr-8">
               <div className="flex items-center gap-3 flex-1">
-                <span className="text-xs text-muted-foreground">Тестовая функция</span>
-                <span className="text-sm font-medium">
-                  {analysis?.updated_at ? formatDate(analysis.updated_at) : ''}
+                <span className="text-xs text-muted-foreground">
+                  {analysis?.updated_at ? getRelativeTime(analysis.updated_at) : ''}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   onClick={handleRefresh}
                   disabled={isRefreshing}
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
+                  variant="outline"
+                  size="sm"
+                  className="h-8"
                 >
                   <Icon 
                     name="RefreshCw" 
-                    size={16} 
+                    size={14} 
                     className={isRefreshing ? 'animate-spin' : ''} 
                   />
+                  <span className="ml-1.5 text-xs">Обновить</span>
                 </Button>
               </div>
             </div>
