@@ -215,8 +215,10 @@ const PersonalRecommendationsCard = ({ entriesCount = 0 }: PersonalRecommendatio
         transition={{ delay: 0.3 }}
       >
         <Card 
-          className="glass-card border-primary/20 shadow-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-all relative"
-          onClick={handleCardClick}
+          className={`glass-card border-primary/20 shadow-lg overflow-hidden transition-all relative ${
+            isAutoUpdating ? 'cursor-not-allowed opacity-75' : 'cursor-pointer hover:border-primary/40'
+          }`}
+          onClick={isAutoUpdating ? undefined : handleCardClick}
         >
           {isAutoUpdating && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-4">
