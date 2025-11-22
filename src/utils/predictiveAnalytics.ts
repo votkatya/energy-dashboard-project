@@ -67,7 +67,7 @@ export const analyzeBurnoutRisk = (entries: EnergyEntry[]): BurnoutRisk => {
     };
   }
 
-  if (consecutiveLowDays >= 2 || lowDaysCount >= 2 || avgLast7 < 3.5) {
+  if ((consecutiveLowDays >= 2 && lowDaysCount >= 3) || avgLast7 < 3.0) {
     return {
       level: 'medium',
       daysLow: consecutiveLowDays,
