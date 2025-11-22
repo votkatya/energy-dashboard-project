@@ -247,6 +247,17 @@ const Index = () => {
                 >
                   <Icon name="HelpCircle" size={20} />
                 </Button>
+                <Button
+                  onClick={() => {
+                    logout();
+                    window.location.href = '/auth';
+                  }}
+                  size="icon"
+                  variant="outline"
+                  title="Выйти из профиля"
+                >
+                  <Icon name="LogOut" size={20} />
+                </Button>
                 <Button 
                   onClick={() => setShowAddDialog(true)}
                   size="lg"
