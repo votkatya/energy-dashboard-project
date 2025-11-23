@@ -143,9 +143,10 @@ const HomePage = ({
 
         <AnimatedCard delay={0.25}>
           <EnergyLevelCard
-            entries={data?.entries || []}
-            userId={user?.id}
-            getColorClass={getColorClass}
+            averageScore={allTimeStats.average}
+            monthlyAverage={monthlyStats.average}
+            onTrendsClick={() => {}}
+            hasData={monthlyStats.total > 0}
           />
         </AnimatedCard>
 
