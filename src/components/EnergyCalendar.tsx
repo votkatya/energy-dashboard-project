@@ -326,25 +326,18 @@ const EnergyCalendar = ({ data, isLoading }: EnergyCalendarProps) => {
                     setIsSaving(true);
                     try {
                       const token = localStorage.getItem('auth_token');
-                      console.log('🗑️ DELETE request:', { date: selectedDay.date, entry: selectedDay.entry });
-                      const response = await fetch(API_URL, {
+                      const entryId = selectedDay.entry.id;
+                      const response = await fetch(`${API_URL}?id=${entryId}`, {
                         method: 'DELETE',
                         headers: {
                           'Content-Type': 'application/json',
                           'X-Auth-Token': token || '',
                         },
-                        body: JSON.stringify({ date: selectedDay.date }),
                       });
-                      console.log('🗑️ DELETE response status:', response.status);
-                      if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('🗑️ DELETE error:', errorText);
-                        throw new Error('Failed to delete');
-                      }
+                      if (!response.ok) throw new Error('Failed to delete');
                       await queryClient.invalidateQueries({ queryKey: ['energy-data'] });
                       setSelectedDay(null);
                     } catch (error) {
-                      console.error('🗑️ DELETE exception:', error);
                       alert('Не удалось удалить запись');
                     } finally {
                       setIsSaving(false);
