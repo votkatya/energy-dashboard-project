@@ -245,7 +245,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     try:
         request_body = {
-            'model': 'gpt-3.5-turbo',
+            'model': 'gpt-4o-mini',
             'messages': [
                 {'role': 'system', 'content': 'Ты эксперт по продуктивности и энергии. Отвечай на русском языке тёплым и человечным тоном.'},
                 {'role': 'user', 'content': prompt}
