@@ -11,6 +11,7 @@ interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
+  loginWithToken: (token: string, user: User) => void;
   logout: () => void;
   isLoading: boolean;
 }
@@ -76,9 +77,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const data = await response.json();
-    setUser(data.user);
-    setToken(data.token);
-    localStorage.setItem('auth_token', data.token);
+    loginWithToken(data.token, data.user);
   };
 
   const register = async (email: string, password: string, name: string) => {
@@ -101,9 +100,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const data = await response.json();
-    setUser(data.user);
-    setToken(data.token);
-    localStorage.setItem('auth_token', data.token);
+    loginWithToken(data.token, data.user);
+  };
+
+  const loginWithToken = (newToken: string, authUser: User) => {
+    setUser(authUser);
+    setToken(newToken);
+    localStorage.setItem('auth_token', newToken);
   };
 
   const logout = () => {
@@ -113,7 +116,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, register, loginWithToken, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

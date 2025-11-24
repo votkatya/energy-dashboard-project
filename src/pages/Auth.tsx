@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 function ElegantShape({
@@ -75,6 +76,27 @@ function ElegantShape({
   );
 }
 
+const TELEGRAM_AUTH_API = 'https://functions.poehali.dev/979cc153-2284-4a5a-ad62-08f0eb2acd23';
+
+declare global {
+  interface Window {
+    TelegramLoginWidget?: {
+      dataOnauth: (user: TelegramAuthData) => void;
+    } & ((options: any) => void);
+    onTelegramAuth?: (user: TelegramAuthData) => void;
+  }
+}
+
+interface TelegramAuthData {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
+  auth_date: string;
+  hash: string;
+}
+
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -84,8 +106,9 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  const { login, register } = useAuth();
+  const { login, register, loginWithToken } = useAuth();
   const navigate = useNavigate();
+  const telegramContainerRef = useRef<HTMLDivElement | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,7 +150,61 @@ const Auth = () => {
       setIsLoading(false);
     }
   };
+  const handleTelegramSuccess = useCallback(async (data: TelegramAuthData) => {
+    try {
+      setError('');
+      setIsLoading(true);
 
+      const response = await fetch(TELEGRAM_AUTH_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.error || 'Telegram авторизация не удалась');
+      }
+
+      const result = await response.json();
+      loginWithToken(result.token, result.user);
+      navigate('/');
+    } catch (telegramError) {
+      const errorMessage = telegramError instanceof Error ? telegramError.message : 'Ошибка Telegram авторизации';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [loginWithToken, navigate]);
+
+  useEffect(() => {
+    if (telegramContainerRef.current?.childElementCount) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.async = true;
+    script.setAttribute('data-telegram-login', 'katflow_bot');
+    script.setAttribute('data-size', 'large');
+    script.setAttribute('data-radius', '8');
+    script.setAttribute('data-lang', 'ru');
+    script.setAttribute('data-request-access', 'write');
+    script.setAttribute('data-onauth', 'window.onTelegramAuth(user)');
+
+    window.onTelegramAuth = (user: TelegramAuthData) => {
+      handleTelegramSuccess(user);
+    };
+
+    telegramContainerRef.current?.appendChild(script);
+
+    return () => {
+      delete window.onTelegramAuth;
+      telegramContainerRef.current?.removeChild(script);
+    };
+  }, [handleTelegramSuccess]);
 
 
   return (
@@ -327,26 +404,28 @@ const Auth = () => {
                   )}
                 </Button>
 
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border"></div>
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">или</span>
+                <Separator className="my-6" />
+
+                <div className="flex flex-col gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    size="lg"
+                    onClick={handleDemoLogin}
+                    disabled={isLoading}
+                  >
+                    <Icon name="Eye" className="mr-2" size={20} />
+                    Посмотреть демо-профиль
+                  </Button>
+
+                  <div className="flex justify-center">
+                    <div
+                      ref={telegramContainerRef}
+                      className="telegram-login-button"
+                    ></div>
                   </div>
                 </div>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full"
-                  size="lg"
-                  onClick={handleDemoLogin}
-                  disabled={isLoading}
-                >
-                  <Icon name="Eye" className="mr-2" size={20} />
-                  Посмотреть демо-профиль
-                </Button>
 
                 <div className="text-center">
                   <button
