@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -8,6 +8,14 @@ import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
+
+declare global {
+  interface Window {
+    TelegramLoginWidget?: {
+      dataOnauth: (user: any) => void;
+    };
+  }
+}
 
 function ElegantShape({
   className,
@@ -127,6 +135,53 @@ const Auth = () => {
       setIsLoading(false);
     }
   };
+
+  const handleTelegramAuth = async (user: any) => {
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/979cc153-2284-4a5a-ad62-08f0eb2acd23', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Ошибка авторизации через Telegram');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      navigate('/');
+      window.location.reload();
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Не удалось войти через Telegram';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    window.TelegramLoginWidget = {
+      dataOnauth: handleTelegramAuth,
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+      delete window.TelegramLoginWidget;
+    };
+  }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-background">
@@ -331,6 +386,19 @@ const Auth = () => {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-card px-2 text-muted-foreground">или</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-center mb-4">
+                  <div id="telegram-login-container">
+                    <script
+                      async
+                      src="https://telegram.org/js/telegram-widget.js?22"
+                      data-telegram-login="FlowKatAuthBot"
+                      data-size="large"
+                      data-onauth="TelegramLoginWidget.dataOnauth(user)"
+                      data-request-access="write"
+                    />
                   </div>
                 </div>
 

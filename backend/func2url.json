@@ -1,4 +1,5 @@
 {
+  "telegram-auth": "https://functions.poehali.dev/979cc153-2284-4a5a-ad62-08f0eb2acd23",
   "chatgpt-analyze": "https://functions.poehali.dev/173fefe5-c3ef-45db-90f8-060626f176ce",
   "user-profile": "https://functions.poehali.dev/401ea5a5-2659-4eea-a94d-cfbe058746b6",
   "test-notification": "https://functions.poehali.dev/1ebf4a4a-104a-451b-b3bd-a539971ccaf4",

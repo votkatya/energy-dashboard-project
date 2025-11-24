@@ -1,0 +1,23 @@
+{
+  "tests": [
+    {
+      "name": "Should handle OPTIONS request",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": "",
+      "bodyMatcher": "exact"
+    },
+    {
+      "name": "Should reject invalid request without telegram data",
+      "method": "POST",
+      "path": "/",
+      "body": {},
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
