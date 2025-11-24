@@ -427,18 +427,6 @@ const Auth = () => {
                   </div>
                 </div>
 
-                <div className="text-center">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsLogin(!isLogin);
-                      setError('');
-                    }}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
-                  </button>
-                </div>
               </form>
             </CardContent>
           </Card>
