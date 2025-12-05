@@ -101,7 +101,7 @@ const Auth = () => {
       } else {
         await register(email, password, name);
       }
-      navigate('/');
+      navigate('/app');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Что-то пошло не так';
       setError(errorMessage);
@@ -122,7 +122,7 @@ const Auth = () => {
 
     try {
       await login('test@test', 'test123');
-      navigate('/');
+      navigate('/app');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось войти в демо-профиль';
       setError(errorMessage);
