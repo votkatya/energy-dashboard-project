@@ -6,57 +6,57 @@ import { Link } from "react-router-dom";
 const Landing = () => {
   const features = [
     {
-      icon: "Zap",
-      title: "Трекинг энергии",
-      description: "Отслеживайте уровень энергии каждый день и следите за динамикой в реальном времени"
+      icon: "Target",
+      title: "Трекинг привычек",
+      description: "Отслеживайте свои привычки каждый день и следите за прогрессом в реальном времени"
     },
     {
       icon: "TrendingUp",
-      title: "ИИ-аналитика",
-      description: "Искусственный интеллект анализирует паттерны и предсказывает вашу энергию на неделю вперёд"
+      title: "Аналитика и прогнозы",
+      description: "ИИ анализирует ваши данные и предсказывает результаты на неделю вперёд"
     },
     {
-      icon: "Activity",
-      title: "Энергетические паттерны",
-      description: "Находите оптимальное время для работы и отдыха на основе ваших данных"
+      icon: "Zap",
+      title: "Уровень энергии",
+      description: "Отмечайте уровень энергии и находите оптимальные паттерны для продуктивности"
     },
     {
       icon: "Heart",
       title: "Защита от выгорания",
-      description: "Система предупредит о риске выгорания и порекомендует восстановление"
+      description: "Система предупредит вас о риске выгорания и порекомендует отдых"
     },
     {
-      icon: "Target",
-      title: "Персональные цели",
-      description: "Ставьте цели по энергии и получайте рекомендации для их достижения"
+      icon: "Bell",
+      title: "Умные напоминания",
+      description: "Настройте персональные напоминания для каждой привычки"
     },
     {
-      icon: "LineChart",
-      title: "Визуализация прогресса",
-      description: "Красивые графики и календарь помогут увидеть динамику вашей энергии"
+      icon: "Award",
+      title: "Стрики и достижения",
+      description: "Мотивация через серии успешных дней и систему достижений"
     }
   ];
 
   const steps = [
     {
       icon: "Plus",
-      title: "Отметь энергию",
-      description: "Оцени свой уровень энергии за несколько секунд"
+      title: "Добавь привычку",
+      description: "Создай свою первую привычку за 10 секунд"
     },
     {
-      icon: "Brain",
-      title: "ИИ анализирует",
-      description: "Система найдёт паттерны и закономерности"
+      icon: "Check",
+      title: "Отмечай каждый день",
+      description: "Быстрая отметка выполнения одним кликом"
     },
     {
-      icon: "LineChart",
-      title: "Смотри инсайты",
-      description: "Получай персональные рекомендации"
+      icon: "BarChart3",
+      title: "Смотри прогресс",
+      description: "Анализируй статистику и тренды"
     },
     {
-      icon: "Sparkles",
-      title: "Управляй энергией",
-      description: "Оптимизируй свою продуктивность"
+      icon: "Trophy",
+      title: "Достигай целей",
+      description: "Получай инсайты и развивай привычки"
     }
   ];
 
@@ -64,12 +64,10 @@ const Landing = () => {
     <div className="min-h-screen bg-background">
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <img 
-            src="https://cdn.poehali.dev/files/5ad5321f-843c-4306-8c74-1b457105908d.png" 
-            alt="FlowKat"
-            className="w-8 h-8"
-          />
-          <span className="text-xl font-bold">FlowKat</span>
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <Icon name="Sparkles" size={20} className="text-primary-foreground" />
+          </div>
+          <span className="text-xl font-bold">HabitFlow</span>
         </div>
         <Link to="/login">
           <Button variant="outline">Войти</Button>
@@ -79,11 +77,11 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-20 md:py-32 text-center">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-            Управляй своей{" "}
-            <span className="text-primary">энергией</span>
+            Твой личный трекер{" "}
+            <span className="text-primary">привычек</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Отслеживай уровень энергии, получай ИИ-аналитику и находи оптимальные паттерны для максимальной продуктивности
+            Формируй полезные привычки, отслеживай прогресс и получай персональные рекомендации на основе ИИ-аналитики
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/login">
@@ -104,7 +102,7 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Как это работает</h2>
-          <p className="text-muted-foreground text-lg">Четыре простых шага к балансу</p>
+          <p className="text-muted-foreground text-lg">Четыре простых шага к успеху</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((step, index) => (
@@ -122,7 +120,7 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-16 bg-card/30 rounded-3xl my-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Возможности приложения</h2>
-          <p className="text-muted-foreground text-lg">Всё необходимое для управления энергией и продуктивностью</p>
+          <p className="text-muted-foreground text-lg">Всё необходимое для эффективного управления привычками</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
@@ -141,10 +139,10 @@ const Landing = () => {
         <Card className="p-12 md:p-16 bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
           <div className="max-w-2xl mx-auto space-y-6">
             <h2 className="text-3xl md:text-5xl font-bold">
-              Начни управлять энергией уже сегодня
+              Начни меняться уже сегодня
             </h2>
             <p className="text-lg text-muted-foreground">
-              Присоединяйся к пользователям, которые нашли баланс и продуктивность с FlowKat
+              Присоединяйся к тысячам пользователей, которые достигают своих целей с HabitFlow
             </p>
             <Link to="/login">
               <Button size="lg" className="text-lg px-8 py-6">
@@ -162,15 +160,13 @@ const Landing = () => {
       <footer className="container mx-auto px-4 py-12 border-t border-border/50 mt-16">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <img 
-              src="https://cdn.poehali.dev/files/5ad5321f-843c-4306-8c74-1b457105908d.png" 
-              alt="FlowKat"
-              className="w-6 h-6"
-            />
-            <span className="font-semibold">FlowKat</span>
+            <div className="w-6 h-6 rounded-lg bg-primary flex items-center justify-center">
+              <Icon name="Sparkles" size={16} className="text-primary-foreground" />
+            </div>
+            <span className="font-semibold">HabitFlow</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2024 FlowKat. Управляй энергией, меняй жизнь.
+            © 2024 HabitFlow. Формируй привычки, меняй жизнь.
           </p>
         </div>
       </footer>
