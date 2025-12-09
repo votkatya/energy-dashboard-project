@@ -143,7 +143,7 @@ const Landing = () => {
         </div>
       </header>
 
-      <section className="container mx-auto px-4 pt-28 pb-16 md:pt-32 md:pb-20 text-center relative overflow-hidden">
+      <section className="container mx-auto px-4 pt-28 pb-20 md:pt-32 md:pb-24 text-center relative overflow-hidden">
         <div className="max-w-3xl mx-auto space-y-6 relative z-10">
           <h1 className="font-bold text-white">
             <div className="text-4xl md:text-7xl lg:text-8xl leading-tight tracking-tight">
@@ -164,7 +164,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-20 md:py-32 relative z-10">
+      <section className="container mx-auto px-4 py-20 md:py-24 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
@@ -242,7 +242,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 relative z-10 overflow-hidden">
+      <section className="container mx-auto px-4 py-20 md:py-24 relative z-10 overflow-hidden">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 px-4">Посмотри, как работает приложение</h2>
           <p className="text-gray-400 text-lg"></p>
@@ -250,7 +250,7 @@ const Landing = () => {
         <AppScreenCarousel />
       </section>
 
-      <section className="container mx-auto px-4 py-20 md:py-32 text-center relative overflow-hidden">
+      <section className="container mx-auto px-4 py-20 md:py-24 text-center relative overflow-hidden">
         <div className="max-w-4xl mx-auto rounded-3xl p-12 md:p-16 relative z-10">
           <h2 className="md:text-6xl font-bold mb-6 leading-tight text-2xl">Начни заботиться о себе уже сегодня</h2>
           <p className="text-gray-300 mb-10 text-base">всего 3 минуты в день</p>
@@ -261,7 +261,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 mt-16 bg-white/5 backdrop-blur-sm">
+      <footer className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400">
