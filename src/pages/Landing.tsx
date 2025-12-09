@@ -167,74 +167,74 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 leading-snug">
                 ТЫ ОТМЕЧАЕШЬ СВОЁ СОСТОЯНИЕ — <span className="text-[#c8ff00]">FLOWKAT ДЕЛАЕТ ОСТАЛЬНОЕ</span>
               </h2>
-              <div className="space-y-4 text-gray-300">
-                <p className="text-base">Всего 3 минуты в день и ты понимаешь:</p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
+              <div className="space-y-3 text-gray-300">
+                <p className="text-sm leading-tight">Всего 3 минуты в день и ты понимаешь:</p>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>какие дни тебя истощают</span>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>что возвращает ресурс</span>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>где скрыты утечки энергии</span>
                   </li>
                 </ul>
-                <p className="text-sm font-bold text-[#c8ff00] pt-2">Это не контроль. Это забота.</p>
+                <p className="text-sm font-bold text-[#c8ff00] pt-2 leading-tight">Это не контроль. Это забота.</p>
               </div>
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 leading-snug">
                 ВИЗУАЛИЗИРУЕТ ЭНЕРГИЮ И ПОМОГАЕТ ВОВРЕМЯ <span className="text-[#c8ff00]">СКОРРЕКТИРОВАТЬ КУРС</span>
               </h2>
-              <div className="space-y-4 text-gray-300">
-                <p className="text-base">Ты видишь:</p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
+              <div className="space-y-3 text-gray-300">
+                <p className="text-sm leading-tight">Ты видишь:</p>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>где именно ты теряешь энергию</span>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>что повторяется из недели в неделю</span>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>какие дни реально восстанавливают</span>
                   </li>
                 </ul>
-                <p className="text-sm font-bold pt-2">Перестаёшь угадывать — и начинаешь управлять ресурсом.</p>
+                <p className="text-sm font-bold text-[#c8ff00] pt-2 leading-tight">Перестаёшь угадывать — и начинаешь управлять ресурсом.</p>
               </div>
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 leading-snug">
                 ТВОИ ДАННЫЕ ПРЕВРАЩАЮТСЯ В ПЕРСОНАЛЬНЫЕ <span className="text-[#c8ff00]">РЕКОМЕНДАЦИИ</span>
               </h2>
-              <div className="space-y-4 text-gray-300">
-                <p className="text-base">Анализирует твои эмоции и энергию и показывает:</p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
+              <div className="space-y-3 text-gray-300">
+                <p className="text-sm leading-tight">Анализирует твои эмоции и энергию и показывает:</p>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>реальные причины усталости</span>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>повторяющиеся сценарии</span>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-sm leading-tight">
                     <span className="text-[#c8ff00] flex-shrink-0">•</span>
                     <span>зоны риска</span>
                   </li>
                 </ul>
-                <p className="text-sm font-bold text-[#c8ff00] pt-2">Не догадки. А точные рекомендации для тебя.</p>
+                <p className="text-sm font-bold text-[#c8ff00] pt-2 leading-tight">Не догадки. А точные рекомендации для тебя.</p>
               </div>
             </div>
           </div>
