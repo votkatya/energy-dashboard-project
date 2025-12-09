@@ -256,9 +256,7 @@ const Landing = () => {
               Начать бесплатно
             </Button>
           </Link>
-          <p className="text-sm text-gray-400 mt-6">
-            Регистрация за 30 секунд • Без кредитной карты
-          </p>
+          <p className="text-sm text-gray-400 mt-6"></p>
         </div>
       </section>
 
