@@ -26,7 +26,7 @@ const Landing = () => {
       <section className="container mx-auto px-4 pt-28 pb-16 md:pt-32 md:pb-20 text-center relative overflow-hidden">
         <div className="max-w-3xl mx-auto space-y-6 relative z-10">
           <h1 className="font-bold text-white">
-            <div className="text-5xl md:text-7xl lg:text-8xl leading-tight tracking-tight">
+            <div className="text-5xl md:text-7xl lg:text-8xl leading-tight tracking-tight whitespace-nowrap">
               ТРЕКЕР ЭНЕРГИИ
             </div>
             <div className="text-2xl md:text-3xl lg:text-4xl leading-tight tracking-wide mt-2">
