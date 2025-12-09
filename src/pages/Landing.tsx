@@ -34,11 +34,11 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-16 relative">
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#c8ff00] rounded-full blur-3xl opacity-20"></div>
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-          <div>
+          <div className="flex justify-center">
             <img 
-              src="https://cdn.poehali.dev/files/2%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
+              src="https://cdn.poehali.dev/files/sUT6uIEW-Photoroom%201.png"
               alt="Усталость"
-              className="w-full rounded-2xl"
+              className="w-full max-w-md"
             />
           </div>
           <div className="space-y-6">
