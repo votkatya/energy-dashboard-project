@@ -167,7 +167,7 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="text-xl md:text-2xl font-bold mb-6 leading-snug">
+              <h2 className="text-lg md:text-xl font-bold mb-6 leading-tight">
                 ТЫ ОТМЕЧАЕШЬ СВОЁ СОСТОЯНИЕ — <span className="text-[#c8ff00]">FLOWKAT ДЕЛАЕТ ОСТАЛЬНОЕ</span>
               </h2>
               <div className="space-y-3 text-gray-300">
@@ -191,7 +191,7 @@ const Landing = () => {
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="text-xl md:text-2xl font-bold mb-6 leading-snug">
+              <h2 className="text-lg md:text-xl font-bold mb-6 leading-tight">
                 ВИЗУАЛИЗИРУЕТ ЭНЕРГИЮ И ПОМОГАЕТ ВОВРЕМЯ <span className="text-[#c8ff00]">СКОРРЕКТИРОВАТЬ КУРС</span>
               </h2>
               <div className="space-y-3 text-gray-300">
@@ -215,7 +215,7 @@ const Landing = () => {
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="text-xl md:text-2xl font-bold mb-6 leading-snug">
+              <h2 className="text-lg md:text-xl font-bold mb-6 leading-tight">
                 ТВОИ ДАННЫЕ ПРЕВРАЩАЮТСЯ В ПЕРСОНАЛЬНЫЕ <span className="text-[#c8ff00]">РЕКОМЕНДАЦИИ</span>
               </h2>
               <div className="space-y-3 text-gray-300">
