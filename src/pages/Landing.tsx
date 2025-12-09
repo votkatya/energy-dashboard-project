@@ -316,7 +316,7 @@ const Landing = () => {
             <p className="text-sm text-gray-500">© 2025 FlowKat. Все права защищены.</p>
             <div className="flex gap-6 text-sm text-gray-400">
               <a href="#" className="hover:text-[#c8ff00] transition-colors">Политика конфиденциальности</a>
-              <a href="#" className="hover:text-[#c8ff00] transition-colors">Условия использования</a>
+              <a href="#" className="hover:text-[#c8ff00] transition-colors"></a>
             </div>
           </div>
         </div>
