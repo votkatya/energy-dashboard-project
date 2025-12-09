@@ -244,7 +244,7 @@ const Landing = () => {
 
       <section className="py-16 md:py-24 relative z-10 overflow-hidden">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Посмотри, как работает приложение</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 px-4">Посмотри, как работает приложение</h2>
           <p className="text-gray-400 text-lg"></p>
         </div>
         <AppScreenCarousel />
