@@ -27,13 +27,7 @@ const Landing = () => {
           <p className="text-xl md:text-2xl text-center text-gray-300 mb-12">
             3 минуты в день, чтобы чувствовать себя лучше
           </p>
-          <div className="flex justify-center mb-16">
-            <img 
-              src="https://cdn.poehali.dev/files/1%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
-              alt="FlowKat App"
-              className="max-w-md w-full rounded-3xl shadow-2xl"
-            />
-          </div>
+
         </div>
       </section>
 
