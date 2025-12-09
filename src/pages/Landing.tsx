@@ -22,7 +22,7 @@ const Landing = () => {
         <div className="max-w-5xl mx-auto">
           <h1 className="md:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-center text-6xl">
             ТРЕКЕР ЭНЕРГИИ<br />
-            <span className="text-[#c8ff00]">С ПЕРСОНАЛЬНЫМИ РЕКОМЕНДАЦИЯМИ</span>
+            <span className="text-[#c8ff00] text-4xl">С ПЕРСОНАЛЬНЫМИ РЕКОМЕНДАЦИЯМИ</span>
           </h1>
           <p className="text-xl md:text-2xl text-center text-gray-300 mb-12">
             3 минуты в день, чтобы чувствовать себя лучше
