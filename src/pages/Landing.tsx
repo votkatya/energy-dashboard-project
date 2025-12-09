@@ -261,7 +261,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <footer className="border-t border-white/5 mt-16 bg-[#0a0f0a]">
+      <footer className="border-t border-white/10 mt-16 bg-white/5 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
