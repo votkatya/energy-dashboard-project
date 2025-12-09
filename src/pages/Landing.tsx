@@ -191,7 +191,7 @@ const Landing = () => {
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-[#c8ff00]/30 transition-colors">
-              <h2 className="md:text-xl font-bold mb-6 leading-tight text-lg">
+              <h2 className="md:text-xl font-bold mb-6 leading-tight text-lg uppercase">
                 Ты видишь, куда уходит твоя энергия — <span className="text-[#c8ff00]">и можешь это менять</span>
               </h2>
               <div className="space-y-3 text-gray-300">
