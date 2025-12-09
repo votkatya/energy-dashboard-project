@@ -25,10 +25,13 @@ const Landing = () => {
 
       <section className="container mx-auto px-4 pt-28 pb-16 md:pt-32 md:pb-20 text-center relative overflow-hidden">
         <div className="max-w-3xl mx-auto space-y-6 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white">
-            ТРЕКЕР ЭНЕРГИИ<br />
-            С ПЕРСОНАЛЬНЫМИ<br />
-            РЕКОМЕНДАЦИЯМИ
+          <h1 className="font-bold text-white">
+            <div className="text-5xl md:text-7xl lg:text-8xl leading-tight tracking-tight">
+              ТРЕКЕР ЭНЕРГИИ
+            </div>
+            <div className="text-2xl md:text-3xl lg:text-4xl leading-tight tracking-wide mt-2">
+              С ПЕРСОНАЛЬНЫМИ РЕКОМЕНДАЦИЯМИ
+            </div>
           </h1>
           <p className="text-lg md:text-xl text-white max-w-xl mx-auto">
             3 минуты в день, чтобы чувствовать себя лучше
