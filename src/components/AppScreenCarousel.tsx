@@ -65,11 +65,11 @@ export default function AppScreenCarousel() {
   return (
     <div className="relative w-full max-w-7xl mx-auto px-4">
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-6">
+        <div className="flex gap-6 -ml-6">
           {screenshots.map((screenshot, index) => (
             <div
               key={index}
-              className="flex-[0_0_auto] w-[280px] md:w-[320px]"
+              className="flex-[0_0_auto] w-[280px] md:w-[320px] pl-6"
             >
               <div className="relative rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
                 <img
