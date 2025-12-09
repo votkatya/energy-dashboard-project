@@ -31,47 +31,39 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-16 relative">
+      <section className="container mx-auto px-4 py-16 md:py-24 relative">
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#c8ff00] rounded-full blur-3xl opacity-20"></div>
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="flex justify-center">
-            <img 
-              src="https://cdn.poehali.dev/files/sUT6uIEW-Photoroom%201.png"
-              alt="Усталость"
-              className="w-full max-w-md"
-            />
-          </div>
-          <div className="space-y-6">
-            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-3 mb-4 rotate-[-2deg]">
-              <p className="text-xl font-bold">ЭНЕРГИЯ НА НУЛЕ?</p>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
+          <div className="relative">
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-xs font-bold">
+                ЭНЕРГИЯ НА НУЛЕ?
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-xs font-bold">
+                НИЧЕГО НЕ ХОЧЕТСЯ?
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-xs font-bold">
+                ПОСЛЕ ОТДЫХА СНОВА НУЖЕН ОТДЫХ?
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-xs font-bold">
+                ПРОСНУЛСЯ И УЖЕ УСТАЛ?
+              </div>
             </div>
-            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-3 mb-4 rotate-[1deg]">
-              <p className="text-xl font-bold">НИЧЕГО НЕ ХОЧЕТСЯ?</p>
-            </div>
-            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-3 mb-4 rotate-[-1deg]">
-              <p className="text-xl font-bold">ПОСЛЕ ОТДЫХА СНОВА НУЖЕН ОТДЫХ?</p>
-            </div>
-            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-3 rotate-[2deg]">
-              <p className="text-xl font-bold">ПРОСНУЛСЯ И УЖЕ УСТАЛ?</p>
-            </div>
-            <div className="mt-8 pt-8 border-t border-white/20">
-              <p className="text-5xl font-bold mb-2">59<span className="text-2xl">%</span></p>
-              <p className="text-xl text-gray-300">человек испытывают</p>
-              <p className="text-2xl font-bold text-[#c8ff00]">УСТАЛОСТЬ</p>
-              <p className="text-sm text-gray-400 mt-2">*по данным журнала The Lancet</p>
+            <div className="flex justify-center">
+              <img 
+                src="https://cdn.poehali.dev/files/Y9vvdVXN-Photoroom.png"
+                alt="Усталость"
+                className="w-full max-w-md"
+              />
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12">
-            ТЫ ОТМЕЧАЕШЬ СВОЁ СОСТОЯНИЕ — <span className="text-[#c8ff00]">FLOWKAT ДЕЛАЕТ ОСТАЛЬНОЕ</span>
-          </h2>
-          <div className="space-y-6 mb-12">
+          <div className="space-y-8">
+            <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+              ТЫ ОТМЕЧАЕШЬ СВОЁ СОСТОЯНИЕ — <span className="text-[#c8ff00]">FLOWKAT ДЕЛАЕТ ОСТАЛЬНОЕ</span>
+            </h2>
             <p className="text-xl text-gray-300">Всего 3 минуты в день и ты понимаешь:</p>
-            <ul className="space-y-4 text-lg text-gray-300">
+            <ul className="space-y-4 text-lg">
               <li className="flex items-start gap-3">
                 <span className="text-[#c8ff00] text-2xl">•</span>
                 <span>какие дни тебя истощают</span>
@@ -85,15 +77,7 @@ const Landing = () => {
                 <span>где скрыты утечки энергии</span>
               </li>
             </ul>
-            <p className="text-xl font-bold mt-8">Это не контроль. Это забота.</p>
-          </div>
-          <div className="flex justify-center relative">
-            <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-[#c8ff00] rounded-full blur-3xl opacity-20"></div>
-            <img 
-              src="https://cdn.poehali.dev/files/3%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
-              alt="FlowKat Interface"
-              className="max-w-md w-full rounded-3xl shadow-2xl relative z-10"
-            />
+            <p className="text-xl font-bold">Это не контроль. Это забота.</p>
           </div>
         </div>
       </section>
