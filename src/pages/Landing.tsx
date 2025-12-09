@@ -20,7 +20,7 @@ const Landing = () => {
 
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-center">
+          <h1 className="md:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-center text-6xl">
             ТРЕКЕР ЭНЕРГИИ<br />
             <span className="text-[#c8ff00]">С ПЕРСОНАЛЬНЫМИ РЕКОМЕНДАЦИЯМИ</span>
           </h1>
