@@ -29,7 +29,7 @@ const Landing = () => {
           </p>
           <div className="flex justify-center mb-16">
             <img 
-              src="https://cdn.poehali.dev/files/1 слайд.png"
+              src="https://cdn.poehali.dev/files/1%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
               alt="FlowKat App"
               className="max-w-md w-full rounded-3xl shadow-2xl"
             />
@@ -42,7 +42,7 @@ const Landing = () => {
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
           <div>
             <img 
-              src="https://cdn.poehali.dev/files/2 слайд.png"
+              src="https://cdn.poehali.dev/files/2%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
               alt="Усталость"
               className="w-full rounded-2xl"
             />
@@ -96,7 +96,7 @@ const Landing = () => {
           <div className="flex justify-center relative">
             <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-[#c8ff00] rounded-full blur-3xl opacity-20"></div>
             <img 
-              src="https://cdn.poehali.dev/files/3 слайд.png"
+              src="https://cdn.poehali.dev/files/3%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
               alt="FlowKat Interface"
               className="max-w-md w-full rounded-3xl shadow-2xl relative z-10"
             />
@@ -132,7 +132,7 @@ const Landing = () => {
           </div>
           <div className="flex justify-center">
             <img 
-              src="https://cdn.poehali.dev/files/4 слайд.png"
+              src="https://cdn.poehali.dev/files/4%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
               alt="FlowKat Analytics"
               className="max-w-md w-full rounded-3xl shadow-2xl"
             />
@@ -166,7 +166,7 @@ const Landing = () => {
           </div>
           <div className="flex justify-center">
             <img 
-              src="https://cdn.poehali.dev/files/5 слайд.png"
+              src="https://cdn.poehali.dev/files/5%20%D1%81%D0%BB%D0%B0%D0%B9%D0%B4.png"
               alt="FlowKat Recommendations"
               className="max-w-md w-full rounded-3xl shadow-2xl"
             />
