@@ -243,17 +243,10 @@ const Landing = () => {
 
       <section className="container mx-auto px-4 py-20 md:py-32 text-center relative overflow-hidden">
         <div className="max-w-4xl mx-auto rounded-3xl p-12 md:p-16 relative z-10">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Начни управлять энергией уже сегодня
-          </h2>
-          <p className="text-xl text-gray-300 mb-10">
-            3 минуты в день для лучшей версии себя
-          </p>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">Начни заботиться о себе уже сегодня</h2>
+          <p className="text-xl text-gray-300 mb-10">всего 3 минуты в день</p>
           <Link to="/login">
-            <Button size="lg" className="bg-[#c8ff00] text-[#0a0f0a] hover:bg-[#b3e600] text-lg px-10 py-7 font-bold rounded-full shadow-xl shadow-[#c8ff00]/30 transition-all hover:scale-105">
-              <Icon name="Sparkles" size={20} className="mr-2" />
-              Начать бесплатно
-            </Button>
+            <Button size="lg" className="bg-[#c8ff00] text-[#0a0f0a] hover:bg-[#b3e600] text-lg px-10 py-7 font-bold rounded-full shadow-xl shadow-[#c8ff00]/30 transition-all hover:scale-105">Начать бесплатно</Button>
           </Link>
           <p className="text-sm text-gray-400 mt-6"></p>
         </div>
