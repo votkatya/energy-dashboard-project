@@ -164,18 +164,6 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 relative z-10 overflow-hidden">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Попробуй FlowKat прямо сейчас
-          </h2>
-          <p className="text-gray-400 text-lg">
-            Посмотри, как работает приложение
-          </p>
-        </div>
-        <AppScreenCarousel />
-      </section>
-
       <section className="container mx-auto px-4 py-20 md:py-32 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
@@ -252,6 +240,18 @@ const Landing = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="py-16 md:py-24 relative z-10 overflow-hidden">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Попробуй FlowKat прямо сейчас
+          </h2>
+          <p className="text-gray-400 text-lg">
+            Посмотри, как работает приложение
+          </p>
+        </div>
+        <AppScreenCarousel />
       </section>
 
       <section className="container mx-auto px-4 py-20 md:py-32 text-center relative overflow-hidden">
