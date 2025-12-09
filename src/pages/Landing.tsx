@@ -242,8 +242,7 @@ const Landing = () => {
       </section>
 
       <section className="container mx-auto px-4 py-20 md:py-32 text-center relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#c8ff00] rounded-full blur-[150px] opacity-10"></div>
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#c8ff00]/20 to-[#c8ff00]/5 rounded-3xl p-12 md:p-16 border border-[#c8ff00]/30 relative z-10">
+        <div className="max-w-4xl mx-auto rounded-3xl p-12 md:p-16 relative z-10">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Начни управлять энергией уже сегодня
           </h2>
