@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Landing from "./pages/Landing";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import { startNotificationScheduler } from "./utils/notificationScheduler";
@@ -48,6 +49,7 @@ const App = () => {
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Auth />} />
               <Route path="/auth" element={<Navigate to="/login" replace />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route
                 path="/app"
                 element={
