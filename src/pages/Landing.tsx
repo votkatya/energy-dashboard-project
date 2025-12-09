@@ -313,9 +313,7 @@ const Landing = () => {
           </div>
 
           <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-500">
-              © 2024 FlowKat. Все права защищены.
-            </p>
+            <p className="text-sm text-gray-500">© 2025 FlowKat. Все права защищены.</p>
             <div className="flex gap-6 text-sm text-gray-400">
               <a href="#" className="hover:text-[#c8ff00] transition-colors">Политика конфиденциальности</a>
               <a href="#" className="hover:text-[#c8ff00] transition-colors">Условия использования</a>
