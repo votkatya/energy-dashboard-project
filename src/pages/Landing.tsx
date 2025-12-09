@@ -261,19 +261,66 @@ const Landing = () => {
         </div>
       </section>
 
-      <footer className="container mx-auto px-4 py-12 border-t border-white/5 mt-16">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <img 
-              src="https://cdn.poehali.dev/files/5ad5321f-843c-4306-8c74-1b457105908d.png" 
-              alt="FlowKat"
-              className="w-6 h-6"
-            />
-            <span className="font-semibold text-[#c8ff00]">FlowKat</span>
+      <footer className="border-t border-white/5 mt-16 bg-[#0a0f0a]">
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <img 
+                  src="https://cdn.poehali.dev/files/5ad5321f-843c-4306-8c74-1b457105908d.png" 
+                  alt="FlowKat"
+                  className="w-8 h-8"
+                />
+                <span className="font-bold text-[#c8ff00] text-xl">FlowKat</span>
+              </div>
+              <p className="text-sm text-gray-400">
+                Трекер энергии с персональными рекомендациями
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-white mb-4">Продукт</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#features" className="hover:text-[#c8ff00] transition-colors">Возможности</a></li>
+                <li><a href="#how-it-works" className="hover:text-[#c8ff00] transition-colors">Как работает</a></li>
+                <li><Link to="/login" className="hover:text-[#c8ff00] transition-colors">Начать бесплатно</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-white mb-4">Поддержка</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-[#c8ff00] transition-colors">Помощь</a></li>
+                <li><a href="#" className="hover:text-[#c8ff00] transition-colors">FAQ</a></li>
+                <li><a href="#" className="hover:text-[#c8ff00] transition-colors">Контакты</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-white mb-4">Соцсети</h3>
+              <div className="flex gap-3">
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#c8ff00]/20 border border-white/10 hover:border-[#c8ff00]/30 flex items-center justify-center transition-all">
+                  <Icon name="Instagram" size={20} className="text-gray-400 hover:text-[#c8ff00]" />
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#c8ff00]/20 border border-white/10 hover:border-[#c8ff00]/30 flex items-center justify-center transition-all">
+                  <Icon name="Twitter" size={20} className="text-gray-400 hover:text-[#c8ff00]" />
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#c8ff00]/20 border border-white/10 hover:border-[#c8ff00]/30 flex items-center justify-center transition-all">
+                  <Icon name="Facebook" size={20} className="text-gray-400 hover:text-[#c8ff00]" />
+                </a>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-gray-500">
-            © 2024 FlowKat. Управляй энергией, меняй жизнь.
-          </p>
+
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-gray-500">
+              © 2024 FlowKat. Все права защищены.
+            </p>
+            <div className="flex gap-6 text-sm text-gray-400">
+              <a href="#" className="hover:text-[#c8ff00] transition-colors">Политика конфиденциальности</a>
+              <a href="#" className="hover:text-[#c8ff00] transition-colors">Условия использования</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
