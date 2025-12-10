@@ -33,6 +33,24 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const RootRedirect = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return <Navigate to="/app" replace />;
+  }
+
+  return <Landing />;
+};
+
 const App = () => {
   useEffect(() => {
     startNotificationScheduler();
@@ -46,7 +64,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<RootRedirect />} />
               <Route path="/login" element={<Auth />} />
               <Route path="/auth" element={<Navigate to="/login" replace />} />
               <Route path="/privacy" element={<Privacy />} />

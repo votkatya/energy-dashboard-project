@@ -30,9 +30,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (savedToken) {
       verifyToken(savedToken);
     } else {
-      setIsLoading(false);
+      tryTelegramAuth();
     }
   }, []);
+
+  const tryTelegramAuth = async () => {
+    try {
+      const tg = (window as any).Telegram?.WebApp;
+      if (tg?.initDataUnsafe?.user) {
+        const telegramUser = tg.initDataUnsafe.user;
+        const response = await fetch('https://functions.poehali.dev/89775b51-b0bf-484e-abf7-ee5eacac6c9f', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            telegram_id: telegramUser.id,
+            first_name: telegramUser.first_name,
+            last_name: telegramUser.last_name || '',
+            username: telegramUser.username || '',
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          loginWithToken(data.token, data.user);
+        }
+      }
+    } catch (error) {
+      console.error('Telegram auth failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const verifyToken = async (savedToken: string) => {
     try {
