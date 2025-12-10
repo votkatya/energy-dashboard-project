@@ -44,6 +44,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                last_notification_sent, last_weekly_report_sent, last_burnout_warning_sent
         FROM t_p45717398_energy_dashboard_pro.users 
         WHERE telegram_chat_id IS NOT NULL 
+        AND email != 'test@test'
         AND (
             notification_settings->>'dailyReminder' = 'true'
             OR notification_settings->>'weeklyReport' = 'true'
