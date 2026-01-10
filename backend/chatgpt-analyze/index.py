@@ -128,20 +128,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     existing_analysis = cursor.fetchone()
     
-    # Get entries for analysis
+    # Get entries for analysis (last 30 days or all if less)
     cursor.execute(f'''
         SELECT entry_date, score, thoughts, tags::text as tags
         FROM t_p45717398_energy_dashboard_pro.energy_entries
         WHERE user_id = '{user_id_escaped}' 
-        AND entry_date >= CURRENT_DATE - 7
+        AND entry_date >= CURRENT_DATE - 30
         ORDER BY entry_date DESC
+        LIMIT 50
     ''')
     
     entries = cursor.fetchall()
     cursor.close()
     conn.close()
     
-    if not entries:
+    if not entries or len(entries) < 3:
         return {
             'statusCode': 200,
             'headers': {
@@ -149,8 +150,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps({
-                'analysis': 'Недостаточно данных для анализа. Добавьте больше записей об энергии.',
-                'recommendations': []
+                'analysis': f'### Пока недостаточно данных\n\nУ вас {len(entries)} записей. Добавьте хотя бы 3 записи, чтобы получить персональный анализ.\n\n*Совет: чем больше данных вы добавите, тем точнее будет анализ!*',
+                'total_entries': len(entries)
             })
         }
     
@@ -160,9 +161,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     ])
     
     prompt = f"""Ты — персональный аналитик энергии и эмоционального состояния.  
-Проанализируй последние 7 дней записей пользователя.
+Проанализируй последние записи пользователя (до 30 дней).
 
-ДАННЫЕ (последние 7 дней):
+ДАННЫЕ (последние {len(entries)} записей):
 {entries_text}
 
 Каждая запись содержит:
