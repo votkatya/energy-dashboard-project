@@ -355,6 +355,16 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
               </div>
             )}
 
+            {isRefreshing && !analysis && !error && (
+              <div className="flex flex-col items-center justify-center py-12 gap-4">
+                <Icon name="Loader2" size={40} className="text-primary animate-spin" />
+                <div className="text-center space-y-1">
+                  <p className="text-sm font-medium">Анализирую ваши записи...</p>
+                  <p className="text-xs text-muted-foreground">Это может занять до 20 секунд</p>
+                </div>
+              </div>
+            )}
+
             {analysis && (
               <div className="space-y-4">
                 <div className="prose prose-sm dark:prose-invert max-w-none">
