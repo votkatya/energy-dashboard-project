@@ -181,9 +181,9 @@ const PersonalRecommendationsCard = ({ entriesCount = 0, entries = [] }: Persona
   };
 
   const getPreviewText = (analysisText?: string) => {
-    if (!analysisText) return 'Нажмите, чтобы получить анализ';
+    if (!analysisText) return '';
     const firstLine = analysisText.split('\n').find(line => line.trim().length > 20);
-    if (!firstLine) return 'Нажмите, чтобы получить анализ';
+    if (!firstLine) return '';
     const cleanText = firstLine.replace(/[#*]/g, '').trim();
     return cleanText.length > 80 ? cleanText.substring(0, 80) + '...' : cleanText;
   };
