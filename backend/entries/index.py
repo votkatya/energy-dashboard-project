@@ -85,6 +85,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             """, (user_id,))
             
             entries = cur.fetchall()
+            print(f"[DEBUG] User {user_id}: fetched {len(entries)} entries")
             
             entries_list = []
             for entry in entries:
