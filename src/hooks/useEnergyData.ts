@@ -62,7 +62,7 @@ export const useEnergyData = () => {
   const token = localStorage.getItem('auth_token');
   
   return useQuery<EnergyData>({
-    queryKey: ['energy-data', 'v2'],
+    queryKey: ['energy-data', 'v3'],
     queryFn: async () => {
       const response = await fetch(API_URL, {
         headers: {
