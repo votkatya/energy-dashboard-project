@@ -381,7 +381,7 @@ const Index = () => {
                     last30DaysAverage={last30DaysAverage}
                     currentMonthCount={currentMonthCount}
                     onTrendsClick={() => setActiveTab('trends')}
-                    hasData={data?.entries && data.entries.length >= 3}
+                    hasData={last30DaysAverage > 0}
                   />
                 </div>
 
