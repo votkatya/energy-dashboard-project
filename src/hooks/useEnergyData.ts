@@ -15,12 +15,19 @@ interface EnergyEntry {
   updatedAt?: string;
 }
 
+interface PeriodStats {
+  average: number;
+  count: number;
+}
+
 interface EnergyStats {
   good: number;
   neutral: number;
   bad: number;
   average: number;
   total: number;
+  last30Days: PeriodStats;
+  currentMonth: PeriodStats;
 }
 
 interface EnergyData {

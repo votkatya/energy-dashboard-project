@@ -145,6 +145,8 @@ const HomePage = ({
           <EnergyLevelCard
             averageScore={allTimeStats.average}
             monthlyAverage={monthlyStats.average}
+            last30DaysAverage={data?.stats?.last30Days?.average || 0}
+            currentMonthCount={data?.stats?.currentMonth?.count || 0}
             onTrendsClick={() => {}}
             hasData={monthlyStats.total > 0}
           />
