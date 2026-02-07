@@ -15,12 +15,19 @@ interface EnergyEntry {
   updatedAt?: string;
 }
 
+interface PeriodStats {
+  average: number;
+  count: number;
+}
+
 interface EnergyStats {
   good: number;
   neutral: number;
   bad: number;
   average: number;
   total: number;
+  last14Days: PeriodStats;
+  currentMonth: PeriodStats;
 }
 
 interface EnergyData {
@@ -35,7 +42,42 @@ const calculateStats = (entries: EnergyEntry[]): EnergyStats => {
   const bad = entries.filter(e => e.score <= 1).length;
   const average = total > 0 ? entries.reduce((sum, e) => sum + e.score, 0) / total : 0;
   
-  return { good, neutral, bad, average, total };
+  // Рассчитываем за последние 14 дней
+  const now = new Date();
+  const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+  const last14DaysEntries = entries.filter(e => {
+    const entryDate = new Date(e.date);
+    return entryDate >= fourteenDaysAgo;
+  });
+  const avg14Days = last14DaysEntries.length > 0 
+    ? last14DaysEntries.reduce((sum, e) => sum + e.score, 0) / last14DaysEntries.length 
+    : 0;
+  
+  // Рассчитываем за текущий месяц
+  const currentMonthEntries = entries.filter(e => {
+    const entryDate = new Date(e.date);
+    return entryDate.getFullYear() === now.getFullYear() && 
+           entryDate.getMonth() === now.getMonth();
+  });
+  const avgCurrentMonth = currentMonthEntries.length > 0
+    ? currentMonthEntries.reduce((sum, e) => sum + e.score, 0) / currentMonthEntries.length
+    : 0;
+  
+  return { 
+    good, 
+    neutral, 
+    bad, 
+    average, 
+    total,
+    last14Days: {
+      average: avg14Days,
+      count: last14DaysEntries.length
+    },
+    currentMonth: {
+      average: avgCurrentMonth,
+      count: currentMonthEntries.length
+    }
+  };
 };
 
 const addDerivedFields = (entry: EnergyEntry): EnergyEntry => {

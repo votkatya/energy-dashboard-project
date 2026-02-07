@@ -5,6 +5,8 @@ import Icon from '@/components/ui/icon';
 interface EnergyLevelCardProps {
   averageScore: number;
   monthlyAverage: number;
+  last14DaysAverage: number;
+  currentMonthCount: number;
   onTrendsClick: () => void;
   hasData?: boolean;
 }
@@ -17,11 +19,12 @@ const getEnergyLevel = (score: number): { text: string; pillBg: string; cardBg: 
   return { text: 'Критический', pillBg: 'bg-[#FF5F72]', cardBg: '#FF5F72', waveBg: '#FF8494' };
 };
 
-const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick, hasData = true }: EnergyLevelCardProps) => {
-  const energyLevel = getEnergyLevel(monthlyAverage);
-  const percentage = (monthlyAverage / 5) * 100;
+const EnergyLevelCard = ({ averageScore, monthlyAverage, last14DaysAverage, currentMonthCount, onTrendsClick, hasData = true }: EnergyLevelCardProps) => {
+  // Основной показатель — последние 14 дней
+  const energyLevel = getEnergyLevel(last14DaysAverage);
+  const percentage = (last14DaysAverage / 5) * 100;
 
-  if (!hasData || monthlyAverage === 0) {
+  if (!hasData || last14DaysAverage === 0) {
     return (
       <Card className="glass-card overflow-hidden">
         <CardContent className="p-6 space-y-4">
@@ -76,9 +79,16 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick, hasData 
                   {energyLevel.text}
                 </span>
               </div>
+              
+              {currentMonthCount > 0 && (
+                <div className="text-xs text-muted-foreground">
+                  В этом месяце: <span className="font-medium text-foreground">{monthlyAverage.toFixed(1)}</span>
+                  <span className="ml-1">({currentMonthCount} {currentMonthCount === 1 ? 'запись' : currentMonthCount < 5 ? 'записи' : 'записей'})</span>
+                </div>
+              )}
             </div>
             
-            <p className="text-muted-foreground text-xs leading-relaxed">Нажми на кнопку, чтобы получить рекомендации</p>
+            <p className="text-muted-foreground text-xs leading-relaxed">За последние 14 дней</p>
           </div>
 
           <div className="relative w-[120px] h-[120px] flex-shrink-0">
@@ -143,14 +153,14 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, onTrendsClick, hasData 
                     fill="none"
                     stroke="#222828"
                     strokeWidth="6"
-                    strokeDasharray={`${(monthlyAverage / 5) * 175.93} 175.93`}
+                    strokeDasharray={`${(last14DaysAverage / 5) * 175.93} 175.93`}
                     strokeLinecap="round"
                     className="transition-all duration-1000"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-2xl font-bold text-black">
-                    {monthlyAverage.toFixed(1)}
+                    {last14DaysAverage.toFixed(1)}
                   </span>
                 </div>
               </div>

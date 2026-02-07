@@ -107,6 +107,10 @@ const Index = () => {
   };
   
   const monthlyStats = getMonthlyStats();
+  
+  // Используем статистику с бэкенда
+  const last14DaysAverage = data?.stats?.last14Days?.average || 0;
+  const currentMonthCount = data?.stats?.currentMonth?.count || 0;
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
   const allTimeStats = data?.entries ? calculateStats(data.entries) : { average: 0, total: 0 };
 
@@ -374,8 +378,10 @@ const Index = () => {
                   <EnergyLevelCard 
                     averageScore={allTimeStats.average}
                     monthlyAverage={monthlyStats.average}
+                    last14DaysAverage={last14DaysAverage}
+                    currentMonthCount={currentMonthCount}
                     onTrendsClick={() => setActiveTab('trends')}
-                    hasData={data?.entries && data.entries.length >= 3}
+                    hasData={last14DaysAverage > 0}
                   />
                 </div>
 

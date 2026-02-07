@@ -125,16 +125,16 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 neutral = 0
                 bad = 0
             
-            # Статистика за последние 30 дней
+            # Статистика за последние 14 дней
             cur.execute("""
-                SELECT AVG(score) as avg_30, COUNT(*) as count_30
+                SELECT AVG(score) as avg_14, COUNT(*) as count_14
                 FROM energy_entries
                 WHERE user_id = %s 
-                AND entry_date >= CURRENT_DATE - INTERVAL '30 days'
+                AND entry_date >= CURRENT_DATE - INTERVAL '14 days'
             """, (user_id,))
-            thirty_days_stats = cur.fetchone()
-            avg_30_days = float(thirty_days_stats['avg_30']) if thirty_days_stats['avg_30'] else 0
-            count_30_days = thirty_days_stats['count_30'] or 0
+            fourteen_days_stats = cur.fetchone()
+            avg_14_days = float(fourteen_days_stats['avg_14']) if fourteen_days_stats['avg_14'] else 0
+            count_14_days = fourteen_days_stats['count_14'] or 0
             
             # Статистика за текущий месяц
             cur.execute("""
@@ -162,9 +162,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'bad': bad,
                         'average': round(avg_score, 2),
                         'total': total,
-                        'last30Days': {
-                            'average': round(avg_30_days, 2),
-                            'count': count_30_days
+                        'last14Days': {
+                            'average': round(avg_14_days, 2),
+                            'count': count_14_days
                         },
                         'currentMonth': {
                             'average': round(avg_current_month, 2),

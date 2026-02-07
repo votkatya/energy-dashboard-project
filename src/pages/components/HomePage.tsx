@@ -145,8 +145,10 @@ const HomePage = ({
           <EnergyLevelCard
             averageScore={allTimeStats.average}
             monthlyAverage={monthlyStats.average}
+            last14DaysAverage={data?.stats?.last14Days?.average || 0}
+            currentMonthCount={data?.stats?.currentMonth?.count || 0}
             onTrendsClick={() => {}}
-            hasData={monthlyStats.total > 0}
+            hasData={(data?.stats?.last14Days?.average || 0) > 0}
           />
         </AnimatedCard>
 
