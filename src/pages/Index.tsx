@@ -111,10 +111,6 @@ const Index = () => {
   // Используем статистику с бэкенда
   const last14DaysAverage = data?.stats?.last14Days?.average || 0;
   const currentMonthCount = data?.stats?.currentMonth?.count || 0;
-  console.log('🔍 Index.tsx - last14DaysAverage:', last14DaysAverage);
-  console.log('🔍 Index.tsx - data.stats FULL:', JSON.stringify(data?.stats, null, 2));
-  console.log('🔍 Index.tsx - last14Days:', data?.stats?.last14Days);
-  console.log('🔍 Index.tsx - currentMonth:', data?.stats?.currentMonth);
   const recentEntries = data?.entries?.slice(-3).reverse() || [];
   const allTimeStats = data?.entries ? calculateStats(data.entries) : { average: 0, total: 0 };
 

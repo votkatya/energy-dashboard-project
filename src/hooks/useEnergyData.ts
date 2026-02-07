@@ -115,14 +115,7 @@ export const useEnergyData = () => {
         throw new Error('Failed to fetch energy data');
       }
       const data = await response.json();
-      console.log('🔖 ВЕРСИЯ ФУНКЦИИ:', data._version || 'старая версия без номера');
       const rawEntries: EnergyEntry[] = data.entries || [];
-      console.log('📥 RAW данные с бэкенда (первые 3):', rawEntries.slice(0, 3));
-      console.log('📅 Порядок дат:', {
-        first: rawEntries[0]?.date,
-        last: rawEntries[rawEntries.length - 1]?.date,
-        total: rawEntries.length
-      });
       
       const sortedEntries = [...rawEntries].sort((a, b) => {
         const dateA = new Date(a.date).getTime();
@@ -131,17 +124,14 @@ export const useEnergyData = () => {
       });
       
       const entries = sortedEntries.map(addDerivedFields);
-      console.log('✅ После сортировки (последние 3):', entries.slice(-3));
       
       // ВАЖНО: Если бэкенд вернул новую версию с last14Days — используем её
       // Иначе считаем на фронте (временно, пока бэкенд не обновится)
       let stats = data.stats || calculateStats(entries);
       
       if (!stats.last14Days && entries.length > 0) {
-        console.log('⚠️ Бэкенд старой версии, считаю 14-дневную статистику на фронте');
         // Находим самую позднюю дату в entries (это текущая дата на сервере)
         const latestDate = new Date(Math.max(...entries.map(e => new Date(e.date).getTime())));
-        console.log('📅 Последняя дата в данных:', latestDate.toISOString());
         
         const fourteenDaysAgo = new Date(latestDate.getTime() - 14 * 24 * 60 * 60 * 1000);
         const last14DaysEntries = entries.filter(e => {
@@ -170,16 +160,7 @@ export const useEnergyData = () => {
             count: currentMonthEntries.length
           }
         };
-        
-        console.log('✅ Посчитано на фронте:', {
-          last14Days: stats.last14Days,
-          currentMonth: stats.currentMonth,
-          latestDate: latestDate.toISOString()
-        });
       }
-      
-      console.log('📊 Статистика с бэкенда:', data.stats);
-      console.log('📊 Итоговая статистика:', stats);
       
       return { entries, stats };
     },
