@@ -133,9 +133,51 @@ export const useEnergyData = () => {
       const entries = sortedEntries.map(addDerivedFields);
       console.log('✅ После сортировки (последние 3):', entries.slice(-3));
       
-      // ВАЖНО: Всегда используем stats с бэкенда, т.к. там правильная дата сервера
-      // Если бэкенд вернул stats — используем их полностью
-      const stats = data.stats || calculateStats(entries);
+      // ВАЖНО: Если бэкенд вернул новую версию с last14Days — используем её
+      // Иначе считаем на фронте (временно, пока бэкенд не обновится)
+      let stats = data.stats || calculateStats(entries);
+      
+      if (!stats.last14Days && entries.length > 0) {
+        console.log('⚠️ Бэкенд старой версии, считаю 14-дневную статистику на фронте');
+        // Находим самую позднюю дату в entries (это текущая дата на сервере)
+        const latestDate = new Date(Math.max(...entries.map(e => new Date(e.date).getTime())));
+        console.log('📅 Последняя дата в данных:', latestDate.toISOString());
+        
+        const fourteenDaysAgo = new Date(latestDate.getTime() - 14 * 24 * 60 * 60 * 1000);
+        const last14DaysEntries = entries.filter(e => {
+          const entryDate = new Date(e.date);
+          return entryDate >= fourteenDaysAgo && entryDate <= latestDate;
+        });
+        
+        const currentMonthEntries = entries.filter(e => {
+          const entryDate = new Date(e.date);
+          return entryDate.getFullYear() === latestDate.getFullYear() && 
+                 entryDate.getMonth() === latestDate.getMonth();
+        });
+        
+        stats = {
+          ...stats,
+          last14Days: {
+            average: last14DaysEntries.length > 0 
+              ? last14DaysEntries.reduce((sum, e) => sum + e.score, 0) / last14DaysEntries.length 
+              : 0,
+            count: last14DaysEntries.length
+          },
+          currentMonth: {
+            average: currentMonthEntries.length > 0
+              ? currentMonthEntries.reduce((sum, e) => sum + e.score, 0) / currentMonthEntries.length
+              : 0,
+            count: currentMonthEntries.length
+          }
+        };
+        
+        console.log('✅ Посчитано на фронте:', {
+          last14Days: stats.last14Days,
+          currentMonth: stats.currentMonth,
+          latestDate: latestDate.toISOString()
+        });
+      }
+      
       console.log('📊 Статистика с бэкенда:', data.stats);
       console.log('📊 Итоговая статистика:', stats);
       
