@@ -79,16 +79,7 @@ const EnergyLevelCard = ({ averageScore, monthlyAverage, last14DaysAverage, curr
                   {energyLevel.text}
                 </span>
               </div>
-              
-              {currentMonthCount > 0 && (
-                <div className="text-xs text-muted-foreground">
-                  В этом месяце: <span className="font-medium text-foreground">{monthlyAverage.toFixed(1)}</span>
-                  <span className="ml-1">({currentMonthCount} {currentMonthCount === 1 ? 'запись' : currentMonthCount < 5 ? 'записи' : 'записей'})</span>
-                </div>
-              )}
             </div>
-            
-            <p className="text-muted-foreground text-xs leading-relaxed">За последние 14 дней</p>
           </div>
 
           <div className="relative w-[120px] h-[120px] flex-shrink-0">
