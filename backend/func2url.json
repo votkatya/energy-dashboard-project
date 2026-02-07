@@ -1,17 +1,8 @@
 {
-  "telegram-auth": "https://functions.poehali.dev/979cc153-2284-4a5a-ad62-08f0eb2acd23",
+  "test-db": "https://functions.poehali.dev/9babd848-a7aa-47cf-b371-bad985518f9d",
+  "test-notification": "https://functions.poehali.dev/1d9fc3e2-82cd-4fc1-a4f2-d01d5497252b",
   "chatgpt-analyze": "https://functions.poehali.dev/173fefe5-c3ef-45db-90f8-060626f176ce",
-  "user-profile": "https://functions.poehali.dev/401ea5a5-2659-4eea-a94d-cfbe058746b6",
-  "test-notification": "https://functions.poehali.dev/1ebf4a4a-104a-451b-b3bd-a539971ccaf4",
-  "test-db": "https://functions.poehali.dev/1f888501-d6b3-4c92-af04-1af6ad36675d",
-  "get-chat-id": "https://functions.poehali.dev/1ba99261-07cc-4f60-a65f-2a68c39f39ed",
   "check-notifications": "https://functions.poehali.dev/bf8e52ca-e49c-4f0f-b52a-cf12ad52b99c",
-  "save-notification-settings": "https://functions.poehali.dev/e7e6bcee-e445-4b84-b638-b3debc2bf0eb",
-  "telegram-notify": "https://functions.poehali.dev/6f9572c0-86b8-4ab3-a82a-c06dde313c74",
-  "goals": "https://functions.poehali.dev/72ced3ee-9024-4117-9b2b-17c5350c2c83",
-  "migrate-from-sheets": "https://functions.poehali.dev/c524ed1f-9496-4ae1-b938-18d8730149cc",
-  "energy": "https://functions.poehali.dev/856f35ee-0e8f-46f6-a290-7fd2955e7469",
   "auth": "https://functions.poehali.dev/6ab3bea8-8d31-4166-b350-5a4b55a8acc7",
-  "entries": "https://functions.poehali.dev/2d4b8a75-8e94-40d2-8412-5e0040b74b86",
-  "google-sheets": "https://functions.poehali.dev/0335f84a-22ea-47e1-ab0f-623e2884ffec"
+  "entries": "https://functions.poehali.dev/2d4b8a75-8e94-40d2-8412-5e0040b74b86"
 }
