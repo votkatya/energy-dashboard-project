@@ -1,1 +1,2 @@
 psycopg2-binary==2.9.9
+# Updated: 2026-02-07 - Added 14-day stats support

@@ -171,10 +171,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             return {
                 'statusCode': 200,
-                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'headers': {
+                    'Content-Type': 'application/json', 
+                    'Access-Control-Allow-Origin': '*',
+                    'X-Function-Version': '2.1.0'
+                },
                 'body': json.dumps({
                     'entries': entries_list,
-                    'stats': stats_object
+                    'stats': stats_object,
+                    '_version': '2.1.0'
                 })
             }
         
