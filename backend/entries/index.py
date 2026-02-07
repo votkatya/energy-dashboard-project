@@ -112,7 +112,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'updatedAt': entry['updated_at'].isoformat() if entry.get('updated_at') else None
                 })
             
-            # Статистика за всё время
             if len(entries_list) > 0:
                 total = len(entries_list)
                 avg_score = sum(e['score'] for e in entries_list) / total
@@ -125,29 +124,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 good = 0
                 neutral = 0
                 bad = 0
-            
-            # Статистика за последние 30 дней
-            cur.execute("""
-                SELECT AVG(score) as avg_30, COUNT(*) as count_30
-                FROM energy_entries
-                WHERE user_id = %s 
-                AND entry_date >= CURRENT_DATE - INTERVAL '30 days'
-            """, (user_id,))
-            thirty_days_stats = cur.fetchone()
-            avg_30_days = float(thirty_days_stats['avg_30']) if thirty_days_stats['avg_30'] else 0
-            count_30_days = thirty_days_stats['count_30'] or 0
-            
-            # Статистика за текущий месяц
-            cur.execute("""
-                SELECT AVG(score) as avg_month, COUNT(*) as count_month
-                FROM energy_entries
-                WHERE user_id = %s 
-                AND EXTRACT(YEAR FROM entry_date) = EXTRACT(YEAR FROM CURRENT_DATE)
-                AND EXTRACT(MONTH FROM entry_date) = EXTRACT(MONTH FROM CURRENT_DATE)
-            """, (user_id,))
-            month_stats = cur.fetchone()
-            avg_current_month = float(month_stats['avg_month']) if month_stats['avg_month'] else 0
-            count_current_month = month_stats['count_month'] or 0
             
             cur.close()
             conn.close()
@@ -162,15 +138,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'neutral': neutral,
                         'bad': bad,
                         'average': round(avg_score, 2),
-                        'total': total,
-                        'last30Days': {
-                            'average': round(avg_30_days, 2),
-                            'count': count_30_days
-                        },
-                        'currentMonth': {
-                            'average': round(avg_current_month, 2),
-                            'count': count_current_month
-                        }
+                        'total': total
                     }
                 })
             }

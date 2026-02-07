@@ -15,19 +15,12 @@ interface EnergyEntry {
   updatedAt?: string;
 }
 
-interface PeriodStats {
-  average: number;
-  count: number;
-}
-
 interface EnergyStats {
   good: number;
   neutral: number;
   bad: number;
   average: number;
   total: number;
-  last30Days: PeriodStats;
-  currentMonth: PeriodStats;
 }
 
 interface EnergyData {
@@ -42,42 +35,7 @@ const calculateStats = (entries: EnergyEntry[]): EnergyStats => {
   const bad = entries.filter(e => e.score <= 1).length;
   const average = total > 0 ? entries.reduce((sum, e) => sum + e.score, 0) / total : 0;
   
-  // Рассчитываем за последние 30 дней
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const last30DaysEntries = entries.filter(e => {
-    const entryDate = new Date(e.date);
-    return entryDate >= thirtyDaysAgo;
-  });
-  const avg30Days = last30DaysEntries.length > 0 
-    ? last30DaysEntries.reduce((sum, e) => sum + e.score, 0) / last30DaysEntries.length 
-    : 0;
-  
-  // Рассчитываем за текущий месяц
-  const currentMonthEntries = entries.filter(e => {
-    const entryDate = new Date(e.date);
-    return entryDate.getFullYear() === now.getFullYear() && 
-           entryDate.getMonth() === now.getMonth();
-  });
-  const avgCurrentMonth = currentMonthEntries.length > 0
-    ? currentMonthEntries.reduce((sum, e) => sum + e.score, 0) / currentMonthEntries.length
-    : 0;
-  
-  return { 
-    good, 
-    neutral, 
-    bad, 
-    average, 
-    total,
-    last30Days: {
-      average: avg30Days,
-      count: last30DaysEntries.length
-    },
-    currentMonth: {
-      average: avgCurrentMonth,
-      count: currentMonthEntries.length
-    }
-  };
+  return { good, neutral, bad, average, total };
 };
 
 const addDerivedFields = (entry: EnergyEntry): EnergyEntry => {
@@ -132,11 +90,6 @@ export const useEnergyData = () => {
       const entries = sortedEntries.map(addDerivedFields);
       console.log('✅ После сортировки (последние 3):', entries.slice(-3));
       const stats = data.stats || calculateStats(entries);
-      console.log('📊 Статистика:', {
-        last30Days: stats.last30Days,
-        currentMonth: stats.currentMonth,
-        total: stats.total
-      });
       
       return { entries, stats };
     },
