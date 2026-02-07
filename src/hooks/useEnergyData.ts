@@ -115,6 +115,7 @@ export const useEnergyData = () => {
         throw new Error('Failed to fetch energy data');
       }
       const data = await response.json();
+      console.log('🔖 ВЕРСИЯ ФУНКЦИИ:', data._version || 'старая версия без номера');
       const rawEntries: EnergyEntry[] = data.entries || [];
       console.log('📥 RAW данные с бэкенда (первые 3):', rawEntries.slice(0, 3));
       console.log('📅 Порядок дат:', {
