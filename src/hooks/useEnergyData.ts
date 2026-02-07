@@ -104,7 +104,7 @@ export const useEnergyData = () => {
   const token = localStorage.getItem('auth_token');
   
   return useQuery<EnergyData>({
-    queryKey: ['energy-data', 'v3'],
+    queryKey: ['energy-data', 'v4'],
     queryFn: async () => {
       const response = await fetch(API_URL, {
         headers: {
@@ -133,7 +133,8 @@ export const useEnergyData = () => {
       console.log('✅ После сортировки (последние 3):', entries.slice(-3));
       
       // ВАЖНО: Всегда используем stats с бэкенда, т.к. там правильная дата сервера
-      const stats = data.stats ? data.stats : calculateStats(entries);
+      // Если бэкенд вернул stats — используем их полностью
+      const stats = data.stats || calculateStats(entries);
       console.log('📊 Статистика с бэкенда:', data.stats);
       console.log('📊 Итоговая статистика:', stats);
       
