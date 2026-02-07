@@ -131,7 +131,11 @@ export const useEnergyData = () => {
       
       const entries = sortedEntries.map(addDerivedFields);
       console.log('✅ После сортировки (последние 3):', entries.slice(-3));
-      const stats = data.stats || calculateStats(entries);
+      
+      // ВАЖНО: Всегда используем stats с бэкенда, т.к. там правильная дата сервера
+      const stats = data.stats ? data.stats : calculateStats(entries);
+      console.log('📊 Статистика с бэкенда:', data.stats);
+      console.log('📊 Итоговая статистика:', stats);
       
       return { entries, stats };
     },
