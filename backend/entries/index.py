@@ -1,8 +1,8 @@
 '''
-Business: CRUD операции с записями энергии пользователей
+Business: CRUD операции с записями энергии пользователей (v2.1)
 Args: event - dict с httpMethod, body, queryStringParameters, headers
       context - объект с атрибутами request_id, function_name
-Returns: HTTP response dict с данными записей или статистикой
+Returns: HTTP response dict с данными записей или статистикой за 14 дней и текущий месяц
 '''
 import json
 import os
@@ -151,26 +151,30 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             cur.close()
             conn.close()
             
+            stats_object = {
+                'good': good,
+                'neutral': neutral,
+                'bad': bad,
+                'average': round(avg_score, 2),
+                'total': total,
+                'last14Days': {
+                    'average': round(avg_14_days, 2),
+                    'count': count_14_days
+                },
+                'currentMonth': {
+                    'average': round(avg_current_month, 2),
+                    'count': count_current_month
+                }
+            }
+            
+            print(f"[DEBUG] Stats object: {json.dumps(stats_object)}")
+            
             return {
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({
                     'entries': entries_list,
-                    'stats': {
-                        'good': good,
-                        'neutral': neutral,
-                        'bad': bad,
-                        'average': round(avg_score, 2),
-                        'total': total,
-                        'last14Days': {
-                            'average': round(avg_14_days, 2),
-                            'count': count_14_days
-                        },
-                        'currentMonth': {
-                            'average': round(avg_current_month, 2),
-                            'count': count_current_month
-                        }
-                    }
+                    'stats': stats_object
                 })
             }
         
