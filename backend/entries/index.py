@@ -1,5 +1,6 @@
 '''
 Business: CRUD операции с записями энергии пользователей (v2.1)
+Updated: 2026-02-07
 Args: event - dict с httpMethod, body, queryStringParameters, headers
       context - объект с атрибутами request_id, function_name
 Returns: HTTP response dict с данными записей или статистикой за 14 дней и текущий месяц
@@ -38,6 +39,7 @@ def verify_jwt(token: str) -> Optional[Dict[str, Any]]:
         return None
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+    """Main handler for energy entries API with 14-day rolling stats"""
     method: str = event.get('httpMethod', 'GET')
     
     if method == 'OPTIONS':
